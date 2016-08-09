@@ -1,8 +1,11 @@
 package de.macbury.server.db.tables;
 
+import com.rethinkdb.gen.ast.Point;
 import com.rethinkdb.model.MapObject;
 import de.macbury.server.db.Database;
 import de.macbury.server.db.models.Location;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.time.OffsetDateTime;
 import java.util.Date;
@@ -15,10 +18,12 @@ import static com.rethinkdb.RethinkDB.r;
  */
 public class LocationsTable extends BaseTable<Location> {
   private static final String KEY_NAME = "name";
-  private static final String KEY_LAT = "lat";
-  private static final String KEY_LNG = "lng";
   private static final String KEY_OSM_ID = "osm_id";
   private static final String KEY_TIMESTAMP = "timestamp";
+  private static final String KEY_TYPE = "type";
+  private static final String KEY_SUB_TYPE = "sub_type";
+  private static final String KEY_POINT = "point";
+  private static final Object KEY_COORDINATES = "coordinates";
 
   public LocationsTable(Database database) {
     super("locations", database);
@@ -30,20 +35,30 @@ public class LocationsTable extends BaseTable<Location> {
     if (model.getTimestamp() != null)
       timestamp = model.getTimestamp().getTime();
     return r.hashMap(KEY_NAME, model.getName())
-            .with(KEY_LAT, model.getLat())
-            .with(KEY_LNG, model.getLng())
+            .with(KEY_POINT, r.point(model.getLng(), model.getLat()))
             .with(KEY_OSM_ID, model.getOsmId())
-            .with(KEY_TIMESTAMP, timestamp);
+            .with(KEY_TIMESTAMP, timestamp)
+            .with(KEY_TYPE, model.getType())
+            .with(KEY_SUB_TYPE, model.getSubType());
+  }
+
+  private Point extractCoordinates(JSONObject pointJson) {
+    JSONArray points = (JSONArray) pointJson.get(KEY_COORDINATES);
+    return r.point(points.get(0), points.get(1));
   }
 
   @Override
   public Location deserialize(HashMap data) {
     Location location = new Location();
-    location.setLat((double)data.get(KEY_LAT));
-    location.setLng((double)data.get(KEY_LNG));
+    JSONObject pointJson = (JSONObject) data.get(KEY_POINT);
+    JSONArray points = (JSONArray) pointJson.get(KEY_COORDINATES);
+    location.setLng((Double) points.get(0));
+    location.setLat((Double) points.get(1));
     location.setName((String)data.get(KEY_NAME));
     location.setOsmId((long)data.get(KEY_OSM_ID));
     location.setTimestamp(new Date((long)data.get(KEY_TIMESTAMP)));
+    location.setType((String)data.get(KEY_TYPE));
+    location.setSubType((String)data.get(KEY_SUB_TYPE));
     return location;
   }
 }

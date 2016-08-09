@@ -26,7 +26,7 @@ public class ServerLauncher {
       location.setName("TEST");
       database.locations.create(location);
       if (serverArgs.isGoingToImportFile()) { // Import osm into database
-        //OSMImporter osmImporter = new OSMImporter(serverArgs.getImportFile(), database);
+        OSMImporter osmImporter = new OSMImporter(serverArgs.getImportFile(), database);
       } else {
 
       }

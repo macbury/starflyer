@@ -58,6 +58,29 @@ public class OSMNode {
   }
 
   /**
+   * Return type of node
+   * @return
+   */
+  public String getType() {
+    if (isAmenity()) {
+      return TYPE_AMENITY;
+    } else if (isHistoric()) {
+      return TYPE_HISTORIC;
+    } else if (isTourism()) {
+      return TYPE_TOURISM;
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * @return
+   */
+  public String getSubType() {
+    return tags.get(getType());
+  }
+
+  /**
    * Used to map facilities used by visitors and residents. For example: toilets, telephones, banks, pharmacies, cafes, parking and schools. See the page Amenities for an introduction on its usage.
    * @return
    */
@@ -116,10 +139,14 @@ public class OSMNode {
     location.setLat(lat);
     location.setName(getName());
     location.setTimestamp(timestamp);
+    location.setType(getType());
+    location.setSubType(getSubType());
     return location;
   }
 
   public void setName(String newName) {
     tags.put(TYPE_NAME, newName);
   }
+
+
 }

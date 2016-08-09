@@ -20,6 +20,7 @@ public class TestOSMNode {
     osmNode.lat = 10;
     osmNode.lon = -2;
     osmNode.timestamp = new Date();
+    osmNode.tags.put("amenity", "place_of_worship");
     osmNode.setName("Helo");
     Location location = osmNode.toLocation();
 
@@ -28,6 +29,8 @@ public class TestOSMNode {
     assertEquals(osmNode.id, location.getOsmId());
     assertEquals(osmNode.timestamp, location.getTimestamp());
     assertEquals(osmNode.getName(), location.getName());
+    assertEquals(osmNode.getType(), location.getType());
+    assertEquals(osmNode.getSubType(), location.getSubType());
     assertTrue(location.isValid());
   }
 }

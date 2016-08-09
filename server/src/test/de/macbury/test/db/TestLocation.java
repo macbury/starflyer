@@ -33,6 +33,8 @@ public class TestLocation extends TestWithDatabase {
     exampleLocation.setLat(10.3);
     exampleLocation.setLng(-12.2);
     exampleLocation.setOsmId(9000);
+    exampleLocation.setType("amenity");
+    exampleLocation.setSubType("place_of_worship");
     exampleLocation.setTimestamp(new Date());
 
     database.locations.create(exampleLocation);
@@ -49,6 +51,9 @@ public class TestLocation extends TestWithDatabase {
     assertEquals(exampleLocation.getName(), persistedLocation.getName());
     assertEquals(exampleLocation.getId(), persistedLocation.getId());
     assertEquals(exampleLocation.getTimestamp(), persistedLocation.getTimestamp());
+
+    assertEquals(exampleLocation.getType(), persistedLocation.getType());
+    assertEquals(exampleLocation.getSubType(), persistedLocation.getSubType());
 
     assertTrue(persistedLocation.isValid());
   }

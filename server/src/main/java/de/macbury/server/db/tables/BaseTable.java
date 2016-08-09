@@ -1,6 +1,7 @@
 package de.macbury.server.db.tables;
 
 import com.badlogic.gdx.utils.ObjectMap;
+import com.rethinkdb.gen.ast.Point;
 import com.rethinkdb.gen.ast.Table;
 import com.rethinkdb.model.MapObject;
 import com.rethinkdb.net.Connection;
@@ -27,6 +28,7 @@ public abstract class BaseTable<SomeModel extends BaseModel> {
     this.database = database;
     setup();
   }
+
 
   /**
    * Base query with selecting database and current table

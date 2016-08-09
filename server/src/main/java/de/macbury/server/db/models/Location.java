@@ -12,6 +12,9 @@ public class Location extends BaseModel {
   private String name;
   private Date timestamp;
 
+  private String type;
+  private String subType;
+
   public Location() {
 
   }
@@ -61,6 +64,22 @@ public class Location extends BaseModel {
    * @return
    */
   public boolean isValid() {
-    return lat != 0.0 && lat != 0.0 && name != null && timestamp != null && osmId != 0;
+    return lat != 0.0 && lat != 0.0 && name != null && timestamp != null && osmId != 0 && type != null && subType != null;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public String getSubType() {
+    return subType;
+  }
+
+  public void setSubType(String subType) {
+    this.subType = subType;
   }
 }
