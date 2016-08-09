@@ -14,7 +14,7 @@ public class Database {
   private final String host;
   private final Integer port;
   private final Connection mainConnection;
-  private ConnectionPool connections;
+  public ConnectionPool connections;
   public final LocationsTable locations;
 
   public Database(String host, Integer port, String name) {
