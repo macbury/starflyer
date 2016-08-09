@@ -6,17 +6,21 @@ import java.util.Date;
  * Place in the world
  */
 public class Location extends BaseModel {
-  private String osmId;
+  private long osmId;
   private double lat;
   private double lng;
   private String name;
   private Date timestamp;
 
-  public String getOsmId() {
+  public Location() {
+
+  }
+
+  public long getOsmId() {
     return osmId;
   }
 
-  public void setOsmId(String osmId) {
+  public void setOsmId(long osmId) {
     this.osmId = osmId;
   }
 
@@ -50,5 +54,13 @@ public class Location extends BaseModel {
 
   public void setTimestamp(Date timestamp) {
     this.timestamp = timestamp;
+  }
+
+  /**
+   * Is location valid
+   * @return
+   */
+  public boolean isValid() {
+    return lat != 0.0 && lat != 0.0 && name != null && timestamp != null && osmId != 0;
   }
 }

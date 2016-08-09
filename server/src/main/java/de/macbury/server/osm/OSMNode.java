@@ -1,6 +1,7 @@
 package de.macbury.server.osm;
 
 import com.badlogic.gdx.utils.ObjectMap;
+import de.macbury.server.db.models.Location;
 import org.xml.sax.Attributes;
 
 import java.text.ParseException;
@@ -102,5 +103,23 @@ public class OSMNode {
 
   public String getName() {
     return tags.get(TYPE_NAME);
+  }
+
+  /**
+   * Create raw model ready to insert into database
+   * @return
+   */
+  public Location toLocation() {
+    Location location = new Location();
+    location.setOsmId(id);
+    location.setLng(lon);
+    location.setLat(lat);
+    location.setName(getName());
+    location.setTimestamp(timestamp);
+    return location;
+  }
+
+  public void setName(String newName) {
+    tags.put(TYPE_NAME, newName);
   }
 }

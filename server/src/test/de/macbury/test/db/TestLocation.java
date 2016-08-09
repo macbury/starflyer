@@ -3,6 +3,9 @@ package de.macbury.test.db;
 import de.macbury.server.db.models.Location;
 import de.macbury.test.TestWithDatabase;
 import org.junit.Test;
+
+import java.util.Date;
+
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +32,8 @@ public class TestLocation extends TestWithDatabase {
     exampleLocation.setName("Example location");
     exampleLocation.setLat(10.3);
     exampleLocation.setLng(-12.2);
-    exampleLocation.setOsmId("random id");
+    exampleLocation.setOsmId(9000);
+    exampleLocation.setTimestamp(new Date());
 
     database.locations.create(exampleLocation);
     assertNotNull(exampleLocation.getId());
@@ -44,6 +48,8 @@ public class TestLocation extends TestWithDatabase {
     assertEquals(exampleLocation.getOsmId(), persistedLocation.getOsmId());
     assertEquals(exampleLocation.getName(), persistedLocation.getName());
     assertEquals(exampleLocation.getId(), persistedLocation.getId());
+    assertEquals(exampleLocation.getTimestamp(), persistedLocation.getTimestamp());
 
+    assertTrue(persistedLocation.isValid());
   }
 }
