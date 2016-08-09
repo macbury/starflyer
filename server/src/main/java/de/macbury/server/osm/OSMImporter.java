@@ -4,6 +4,7 @@ import com.rethinkdb.gen.exc.ReqlError;
 import com.rethinkdb.gen.exc.ReqlQueryLogicError;
 import com.rethinkdb.model.MapObject;
 import com.rethinkdb.net.Connection;
+import de.macbury.server.db.Database;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,13 +19,11 @@ import static com.rethinkdb.RethinkDB.r;
  */
 public class OSMImporter implements OSMParser.Listener {
   private final OSMParser parser;
-  private final Connection connection;
+  private final Database database;
 
-  public OSMImporter(File fileToImport, String host, int port) {
-    connection = r.connection().hostname(host).port(port).connect();
+  public OSMImporter(File fileToImport, Database database) {
     parser     = new OSMParser(fileToImport, this);
-
-    r.db("starflyer").tableCreate("locations").run(connection);
+    this.database   = database;
 
     try {
       parser.run();
@@ -35,12 +34,12 @@ public class OSMImporter implements OSMParser.Listener {
     } catch (IOException e) {
       e.printStackTrace();
     }
-
-    connection.close();
   }
 
   @Override
-  public void onNodeFound(OSMParser parser, OSMNode nodeCursor) {
-
+  public void onNodeFound(OSMParser parser, OSMNode cursor) {
+    if (cursor.isPointOfInterest() && cursor.haveName()) {
+      database.locations.create(cursor);
+    }
   }
 }

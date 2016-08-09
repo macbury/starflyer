@@ -21,21 +21,16 @@ public class ServerLauncher {
     if (serverArgs.isSuccess()) {
       Database database = new Database(serverArgs.getDatabaseHost(), serverArgs.getDatabasePort(), serverArgs.getDatabaseName());
 
+      if (serverArgs.isGoingToImportFile()) { // Import osm into database
+        //OSMImporter osmImporter = new OSMImporter(serverArgs.getImportFile(), database);
+      } else {
+
+      }
     } else {
       System.err.println();
       System.err.println(serverArgs.getHelp());
       System.err.println();
       System.exit(1);
-    }
-
-    if (serverArgs.isGoingToImportFile()) {
-      /*/OSMImporter osmImporter = new OSMImporter(
-              serverArgs.getImportFile(),
-              serverArgs.getDatabaseHost(),
-              serverArgs.getDatabasePort()
-      );*/
-    } else {
-
     }
 
     System.exit(0);
