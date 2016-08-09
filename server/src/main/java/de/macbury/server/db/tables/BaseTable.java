@@ -1,5 +1,6 @@
 package de.macbury.server.db.tables;
 
+import com.badlogic.gdx.utils.ObjectMap;
 import com.rethinkdb.gen.ast.Table;
 import com.rethinkdb.model.MapObject;
 import com.rethinkdb.net.Connection;
@@ -17,6 +18,7 @@ import static com.rethinkdb.RethinkDB.r;
  */
 public abstract class BaseTable<SomeModel extends BaseModel> {
   private static final String KEY_GENERATED_KEYS = "generated_keys";
+  private static final String KEY_ID = "id";
   private final String name;
   private final Database database;
 
@@ -58,7 +60,19 @@ public abstract class BaseTable<SomeModel extends BaseModel> {
    * @return
    */
   public SomeModel get(String id) {
-    return null;
+    Connection connection = database.connections.obtain();
+    try {
+      HashMap<String, Object> data = query().get(id).run(connection);
+      if (data == null) {
+        return null;
+      } else {
+        SomeModel model = deserialize(data);
+        model.setId((String)data.get(KEY_ID));
+        return model;
+      }
+    } finally {
+      database.connections.free(connection);
+    }
   }
 
   /**
@@ -67,6 +81,13 @@ public abstract class BaseTable<SomeModel extends BaseModel> {
    * @return
    */
   public abstract MapObject serialize(SomeModel model);
+
+  /**
+   * Deserialize data from database into {@link SomeModel}
+   * @param data from database
+   * @return
+   */
+  public abstract SomeModel deserialize(HashMap data);
 
   /**
    * Setup table in database

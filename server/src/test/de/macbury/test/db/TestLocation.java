@@ -4,6 +4,8 @@ import de.macbury.server.db.models.Location;
 import de.macbury.test.TestWithDatabase;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 /**
  *
  */
@@ -13,6 +15,12 @@ public class TestLocation extends TestWithDatabase {
     Location exampleLocation = new Location();
     database.locations.create(exampleLocation);
     assertNotNull(exampleLocation.getId());
+  }
+
+  @Test
+  public void itShouldReturnNullForNonExistingId() {
+    Location location = database.locations.get("not existt it");
+    assertNull(location);
   }
 
   @Test
@@ -27,11 +35,15 @@ public class TestLocation extends TestWithDatabase {
     assertNotNull(exampleLocation.getId());
 
     Location persistedLocation = database.locations.get(exampleLocation.getId());
+
     assertNotNull(persistedLocation);
+    assertNotNull(persistedLocation.getId());
 
     assertEquals(exampleLocation.getLat(), persistedLocation.getLat(), 0.2);
     assertEquals(exampleLocation.getLng(), persistedLocation.getLng(), 0.2);
     assertEquals(exampleLocation.getOsmId(), persistedLocation.getOsmId());
     assertEquals(exampleLocation.getName(), persistedLocation.getName());
+    assertEquals(exampleLocation.getId(), persistedLocation.getId());
+
   }
 }
