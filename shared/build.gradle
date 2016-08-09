@@ -1,0 +1,5 @@
+eclipse.project.name = appName + '-shared'
+
+dependencies {
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+}

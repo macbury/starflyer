@@ -1,0 +1,18 @@
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+mainClassName = 'de.macbury.server.ServerLauncher'
+eclipse.project.name = appName + '-server'
+
+dependencies {
+  compile project(':shared')
+  compile group: 'com.rethinkdb', name: 'rethinkdb-driver', version: '2.3.0'
+  compile 'com.martiansoftware:jsap:2.1'
+}
+
+jar {
+  from { configurations.compile.collect { zipTree(it) } }
+  manifest {
+    attributes 'Main-Class': project.mainClassName
+  }
+}
