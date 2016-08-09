@@ -53,6 +53,15 @@ public abstract class BaseTable<SomeModel extends BaseModel> {
   }
 
   /**
+   * Retrive model from db by its id
+   * @param id
+   * @return
+   */
+  public SomeModel get(String id) {
+    return null;
+  }
+
+  /**
    * Serialize model into database {@link MapObject}
    * @param model
    * @return

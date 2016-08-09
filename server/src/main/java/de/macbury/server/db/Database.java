@@ -1,4 +1,5 @@
 package de.macbury.server.db;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 import com.rethinkdb.gen.ast.Javascript;
 import com.rethinkdb.net.Connection;
@@ -8,7 +9,7 @@ import static com.rethinkdb.RethinkDB.r;
 /**
  * Manage connection to rethinkdb, creating database, quering data, and connection pool
  */
-public class Database {
+public class Database implements Disposable {
   private static final String TABLE_POINTS_OF_INTERESTS = "point_of_interest";
   private final String name;
   private final String host;
@@ -33,11 +34,20 @@ public class Database {
    * Create database
    */
   public void create() {
-    boolean dbExists = r.dbList().contains(name).run(mainConnection);
-
-    if (!dbExists) {
+    if (!exists()) {
       r.dbCreate(name).run(mainConnection);
     }
+  }
+
+  /**
+   * Check if database exists
+   * @return
+   */
+  public boolean exists() {
+    Connection connection = connections.obtain();
+    boolean exists = r.dbList().contains(name).run(connection);
+    connections.free(connection);
+    return exists;
   }
 
   /**
@@ -86,5 +96,18 @@ public class Database {
     return port;
   }
 
+  /**
+   * Drop database
+   */
+  public void drop() {
+    if (exists()) {
+      r.dbDrop(name).run(mainConnection);
+    }
+  }
 
+  @Override
+  public void dispose() {
+    connections.clear();
+    mainConnection.close();
+  }
 }

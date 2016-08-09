@@ -2,5 +2,12 @@ eclipse.project.name = appName + '-shared'
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    testCompile 'junit:junit:4.12'
+
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
