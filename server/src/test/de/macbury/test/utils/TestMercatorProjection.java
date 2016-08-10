@@ -6,7 +6,6 @@ import de.macbury.utils.MercatorProjection;
 
 import static org.junit.Assert.*;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class TestMercatorProjection {
@@ -49,5 +48,31 @@ public class TestMercatorProjection {
     MercatorProjection.project(point, result);
     assertEquals(3339584.0, result.x, 1);
     assertEquals(6446275.0, result.y, 1);
+  }
+
+  @Test
+  public void unprojectsACenterPoint() {
+    Vector2 vector = new Vector2();
+    GeoPoint result = new GeoPoint();
+
+    MercatorProjection.unproject(vector, result);
+    assertEquals(0.0, result.lat, 0);
+    assertEquals(0.0, result.lng, 0);
+  }
+
+  public GeoPoint pr(GeoPoint point) {
+    Vector2 tempVec = new Vector2();
+    GeoPoint newResult = new GeoPoint();
+    MercatorProjection.project(point,tempVec);
+    MercatorProjection.unproject(tempVec, newResult);
+    return newResult;
+  }
+
+  @Test
+  public void unprojectsPiPoints() {
+    GeoPoint pA = new GeoPoint(-Math.PI, Math.PI);
+    GeoPoint rA = pr(pA);
+
+    assertEquals(pA, rA);
   }
 }

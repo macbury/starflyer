@@ -4,8 +4,8 @@ package de.macbury.utils;
  * Encapsulates a geo coordinate. Allows chaining methods by returning a reference to itself
  */
 public class GeoPoint {
-  double lat;
-  double lng;
+  public double lat;
+  public double lng;
 
   /**
    * @param lat Szerokość geograficzna
@@ -27,5 +27,15 @@ public class GeoPoint {
     this.lat = lat;
     this.lng = lng;
     return this;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (GeoPoint.class.isInstance(obj)) {
+      GeoPoint otherPoint = (GeoPoint)obj;
+      return lat == otherPoint.lat && lng == otherPoint.lng;
+    } else {
+      return super.equals(obj);
+    }
   }
 }
