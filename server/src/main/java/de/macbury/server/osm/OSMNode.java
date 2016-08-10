@@ -134,7 +134,7 @@ public class OSMNode {
    */
   public Location toLocation() {
     Location location = new Location();
-    location.setOsmId(id);
+    location.setId(id);
     location.setLng(lon);
     location.setLat(lat);
     location.setName(getName());

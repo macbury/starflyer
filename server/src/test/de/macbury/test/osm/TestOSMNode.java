@@ -26,6 +26,7 @@ public class TestOSMNode {
 
     assertEquals(osmNode.lat, location.getLat(), 0.2);
     assertEquals(osmNode.lon, location.getLng(), 0.2);
+
     assertEquals(osmNode.id, location.getOsmId());
     assertEquals(osmNode.timestamp, location.getTimestamp());
     assertEquals(osmNode.getName(), location.getName());

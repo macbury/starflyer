@@ -17,7 +17,7 @@ import static com.rethinkdb.RethinkDB.r;
 /**
  * Manage saving, finding, updating data in RethinkDB
  */
-public abstract class BaseTable<SomeModel extends BaseModel> {
+public abstract class BaseTable<SomeModel extends BaseModel, TypeOfId> {
   private static final String KEY_GENERATED_KEYS = "generated_keys";
   private static final String KEY_ID = "id";
   private final String name;
@@ -61,7 +61,7 @@ public abstract class BaseTable<SomeModel extends BaseModel> {
    * @param id
    * @return
    */
-  public SomeModel get(String id) {
+  public SomeModel get(TypeOfId id) {
     Connection connection = database.connections.obtain();
     try {
       HashMap<String, Object> data = query().get(id).run(connection);
@@ -69,7 +69,7 @@ public abstract class BaseTable<SomeModel extends BaseModel> {
         return null;
       } else {
         SomeModel model = deserialize(data);
-        model.setId((String)data.get(KEY_ID));
+        model.setId((TypeOfId)data.get(KEY_ID));
         return model;
       }
     } finally {

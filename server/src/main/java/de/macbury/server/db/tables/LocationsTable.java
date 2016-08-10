@@ -16,9 +16,9 @@ import static com.rethinkdb.RethinkDB.r;
 /**
  * Table with locations in world
  */
-public class LocationsTable extends BaseTable<Location> {
+public class LocationsTable extends BaseTable<Location, Long> {
   private static final String KEY_NAME = "name";
-  private static final String KEY_OSM_ID = "osm_id";
+  private static final String KEY_ID = "id";
   private static final String KEY_TIMESTAMP = "timestamp";
   private static final String KEY_TYPE = "type";
   private static final String KEY_SUB_TYPE = "sub_type";
@@ -36,7 +36,7 @@ public class LocationsTable extends BaseTable<Location> {
       timestamp = model.getTimestamp().getTime();
     return r.hashMap(KEY_NAME, model.getName())
             .with(KEY_POINT, r.point(model.getLng(), model.getLat()))
-            .with(KEY_OSM_ID, model.getOsmId())
+            .with(KEY_ID, model.getId())
             .with(KEY_TIMESTAMP, timestamp)
             .with(KEY_TYPE, model.getType())
             .with(KEY_SUB_TYPE, model.getSubType());
@@ -55,7 +55,7 @@ public class LocationsTable extends BaseTable<Location> {
     location.setLng((Double) points.get(0));
     location.setLat((Double) points.get(1));
     location.setName((String)data.get(KEY_NAME));
-    location.setOsmId((long)data.get(KEY_OSM_ID));
+    location.setId((long)data.get(KEY_ID));
     location.setTimestamp(new Date((long)data.get(KEY_TIMESTAMP)));
     location.setType((String)data.get(KEY_TYPE));
     location.setSubType((String)data.get(KEY_SUB_TYPE));

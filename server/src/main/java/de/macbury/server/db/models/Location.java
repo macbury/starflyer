@@ -5,8 +5,7 @@ import java.util.Date;
 /**
  * Place in the world
  */
-public class Location extends BaseModel {
-  private long osmId;
+public class Location extends BaseModel<Long> {
   private double lat;
   private double lng;
   private String name;
@@ -20,11 +19,7 @@ public class Location extends BaseModel {
   }
 
   public long getOsmId() {
-    return osmId;
-  }
-
-  public void setOsmId(long osmId) {
-    this.osmId = osmId;
+    return getId();
   }
 
   public double getLat() {
@@ -64,7 +59,7 @@ public class Location extends BaseModel {
    * @return
    */
   public boolean isValid() {
-    return lat != 0.0 && lat != 0.0 && name != null && timestamp != null && osmId != 0 && type != null && subType != null;
+    return lat != 0.0 && lat != 0.0 && name != null && timestamp != null && id != 0 && type != null && subType != null;
   }
 
   public String getType() {
