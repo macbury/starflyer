@@ -73,6 +73,42 @@ public class TestMercatorProjection {
     GeoPoint pA = new GeoPoint(-Math.PI, Math.PI);
     GeoPoint rA = pr(pA);
 
-    assertEquals(pA, rA);
+    assertEquals(pA.lng, rA.lng, GeoPoint.TOLERANCE);
+    assertEquals(pA.lat, rA.lat, GeoPoint.TOLERANCE);
+
+    assertTrue(pA.equals(rA));
+  }
+
+  @Test
+  public void unprojectsCenterPoints() {
+    GeoPoint pA = new GeoPoint(0, 0);
+    GeoPoint rA = pr(pA);
+
+    assertEquals(pA.lng, rA.lng, GeoPoint.TOLERANCE);
+    assertEquals(pA.lat, rA.lat, GeoPoint.TOLERANCE);
+
+    assertTrue(pA.equals(rA));
+  }
+
+  @Test
+  public void unprojectsOtherPoints() {
+    GeoPoint pA = new GeoPoint(0.523598775598, 1.010683188683);
+    GeoPoint rA = pr(pA);
+
+    assertEquals(pA.lng, rA.lng, GeoPoint.TOLERANCE);
+    assertEquals(pA.lat, rA.lat, GeoPoint.TOLERANCE);
+
+    assertTrue(pA.equals(rA));
+  }
+
+  @Test
+  public void unprojectsCracowPoints() {
+    GeoPoint pA = new GeoPoint(50.062082, 19.939232);
+    GeoPoint rA = pr(pA);
+
+    assertEquals(pA.lng, rA.lng, GeoPoint.TOLERANCE);
+    assertEquals(pA.lat, rA.lat, GeoPoint.TOLERANCE);
+
+    assertTrue(pA.equals(rA));
   }
 }

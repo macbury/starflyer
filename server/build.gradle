@@ -21,14 +21,15 @@ jar {
   }
 }
 
-sourceSets.test.java.srcDirs = ["src/"]
+sourceSets.main.java.srcDirs = [ "src/main/java/" ]
+sourceSets.test.java.srcDirs = [ "test/" ]
 
 idea {
   module {
-    testSourceDirs += file('src/test')
+    testSourceDirs += file('test/')
   }
 }
 
 test {
-  include 'src/test/**/*'
+  include 'test/**/*'
 }

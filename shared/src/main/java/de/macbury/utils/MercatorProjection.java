@@ -10,7 +10,7 @@ public class MercatorProjection {
   private static final double R = 6378137.0;
   private static final double MAX_LATITUDE = 85.0511287798;
   private static final double D = Math.PI / 180.0;
-
+  private static final double D2 = 180.0 / Math.PI;
   /**
    * Project {@link GeoPoint} into world position
    * @param inLatLng
@@ -30,10 +30,9 @@ public class MercatorProjection {
    * @param outLatLng
    */
   public static void unproject(Vector2 inWorld, GeoPoint outLatLng) {
-    /*outLatLng.set(
-            yToLat(inWorld.y),
-            xToLon(inWorld.x)
-    );*/
+    double lat = (2.0 * Math.atan(Math.exp(inWorld.y / R)) - (Math.PI / 2.0)) * D2;
+    double lng = (inWorld.x * D2 / R);
+    outLatLng.set(lat, lng);
   }
 
 }
