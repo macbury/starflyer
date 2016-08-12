@@ -10,6 +10,11 @@ dependencies {
   compile group: 'com.rethinkdb', name: 'rethinkdb-driver', version: '2.3.0'
   compile 'com.martiansoftware:jsap:2.1'
 
+  compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+  compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+  compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+  compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
   testCompile 'junit:junit:4.+'
   testCompile "org.mockito:mockito-all:1.9.+"
 }

@@ -1,5 +1,9 @@
 package de.macbury.server;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
+
 import de.macbury.server.db.Database;
 import de.macbury.server.db.models.Location;
 import de.macbury.server.osm.OSMImporter;
@@ -22,13 +26,11 @@ public class ServerLauncher {
     if (serverArgs.isSuccess()) {
       Database database = new Database(serverArgs.getDatabaseHost(), serverArgs.getDatabasePort(), serverArgs.getDatabaseName());
 
-      Location location = new Location();
-      location.setName("TEST");
-      database.locations.create(location);
       if (serverArgs.isGoingToImportFile()) { // Import osm into database
         OSMImporter osmImporter = new OSMImporter(serverArgs.getImportFile(), database);
+        System.exit(0);
       } else {
-
+        HeadlessApplication application = new HeadlessApplication(new StarflyerServer(database, serverArgs), getDefaultConfiguration());
       }
     } else {
       System.err.println();
@@ -36,7 +38,12 @@ public class ServerLauncher {
       System.err.println();
       System.exit(1);
     }
+  }
 
-    System.exit(0);
+
+  private static HeadlessApplicationConfiguration getDefaultConfiguration() {
+    HeadlessApplicationConfiguration configuration = new HeadlessApplicationConfiguration();
+    configuration.renderInterval = -1f; // When this value is negative, Starflyer#render() is never called.
+    return configuration;
   }
 }

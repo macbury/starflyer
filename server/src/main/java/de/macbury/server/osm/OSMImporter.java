@@ -39,7 +39,12 @@ public class OSMImporter implements OSMParser.Listener {
   @Override
   public void onNodeFound(OSMParser parser, OSMNode cursor) {
     if (cursor.isPointOfInterest() && cursor.haveName()) {
-      database.locations.create(cursor.toLocation());
+      try {
+        database.locations.create(cursor.toLocation());
+      } catch (Exception e){
+        e.toString();
+      }
+
     }
   }
 }

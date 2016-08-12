@@ -17,6 +17,9 @@ public class GeoPoint {
     set(lat, lng);
   }
 
+  /**
+   * Point at center of earth
+   */
   public GeoPoint() {
     set(0,0);
   }

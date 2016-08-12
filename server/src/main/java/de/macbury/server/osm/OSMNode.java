@@ -19,6 +19,7 @@ public class OSMNode {
   private static final String TYPE_AMENITY = "amenity";
   private static final String TYPE_HISTORIC = "historic";
   private static final String TYPE_TOURISM = "tourism";
+  private static final String TYPE_SHOP = "shop";
   private static final String TYPE_NAME = "name";
   private final SimpleDateFormat formatter;
   /**
@@ -62,14 +63,16 @@ public class OSMNode {
    * @return
    */
   public String getType() {
-    if (isAmenity()) {
+    if (isShop()) {
+      return TYPE_SHOP;
+    } else if (isAmenity()) {
       return TYPE_AMENITY;
     } else if (isHistoric()) {
       return TYPE_HISTORIC;
     } else if (isTourism()) {
       return TYPE_TOURISM;
     } else {
-      return null;
+      throw new RuntimeException("Implement get type");
     }
   }
 
@@ -86,6 +89,11 @@ public class OSMNode {
    */
   public boolean isAmenity() {
     return tags.containsKey(TYPE_AMENITY);
+  }
+
+
+  public boolean isShop() {
+    return tags.containsKey(TYPE_SHOP);
   }
 
   /**
@@ -121,7 +129,7 @@ public class OSMNode {
   }
 
   public boolean isPointOfInterest() {
-    return isAmenity() || isHistoric() || isTourism();
+    return isAmenity() || isHistoric() || isTourism() || isShop();
   }
 
   public String getName() {
