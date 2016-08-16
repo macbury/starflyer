@@ -1,13 +1,11 @@
-apply plugin: 'application'
-
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-mainClassName = 'de.macbury.server.ServerLauncher'
-eclipse.project.name = appName + '-tests'
+
 project(":tests") {
   apply plugin: "java"
 
   sourceSets.test.java.srcDirs = ["src/"]
+
 
   idea {
     module {
@@ -15,9 +13,6 @@ project(":tests") {
     }
   }
 
-  test {
-    include 'src/**/*'
-  }
 
   dependencies {
 
