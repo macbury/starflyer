@@ -12,7 +12,7 @@ public class TestWithDatabase {
 
   @Before
   public void setupDatabase() {
-    this.database = new Database("192.168.56.1", 28015, "starflyer_test");
+    this.database = new Database("127.0.0.1", 28015, "starflyer_test");
   }
 
   @After
