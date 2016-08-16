@@ -1,4 +1,4 @@
-package de.macbury.test.osm;
+package de.macbury.tests.osm;
 
 
 import de.macbury.server.db.models.Location;

@@ -15,8 +15,6 @@ dependencies {
   compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
   compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
-  testCompile 'junit:junit:4.+'
-  testCompile "org.mockito:mockito-all:1.9.+"
 }
 
 jar {
@@ -24,17 +22,4 @@ jar {
   manifest {
     attributes 'Main-Class': project.mainClassName
   }
-}
-
-sourceSets.main.java.srcDirs = [ "src/main/java/" ]
-sourceSets.test.java.srcDirs = [ "test/" ]
-
-idea {
-  module {
-    testSourceDirs += file('test/')
-  }
-}
-
-test {
-  include 'test/**/*'
 }

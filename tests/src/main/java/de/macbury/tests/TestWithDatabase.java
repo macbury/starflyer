@@ -1,4 +1,4 @@
-package de.macbury.test;
+package de.macbury.tests;
 
 import de.macbury.server.db.Database;
 import org.junit.After;

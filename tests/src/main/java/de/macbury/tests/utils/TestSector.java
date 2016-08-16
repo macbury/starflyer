@@ -1,8 +1,6 @@
-package de.macbury.test.utils;
+package de.macbury.tests.utils;
 
-import com.badlogic.gdx.math.Vector2;
 import de.macbury.utils.GeoPoint;
-import de.macbury.utils.MercatorProjection;
 import de.macbury.utils.Sector;
 import org.junit.Test;
 
