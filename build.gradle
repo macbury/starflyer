@@ -6,6 +6,8 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
+    classpath 'com.android.tools.build:gradle:0.12.+'
+    classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
     classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
     classpath "com.android.tools.build:gradle:$androidPluginVersion"
   }
@@ -14,6 +16,7 @@ buildscript {
 allprojects {
   apply plugin: 'eclipse'
   apply plugin: 'idea'
+  apply plugin: 'android-sdk-manager'
 }
 
 configure(subprojects - project(':android')) {
