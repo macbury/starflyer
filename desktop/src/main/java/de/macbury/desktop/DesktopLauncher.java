@@ -3,8 +3,6 @@ package de.macbury.desktop;
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Listener;
 import de.macbury.SharedConsts;
 import de.macbury.Starflyer;
 
@@ -17,17 +15,7 @@ public class DesktopLauncher {
     }
 
     private static LwjglApplication createApplication() {
-      Client client = new Client();
-      client.start();
-      try {
-        client.connect(5000, "localhost", SharedConsts.PORT);
-        client.sendTCP("Hello!");
-        client.addListener(new Listener() {
 
-        });
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
 
       return new LwjglApplication(new Starflyer(), getDefaultConfiguration());
     }
