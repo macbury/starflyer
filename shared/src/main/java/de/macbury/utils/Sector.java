@@ -23,6 +23,10 @@ public class Sector {
   private Vector3 tempB = new Vector3();
   private Vector2 tempC = new Vector2();
 
+  public String getId() {
+    return x+"/"+y;
+  }
+
   /**
    * Calculate on which tile is passed point
    * @param point
@@ -47,5 +51,12 @@ public class Sector {
    */
   public Vector3 getPosition() {
     return box.getMin(tempA);
+  }
+
+  @Override
+  public String toString() {
+    return "Sector{" +
+            "id=" + getId() +
+            '}';
   }
 }

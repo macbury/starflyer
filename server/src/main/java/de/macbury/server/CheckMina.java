@@ -21,10 +21,10 @@ import java.util.Date;
 public class CheckMina {
   public static void main(String[] args) {
     IoAcceptor acceptor = new NioSocketAcceptor();
-    acceptor.getFilterChain().addLast( "logger", new LoggingFilter() );
-    acceptor.getFilterChain().addLast( "codec", new ProtocolCodecFilter( new TextLineCodecFactory( Charset.forName( "UTF-8" ))));
+    acceptor.getFilterChain().addLast("logger", new LoggingFilter());
+    acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter( new TextLineCodecFactory( Charset.forName( "UTF-8" ))));
 
-    acceptor.setHandler(  new TimeServerHandler() );
+    acceptor.setHandler(new TimeServerHandler());
     acceptor.getSessionConfig().setReadBufferSize( 2048 );
     acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, 10 );
 
