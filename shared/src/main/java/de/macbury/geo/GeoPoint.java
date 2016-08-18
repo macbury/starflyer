@@ -1,6 +1,4 @@
-package de.macbury.utils;
-
-import com.badlogic.gdx.math.MathUtils;
+package de.macbury.geo;
 
 /**
  * Encapsulates a geo coordinate. Allows chaining methods by returning a reference to itself

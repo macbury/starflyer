@@ -1,6 +1,6 @@
 package de.macbury.tests.utils;
 
-import de.macbury.utils.GeoPoint;
+import de.macbury.geo.GeoPoint;
 import de.macbury.utils.Sector;
 import org.junit.Test;
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import de.macbury.geo.MercatorProjection;
 
 /**
  * Represents sector in world.
@@ -32,7 +33,7 @@ public class Sector {
    * @param point
    * @return
    */
-  public Sector from(GeoPoint point) {
+  public Sector from(de.macbury.geo.GeoPoint point) {
     // tempA minimum point
     // tempB maxiumum point
     MercatorProjection.project(point, tempC);

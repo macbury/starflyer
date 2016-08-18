@@ -23,8 +23,9 @@ public class DesktopLauncher {
     private static LwjglApplicationConfiguration getDefaultConfiguration() {
         LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
         configuration.title = "Starflyer";
-        configuration.width = 640;
-        configuration.height = 480;
+        configuration.width = 1368;
+        configuration.height = 768;
+        
         for (int size : new int[] { 128, 64, 32, 16 }) {
             configuration.addIcon("libgdx" + size + ".png", FileType.Internal);
         }

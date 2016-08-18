@@ -1,6 +1,5 @@
-package de.macbury.utils;
+package de.macbury.geo;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 /**
