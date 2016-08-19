@@ -1,10 +1,7 @@
 package de.macbury.tests.geo;
 
 import com.badlogic.gdx.Gdx;
-import de.macbury.geo.Feature;
-import de.macbury.geo.FeatureCollection;
-import de.macbury.geo.FeatureGeometry;
-import de.macbury.geo.GeoJSON;
+import de.macbury.geo.*;
 import de.macbury.tests.GdxTestRunner;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -21,14 +18,31 @@ public class TestItShouldReadGeoJson {
     Assert.assertNotNull(collection);
     Assert.assertEquals(17, collection.getFeatures().size());
 
-    Feature feature = collection.getFeatures().get(0);
-    Assert.assertEquals("openstreetmap.org", feature.getPropSource());
-    Assert.assertEquals(163221025, feature.getPropId());
-    Assert.assertEquals("church", feature.getPropKind());
-    Assert.assertEquals("place_of_worship", feature.getPropLandUse());
+    Feature polygonFeature = collection.getFeatures().get(0);
+    Assert.assertEquals(GeoJSON.Type.Feature, polygonFeature.getType());
+    Assert.assertEquals("openstreetmap.org", polygonFeature.getPropSource());
+    Assert.assertEquals(163221025, polygonFeature.getPropId());
+    Assert.assertEquals("church", polygonFeature.getPropKind());
+    Assert.assertEquals("place_of_worship", polygonFeature.getPropLandUse());
 
-    FeatureGeometry geometry = feature.getGeometry();
+    FeatureGeometry geometry = polygonFeature.getGeometry();
     Assert.assertNotNull(geometry);
-    Assert.assertEquals(17, geometry.getCoordinates().size());
+    Assert.assertEquals(GeoJSON.Type.Polygon, geometry.getType());
+    Assert.assertEquals(179, geometry.getCoordinates().size());
+
+    GeoPoint firstCoord = geometry.getCoordinates().get(0);
+    Assert.assertEquals(50.0925789, firstCoord.lat);
+    Assert.assertEquals(20.057813, firstCoord.lng);
+
+    Feature pointFeature = collection.getFeatures().get(11);
+
+    geometry = pointFeature.getGeometry();
+    Assert.assertEquals(GeoJSON.Type.Point, geometry.getType());
+    Assert.assertEquals(1, geometry.getCoordinates().size());
+
+    GeoPoint pointCoord = geometry.getCoordinates().get(0);
+
+    Assert.assertEquals(50.09398094, pointCoord.lat);
+    Assert.assertEquals(20.05994134, pointCoord.lng);
   }
 }

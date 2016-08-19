@@ -10,9 +10,9 @@ import java.util.ArrayList;
  */
 public class FeatureGeometry extends GeoJSON {
   @Expose
-  private ArrayList<GeoPoint> coordinates;
+  private Coordinates coordinates;
 
-  public ArrayList<GeoPoint> getCoordinates() {
+  public Coordinates getCoordinates() {
     return coordinates;
   }
 }

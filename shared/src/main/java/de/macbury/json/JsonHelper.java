@@ -3,6 +3,8 @@ package de.macbury.json;
 import com.badlogic.gdx.utils.Pool;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.macbury.geo.Coordinates;
+import de.macbury.json.serializers.CoordinatesSerializerAndDeserializer;
 
 /**
  * This class helps with serialization and deserialization objects. It contains poll of gson objects
@@ -25,6 +27,7 @@ public class JsonHelper {
     GsonBuilder gson = new GsonBuilder();
     gson.excludeFieldsWithoutExposeAnnotation();
     gson.setVersion(CURRENT_VERSION);
+    gson.registerTypeAdapter(Coordinates.class, new CoordinatesSerializerAndDeserializer());
     return gson.create();
   }
 
