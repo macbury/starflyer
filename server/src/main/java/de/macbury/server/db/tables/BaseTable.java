@@ -19,7 +19,7 @@ import static com.rethinkdb.RethinkDB.r;
  */
 public abstract class BaseTable<SomeModel extends BaseModel, TypeOfId> {
   private static final String KEY_GENERATED_KEYS = "generated_keys";
-  private static final String KEY_ID = "id";
+  protected static final String KEY_ID = "id";
   private final String name;
   private final Database database;
 
@@ -69,6 +69,9 @@ public abstract class BaseTable<SomeModel extends BaseModel, TypeOfId> {
         return null;
       } else {
         SomeModel model = deserialize(data);
+        if (model == null) {
+          throw new RuntimeException("Deserialization returned null object: " + getClass().toString());
+        }
         model.setId((TypeOfId)data.get(KEY_ID));
         return model;
       }

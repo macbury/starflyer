@@ -1,4 +1,4 @@
-package de.macbury.tests;
+package de.macbury.tests.support;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.rethinkdb.gen.ast.Javascript;
 import com.rethinkdb.net.Connection;
 import de.macbury.server.db.tables.LocationsTable;
+import de.macbury.server.db.tables.TilesTable;
 
 import static com.rethinkdb.RethinkDB.r;
 /**
@@ -15,6 +16,7 @@ public class Database implements Disposable {
   private final String host;
   private final Integer port;
   private final Connection mainConnection;
+  public final TilesTable tiles;
   public ConnectionPool connections;
   public final LocationsTable locations;
 
@@ -28,6 +30,7 @@ public class Database implements Disposable {
     create();
 
     this.locations = new LocationsTable(this);
+    this.tiles     = new TilesTable(this);
   }
 
   /**

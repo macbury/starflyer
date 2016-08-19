@@ -38,8 +38,24 @@ public class CoordinatesSerializerAndDeserializer implements JsonDeserializer<Co
   }
 
   @Override
-  public JsonElement serialize(Coordinates src, Type typeOfSrc, JsonSerializationContext context) {
-    throw new RuntimeException("Implement serialization here!");
-    //return null;
+  public JsonElement serialize(Coordinates coordinates, Type typeOfSrc, JsonSerializationContext context) {
+    if (coordinates.size() == 1) {// if we have point
+      JsonArray jsonCoordinates = new JsonArray();
+      jsonCoordinates.add(coordinates.get(0).lng);
+      jsonCoordinates.add(coordinates.get(0).lat);
+      return jsonCoordinates;
+    } else {
+      JsonArray jsonCoordinates = new JsonArray();
+      for (GeoPoint point : coordinates) {
+        JsonArray pointArray = new JsonArray();
+        pointArray.add(point.lng);
+        pointArray.add(point.lat);
+        jsonCoordinates.add(pointArray);
+      }
+
+      JsonArray root = new JsonArray();
+      root.add(jsonCoordinates);
+      return root;
+    }
   }
 }

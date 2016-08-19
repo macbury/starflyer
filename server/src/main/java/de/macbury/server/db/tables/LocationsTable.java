@@ -18,7 +18,6 @@ import static com.rethinkdb.RethinkDB.r;
  */
 public class LocationsTable extends BaseTable<Location, Long> {
   private static final String KEY_NAME = "name";
-  private static final String KEY_ID = "id";
   private static final String KEY_TIMESTAMP = "timestamp";
   private static final String KEY_TYPE = "type";
   private static final String KEY_SUB_TYPE = "sub_type";

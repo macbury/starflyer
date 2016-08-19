@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder;
 import de.macbury.geo.Coordinates;
 import de.macbury.json.serializers.CoordinatesSerializerAndDeserializer;
 
+import java.util.HashMap;
+
 /**
  * This class helps with serialization and deserialization objects. It contains poll of gson objects
  */
@@ -40,6 +42,21 @@ public class JsonHelper {
     Gson gson = gsonPool.obtain();
     try {
       return gson.toJson(src);
+    } finally {
+      gsonPool.free(gson);
+    }
+  }
+
+  /**
+   * Transform object into hash
+   * @param src
+   * @return
+   */
+  public static HashMap toHash(Object src) {
+    Gson gson = gsonPool.obtain();
+    try {
+      String json = gson.toJson(src);
+      return gson.fromJson(json, HashMap.class);
     } finally {
       gsonPool.free(gson);
     }

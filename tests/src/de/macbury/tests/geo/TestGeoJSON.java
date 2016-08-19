@@ -2,18 +2,32 @@ package de.macbury.tests.geo;
 
 import com.badlogic.gdx.Gdx;
 import de.macbury.geo.*;
-import de.macbury.tests.GdxTestRunner;
+import de.macbury.json.JsonHelper;
+import de.macbury.tests.support.GdxTestRunner;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(GdxTestRunner.class)
-public class TestItShouldReadGeoJson {
+public class TestGeoJSON {
+
+  @Test
+  public void itSerializeGeoJsonHome() {
+    FeatureCollection collection = FeatureCollection.parse(Gdx.files.internal("fixtures/geo_jsons/home.json").readString());
+
+    String json = JsonHelper.toJson(collection);
+    FeatureCollection deserializedJson = FeatureCollection.parse(json);
+
+    assertIsHome(deserializedJson);
+  }
 
   @Test
   public void itReadsGeoJsonForHome() {
     FeatureCollection collection = FeatureCollection.parse(Gdx.files.internal("fixtures/geo_jsons/home.json").readString());
+    assertIsHome(collection);
+  }
 
+  public static void assertIsHome(FeatureCollection collection) {
     Assert.assertEquals(GeoJSON.Type.FeatureCollection, collection.getType());
     Assert.assertNotNull(collection);
     Assert.assertEquals(17, collection.getFeatures().size());

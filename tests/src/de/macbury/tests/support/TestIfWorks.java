@@ -1,4 +1,4 @@
-package de.macbury.tests;
+package de.macbury.tests.support;
 
 import org.junit.Test;
 

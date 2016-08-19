@@ -1,7 +1,7 @@
 package de.macbury.tests.db;
 
 import de.macbury.server.db.models.Location;
-import de.macbury.tests.TestWithDatabase;
+import de.macbury.tests.support.TestWithDatabase;
 import org.junit.Test;
 
 import java.util.Date;

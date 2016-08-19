@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Place in the world
  */
-public class Location extends BaseModel<Long> {
+public class Location implements BaseModel<Long> {
   private double lat;
   private double lng;
   private String name;
@@ -13,6 +13,7 @@ public class Location extends BaseModel<Long> {
 
   private String type;
   private String subType;
+  private Long id;
 
   public Location() {
 
@@ -76,5 +77,15 @@ public class Location extends BaseModel<Long> {
 
   public void setSubType(String subType) {
     this.subType = subType;
+  }
+
+  @Override
+  public Long getId() {
+    return id;
+  }
+
+  @Override
+  public void setId(Long newId) {
+    this.id = newId;
   }
 }

@@ -1,12 +1,14 @@
-package de.macbury.tests;
+package de.macbury.tests.support;
 
 import de.macbury.server.db.Database;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 
 /**
  * Base class that wraps tests for database
  */
+@RunWith(GdxTestRunner.class)
 public class TestWithDatabase {
   protected Database database;
 
