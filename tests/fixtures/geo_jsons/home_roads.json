@@ -1,0 +1,1286 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05896545,
+            50.0928666
+          ],
+          [
+            20.05899102,
+            50.09280552
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 340132897,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05899102,
+            50.09280552
+          ],
+          [
+            20.05899932,
+            50.09278568
+          ],
+          [
+            20.05925022,
+            50.09243212
+          ],
+          [
+            20.0592742,
+            50.09239321
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "kind": "path",
+        "id": 340132897,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06021995,
+            50.0936049
+          ],
+          [
+            20.06103516,
+            50.09341537
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "minor_road",
+        "sort_key": 358,
+        "landuse_kind": "residential",
+        "source": "openstreetmap.org",
+        "id": 163221043,
+        "highway": "service"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05948135,
+            50.09364547
+          ],
+          [
+            20.05978508,
+            50.09368161
+          ],
+          [
+            20.05985255,
+            50.09369961
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 340132895,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05985255,
+            50.09369961
+          ],
+          [
+            20.05989072,
+            50.09370979
+          ],
+          [
+            20.06008817,
+            50.09372351
+          ],
+          [
+            20.06019983,
+            50.09378667
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "residential",
+        "source": "openstreetmap.org",
+        "id": 340132895,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06022911,
+            50.09275762
+          ],
+          [
+            20.06029056,
+            50.0927881
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 299563004,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05871211,
+            50.09239321
+          ],
+          [
+            20.05846365,
+            50.09270869
+          ],
+          [
+            20.05835065,
+            50.09274096
+          ],
+          [
+            20.05828857,
+            50.09273145
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 299557797,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05844811,
+            50.09318968
+          ],
+          [
+            20.05828857,
+            50.09328987
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 101342023,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06092316,
+            50.09239321
+          ],
+          [
+            20.06094552,
+            50.09240682
+          ],
+          [
+            20.06103516,
+            50.09246304
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "kind": "path",
+        "id": 101515022,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06047379,
+            50.09239321
+          ],
+          [
+            20.0604457,
+            50.09246237
+          ],
+          [
+            20.06034365,
+            50.09263527
+          ],
+          [
+            20.06031122,
+            50.09270512
+          ],
+          [
+            20.06068627,
+            50.0924618
+          ],
+          [
+            20.06069525,
+            50.09246197
+          ],
+          [
+            20.0607178,
+            50.09246249
+          ],
+          [
+            20.06074106,
+            50.09247678
+          ],
+          [
+            20.06085245,
+            50.09241546
+          ],
+          [
+            20.06088378,
+            50.09239321
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 299562996,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06039747,
+            50.09239321
+          ],
+          [
+            20.06024241,
+            50.09247741
+          ],
+          [
+            20.06024241,
+            50.09250871
+          ],
+          [
+            20.06013156,
+            50.09269048
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 299563686,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05972647,
+            50.09337147
+          ],
+          [
+            20.05970378,
+            50.0933617
+          ],
+          [
+            20.05957738,
+            50.0934912
+          ],
+          [
+            20.05948135,
+            50.09364547
+          ],
+          [
+            20.05926549,
+            50.09397097
+          ],
+          [
+            20.05922569,
+            50.0940188
+          ],
+          [
+            20.05914485,
+            50.09405459
+          ],
+          [
+            20.0590755,
+            50.0940758
+          ],
+          [
+            20.05894901,
+            50.09410467
+          ],
+          [
+            20.05883645,
+            50.09411187
+          ],
+          [
+            20.05873432,
+            50.09415452
+          ],
+          [
+            20.05873314,
+            50.09415525
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 101342025,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06019983,
+            50.09378667
+          ],
+          [
+            20.06028184,
+            50.0937133
+          ],
+          [
+            20.05999345,
+            50.09353421
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "residential",
+        "source": "openstreetmap.org",
+        "id": 101342025,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05999345,
+            50.09353421
+          ],
+          [
+            20.05974258,
+            50.09337842
+          ],
+          [
+            20.05972647,
+            50.09337147
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "kind": "path",
+        "id": 101342025,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05850228,
+            50.09272909
+          ],
+          [
+            20.05856543,
+            50.09276027
+          ],
+          [
+            20.05861861,
+            50.09279888
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "kind": "path",
+        "id": 299558313,
+        "highway": "steps"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06069866,
+            50.09390331
+          ],
+          [
+            20.06103516,
+            50.09381782
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "minor_road",
+        "sort_key": 358,
+        "landuse_kind": "residential",
+        "source": "openstreetmap.org",
+        "id": 163221046,
+        "highway": "service"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.0602213,
+            50.0929002
+          ],
+          [
+            20.05991955,
+            50.09270661
+          ],
+          [
+            20.05988928,
+            50.09268639
+          ],
+          [
+            20.05981571,
+            50.0927284
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 358,
+        "source": "openstreetmap.org",
+        "kind": "minor_road",
+        "id": 299563009,
+        "highway": "service"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05988928,
+            50.09268639
+          ],
+          [
+            20.06004801,
+            50.09256882
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 358,
+        "source": "openstreetmap.org",
+        "kind": "minor_road",
+        "id": 299563011,
+        "highway": "service"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05907789,
+            50.09239321
+          ],
+          [
+            20.05907586,
+            50.09239489
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 358,
+        "source": "openstreetmap.org",
+        "kind": "minor_road",
+        "id": 163221030,
+        "highway": "service"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06103516,
+            50.09412624
+          ],
+          [
+            20.06069866,
+            50.09390331
+          ],
+          [
+            20.06021995,
+            50.0936049
+          ],
+          [
+            20.06003804,
+            50.09348836
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "minor_road",
+        "name": "Jarz\\u0119biny",
+        "sort_key": 360,
+        "landuse_kind": "residential",
+        "source": "openstreetmap.org",
+        "id": 47461642,
+        "highway": "residential"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06003804,
+            50.09348836
+          ],
+          [
+            20.05988623,
+            50.09339109
+          ],
+          [
+            20.05984023,
+            50.09333427
+          ],
+          [
+            20.0602213,
+            50.0929002
+          ],
+          [
+            20.0607239,
+            50.09255182
+          ],
+          [
+            20.06094552,
+            50.09240682
+          ],
+          [
+            20.06096497,
+            50.09239321
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "minor_road",
+        "name": "Jarz\\u0119biny",
+        "sort_key": 360,
+        "source": "openstreetmap.org",
+        "id": 47461642,
+        "highway": "residential"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05846365,
+            50.09270869
+          ],
+          [
+            20.05850228,
+            50.09272909
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 299558312,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06031122,
+            50.09270512
+          ],
+          [
+            20.06022911,
+            50.09275762
+          ],
+          [
+            20.0601365,
+            50.0928168
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 299563000,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05859801,
+            50.09415525
+          ],
+          [
+            20.05860119,
+            50.09410167
+          ],
+          [
+            20.05855636,
+            50.09402796
+          ],
+          [
+            20.05853085,
+            50.09396186
+          ],
+          [
+            20.05853929,
+            50.09390631
+          ],
+          [
+            20.05857361,
+            50.0938288
+          ],
+          [
+            20.05865508,
+            50.09371849
+          ],
+          [
+            20.05870889,
+            50.09365786
+          ],
+          [
+            20.05873989,
+            50.0935418
+          ],
+          [
+            20.05871833,
+            50.09347051
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 299571467,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05865508,
+            50.09371849
+          ],
+          [
+            20.05926549,
+            50.09397097
+          ],
+          [
+            20.05958108,
+            50.09415525
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 101342063,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05862975,
+            50.09280361
+          ],
+          [
+            20.05861861,
+            50.09279888
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "kind": "path",
+        "id": 340132877,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05859345,
+            50.09288005
+          ],
+          [
+            20.05858942,
+            50.09289991
+          ],
+          [
+            20.05845772,
+            50.09305488
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 340132899,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05926815,
+            50.09239321
+          ],
+          [
+            20.05922372,
+            50.09242779
+          ],
+          [
+            20.05891488,
+            50.09266996
+          ],
+          [
+            20.05872946,
+            50.09274966
+          ],
+          [
+            20.05862975,
+            50.09280361
+          ],
+          [
+            20.05859472,
+            50.0928738
+          ],
+          [
+            20.05859345,
+            50.09288005
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "kind": "path",
+        "id": 340132899,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              20.05986081,
+              50.09321432
+            ],
+            [
+              20.0598078,
+              50.09327151
+            ],
+            [
+              20.05972893,
+              50.09329929
+            ],
+            [
+              20.05927097,
+              50.09325169
+            ],
+            [
+              20.0590604,
+              50.09321941
+            ],
+            [
+              20.05885658,
+              50.09326287
+            ]
+          ],
+          [
+            [
+              20.05997604,
+              50.0929959
+            ],
+            [
+              20.05994273,
+              50.09303229
+            ],
+            [
+              20.05998182,
+              50.09307277
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 340132898,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              20.05998182,
+              50.09307277
+            ],
+            [
+              20.05998702,
+              50.09307816
+            ],
+            [
+              20.05986081,
+              50.09321432
+            ]
+          ],
+          [
+            [
+              20.06010047,
+              50.09285997
+            ],
+            [
+              20.05997604,
+              50.0929959
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 340132898,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05863047,
+            50.09287311
+          ],
+          [
+            20.05896545,
+            50.0928666
+          ],
+          [
+            20.05962449,
+            50.09287517
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 299557793,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              20.05828857,
+              50.09288421
+            ],
+            [
+              20.05831112,
+              50.09288222
+            ],
+            [
+              20.05859472,
+              50.0928738
+            ],
+            [
+              20.05863047,
+              50.09287311
+            ]
+          ],
+          [
+            [
+              20.05962449,
+              50.09287517
+            ],
+            [
+              20.05971887,
+              50.0928764
+            ]
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 299557793,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05873989,
+            50.0935418
+          ],
+          [
+            20.05858205,
+            50.09347241
+          ],
+          [
+            20.05844865,
+            50.09331767
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 101342072,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05885658,
+            50.09326287
+          ],
+          [
+            20.05858052,
+            50.09332321
+          ],
+          [
+            20.05844865,
+            50.09331767
+          ],
+          [
+            20.05828857,
+            50.09331378
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 101342070,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05828857,
+            50.09316101
+          ],
+          [
+            20.05844811,
+            50.09318968
+          ],
+          [
+            20.05885658,
+            50.09326287
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "sort_key": 354,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 101342078,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.0585666,
+            50.09342319
+          ],
+          [
+            20.05914458,
+            50.09329836
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "minor_road",
+        "sort_key": 358,
+        "landuse_kind": "parking",
+        "source": "openstreetmap.org",
+        "id": 163221061,
+        "highway": "service"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05914458,
+            50.09329836
+          ],
+          [
+            20.05922911,
+            50.0932801
+          ],
+          [
+            20.05976404,
+            50.09332752
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "minor_road",
+        "sort_key": 358,
+        "landuse_kind": "park",
+        "source": "openstreetmap.org",
+        "id": 163221061,
+        "highway": "service"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05976404,
+            50.09332752
+          ],
+          [
+            20.05984023,
+            50.09333427
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "sort_key": 358,
+        "source": "openstreetmap.org",
+        "kind": "minor_road",
+        "id": 163221061,
+        "highway": "service"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.05986008,
+            50.09274327
+          ],
+          [
+            20.05979819,
+            50.09282568
+          ],
+          [
+            20.06003049,
+            50.09283548
+          ],
+          [
+            20.06008808,
+            50.0928398
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 299563013,
+        "highway": "footway"
+      }
+    },
+    {
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20.06022911,
+            50.09275762
+          ],
+          [
+            20.06013156,
+            50.09269048
+          ],
+          [
+            20.06003642,
+            50.09262507
+          ]
+        ]
+      },
+      "type": "Feature",
+      "properties": {
+        "kind": "path",
+        "footway": "sidewalk",
+        "sort_key": 354,
+        "source": "openstreetmap.org",
+        "id": 299563006,
+        "highway": "footway"
+      }
+    }
+  ]
+}

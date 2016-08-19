@@ -4,7 +4,10 @@ import com.badlogic.gdx.utils.Pool;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.macbury.geo.Coordinates;
+import de.macbury.geo.FeatureCollection;
+import de.macbury.geo.GeoJSON;
 import de.macbury.json.serializers.CoordinatesSerializerAndDeserializer;
+import de.macbury.json.serializers.GeoJSONSerializerAndDeserializer;
 
 import java.util.HashMap;
 
@@ -29,7 +32,8 @@ public class JsonHelper {
     GsonBuilder gson = new GsonBuilder();
     gson.excludeFieldsWithoutExposeAnnotation();
     gson.setVersion(CURRENT_VERSION);
-    gson.registerTypeAdapter(Coordinates.class, new CoordinatesSerializerAndDeserializer());
+    gson.registerTypeAdapter(FeatureCollection.class, new GeoJSONSerializerAndDeserializer());
+
     return gson.create();
   }
 

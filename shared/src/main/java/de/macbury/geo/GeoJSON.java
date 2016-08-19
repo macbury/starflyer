@@ -13,9 +13,7 @@ public abstract class GeoJSON {
   public enum Type {
     Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon, GeometryCollection, Feature, FeatureCollection
   }
-  @Expose
   private Type type;
-
 
   public Type getType() {
     return type;
@@ -23,6 +21,16 @@ public abstract class GeoJSON {
 
   public void setType(Type type) {
     this.type = type;
+  }
+
+  /**
+   * Parses the given String as FeatureCollection and returns a concrete subclass of
+   * {@link GeoJSON} corresponding to the type of the root object.
+   * @param rawJson
+   * @return
+   */
+  public static <GeoJSONType extends GeoJSON> GeoJSONType parse(String rawJson, Class<GeoJSONType> type) {
+    return JsonHelper.fromJson(rawJson, type);
   }
 
 }

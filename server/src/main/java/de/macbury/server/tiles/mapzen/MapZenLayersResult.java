@@ -10,28 +10,28 @@ import de.macbury.geo.FeatureCollection;
  * Need help displaying vector tiles in a map? We have several examples using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and Hoverboard.
  */
 public class MapZenLayersResult {
-  @Expose
-  private FeatureCollection water;
+  //@Expose
+  //private FeatureCollection water;
   @Expose
   private FeatureCollection roads;
-  @Expose
-  private FeatureCollection buildings;
-  @Expose
-  private FeatureCollection landuse;
+  //@Expose
+  //private FeatureCollection buildings;
+  //@Expose
+  //private FeatureCollection landuse;
 
-  public FeatureCollection getWater() {
-    return water;
-  }
+  //public FeatureCollection getWater() {
+   // return water;
+  //}
 
   public FeatureCollection getRoads() {
     return roads;
   }
-
-  public FeatureCollection getBuildings() {
+/*
+  //public FeatureCollection getBuildings() {
     return buildings;
   }
 
-  public FeatureCollection getLanduse() {
-    return landuse;
-  }
+  //public FeatureCollection getLanduse() {
+   // return landuse;
+  //}*/
 }

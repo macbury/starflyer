@@ -1,6 +1,5 @@
 package de.macbury.geo;
 
-import com.badlogic.gdx.utils.Array;
 import com.google.gson.annotations.Expose;
 import de.macbury.json.JsonHelper;
 
@@ -14,25 +13,14 @@ import java.util.function.Consumer;
  * An object of type "FeatureCollection" must have a member with the name "features". The value corresponding to "features" is an array. Each element in the array is a feature object as defined above.
  */
 public class FeatureCollection extends GeoJSON implements Iterable<Feature> {
-  @Expose
-  private ArrayList<Feature> features;
+  private ArrayList<Feature> features = new ArrayList<Feature>();
 
-  public ArrayList<Feature> getFeatures() {
+  public ArrayList<Feature> all() {
     return features;
   }
 
   public void setFeatures(ArrayList<Feature> features) {
     this.features = features;
-  }
-
-  /**
-   * Parses the given String as FeatureCollection and returns a concrete subclass of
-   * {@link GeoJSON} corresponding to the type of the root object.
-   * @param rawJson
-   * @return
-   */
-  public static FeatureCollection parse(String rawJson) {
-    return JsonHelper.fromJson(rawJson, FeatureCollection.class);
   }
 
   @Override
@@ -48,5 +36,21 @@ public class FeatureCollection extends GeoJSON implements Iterable<Feature> {
   @Override
   public Spliterator<Feature> spliterator() {
     return features.spliterator();
+  }
+
+  /**
+   * Number of features in collection
+   * @return
+   */
+  public int size() {
+    return features.size();
+  }
+
+  public Feature get(int index) {
+    return features.get(index);
+  }
+
+  public void add(Feature feature) {
+    features.add(feature);
   }
 }
