@@ -14,6 +14,7 @@ public class ServerArgs {
   private static final String PARAM_DB_PORT = "db-port";
   private static final String PARAM_DB_NAME = "db-name";
   private static final String PARAM_DB_CREATE = "db-create";
+  private static final String PARAM_MAP_ZEN_API_KEY = "map-zen-api-key";
   private final JSAPResult result;
   private final Array<Parameter> pendingOptions;
   private JSAP jsap;
@@ -99,6 +100,11 @@ public class ServerArgs {
               .setRequired(true)
               .setUsageName("RethinkDB port")
               .setHelp("Port to RethinkDB you want connect to");
+      option(PARAM_MAP_ZEN_API_KEY)
+              .setStringParser(JSAP.STRING_PARSER)
+              .setRequired(true)
+              .setUsageName("Mapzen Api key")
+              .setHelp("Api key for vector.mapzen.com");
 
       for (int i = 0; i < pendingOptions.size; i++) {
         jsap.registerParameter(pendingOptions.get(i));
