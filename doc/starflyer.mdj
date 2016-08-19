@@ -9209,6 +9209,53 @@
 							"nameLabel": {
 								"$ref": "AAAAAAFWobYZ8Ni+A7U="
 							}
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAFWoo7dMy2G/24=",
+							"_parent": {
+								"$ref": "AAAAAAFWoa8k/dcQ6ps="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 888,
+							"top": 688,
+							"width": 177,
+							"height": 57,
+							"autoResize": false,
+							"text": "Zostają tylko drogi, budynki, lasy i parki, akweny wodne",
+							"wordWrap": true
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAFWoo7dPi2JIIE=",
+							"_parent": {
+								"$ref": "AAAAAAFWoa8k/dcQ6ps="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"head": {
+								"$ref": "AAAAAAFWoo7dMy2G/24="
+							},
+							"tail": {
+								"$ref": "AAAAAAFWobQCJdheKRU="
+							},
+							"lineStyle": 1,
+							"points": "982:603;978:687"
 						}
 					]
 				},

@@ -152,4 +152,7 @@ public class ServerArgs {
     return jsap.getHelp();
   }
 
+  public String getMapZenApiKey() {
+    return result.getString(PARAM_MAP_ZEN_API_KEY);
+  }
 }

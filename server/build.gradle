@@ -14,7 +14,7 @@ dependencies {
   compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
   compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
   compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-
+  compile "com.mashape.unirest:unirest-java:1.4.9"
 }
 
 jar {
