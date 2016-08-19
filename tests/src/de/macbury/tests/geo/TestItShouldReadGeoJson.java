@@ -29,5 +29,6 @@ public class TestItShouldReadGeoJson {
 
     FeatureGeometry geometry = feature.getGeometry();
     Assert.assertNotNull(geometry);
+    Assert.assertEquals(17, geometry.getCoordinates().size());
   }
 }
