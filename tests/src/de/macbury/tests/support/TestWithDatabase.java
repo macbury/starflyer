@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 /**
  * Base class that wraps tests for database
  */
-@RunWith(GdxTestRunner.class)
 public class TestWithDatabase {
   protected Database database;
 
