@@ -3,10 +3,7 @@ package de.macbury.json;
 import com.badlogic.gdx.utils.Pool;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import de.macbury.geo.Coordinates;
-import de.macbury.geo.FeatureCollection;
-import de.macbury.geo.GeoJSON;
-import de.macbury.json.serializers.CoordinatesSerializerAndDeserializer;
+import de.macbury.geo.core.FeatureCollection;
 import de.macbury.json.serializers.GeoJSONSerializerAndDeserializer;
 
 import java.util.HashMap;

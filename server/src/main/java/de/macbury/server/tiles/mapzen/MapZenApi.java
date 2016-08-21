@@ -5,6 +5,7 @@ import com.mashape.unirest.http.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import de.macbury.geo.core.GeoJSON;
 import de.macbury.json.JsonHelper;
 
 import java.util.concurrent.Future;
@@ -37,7 +38,7 @@ public class MapZenApi {
   }
 
   /**
-   * Fetch {@link de.macbury.geo.GeoJSON} from MapZen vector api
+   * Fetch {@link GeoJSON} from MapZen vector api
    * @param x
    * @param y
    * @return

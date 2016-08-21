@@ -2,10 +2,9 @@ package de.macbury.json.serializers;
 
 import com.google.gson.*;
 import de.macbury.geo.Coordinates;
-import de.macbury.geo.GeoPoint;
+import de.macbury.geo.core.GeoPoint;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 /**
  * Created by macbury on 19.08.16.

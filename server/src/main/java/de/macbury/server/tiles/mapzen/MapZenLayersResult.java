@@ -2,7 +2,7 @@ package de.macbury.server.tiles.mapzen;
 
 
 import com.google.gson.annotations.Expose;
-import de.macbury.geo.FeatureCollection;
+import de.macbury.geo.core.FeatureCollection;
 
 /**
  * The Mapzen vector tile service provides worldwide basemap coverage sourced from OpenStreetMap and other open data projects, updated daily as a free & shared service.

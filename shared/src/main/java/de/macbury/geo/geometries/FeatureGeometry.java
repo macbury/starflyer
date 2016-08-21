@@ -1,8 +1,6 @@
-package de.macbury.geo;
+package de.macbury.geo.geometries;
 
-import com.google.gson.annotations.Expose;
-
-import java.util.ArrayList;
+import de.macbury.geo.core.GeoJSON;
 
 /**
  * A geometry is a GeoJSON object where the type member's value is one of the following strings: "Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon", or "GeometryCollection".

@@ -1,8 +1,5 @@
-package de.macbury.geo;
+package de.macbury.geo.core;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.google.gson.annotations.Expose;
 import de.macbury.json.JsonHelper;
 
 /**

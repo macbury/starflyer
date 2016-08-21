@@ -1,13 +1,11 @@
 package de.macbury.tests.geo;
 
 import com.badlogic.gdx.Gdx;
-import de.macbury.geo.*;
-import de.macbury.json.JsonHelper;
 import de.macbury.tests.support.GdxTestRunner;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.junit.Assert.*;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(GdxTestRunner.class)
@@ -19,20 +17,20 @@ public class TestGeoJSON {
 
   @Test
   public void itDeserializesAllRoadsForHome() {
-    FeatureCollection collection = GeoJSON.parse(fixture("home_roads"), FeatureCollection.class);
-    assertEquals(10, collection.size());
+    de.macbury.geo.core.FeatureCollection collection = de.macbury.geo.core.GeoJSON.parse(fixture("home_roads"), de.macbury.geo.core.FeatureCollection.class);
+    assertEquals(40, collection.size());
 
-    Feature roadFeature = collection.get(0);
-    assertEquals(GeoJSON.Type.Feature, roadFeature.getType());
+    de.macbury.geo.core.Feature roadFeature = collection.get(0);
+    assertEquals(de.macbury.geo.core.GeoJSON.Type.Feature, roadFeature.getType());
 
-    LineStringGeometry roadFeatureGeometry = (LineStringGeometry)roadFeature.getGeometry();
+    de.macbury.geo.geometries.LineStringGeometry roadFeatureGeometry = (de.macbury.geo.geometries.LineStringGeometry)roadFeature.getGeometry();
     assertEquals(2, roadFeatureGeometry.size());
 
-    GeoPoint firstCoord = roadFeatureGeometry.get(0);
+    de.macbury.geo.core.GeoPoint firstCoord = roadFeatureGeometry.get(0);
     Assert.assertEquals(50.0928666, firstCoord.lat);
     Assert.assertEquals(20.05896545, firstCoord.lng);
 
-    GeoPoint secondCoord = roadFeatureGeometry.get(0);
+    de.macbury.geo.core.GeoPoint secondCoord = roadFeatureGeometry.get(0);
     Assert.assertEquals(50.09280552, secondCoord.lat);
     Assert.assertEquals(20.05899102, secondCoord.lng);
   }
@@ -54,7 +52,7 @@ public class TestGeoJSON {
     assertIsHome(collection);
   }*/
 
-  public static void assertIsHome(FeatureCollection collection) {
+  public static void assertIsHome(de.macbury.geo.core.FeatureCollection collection) {
     /*Assert.assertEquals(GeoJSON.Type.FeatureCollection, collection.getType());
     Assert.assertNotNull(collection);
     Assert.assertEquals(17, collection.getFeatures().size());

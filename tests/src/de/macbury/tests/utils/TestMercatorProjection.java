@@ -1,7 +1,7 @@
 package de.macbury.tests.utils;
 
 import com.badlogic.gdx.math.Vector2;
-import de.macbury.geo.GeoPoint;
+import de.macbury.geo.core.GeoPoint;
 import de.macbury.geo.MercatorProjection;
 
 import static org.junit.Assert.*;

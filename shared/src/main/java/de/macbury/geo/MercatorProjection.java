@@ -11,11 +11,11 @@ public class MercatorProjection {
   private static final double D = Math.PI / 180.0;
   private static final double D2 = 180.0 / Math.PI;
   /**
-   * Project {@link GeoPoint} into world position
+   * Project {@link de.macbury.geo.core.GeoPoint} into world position
    * @param inLatLng
    * @param outWorld in meters
    */
-  public static void project(GeoPoint inLatLng, Vector2 outWorld) {
+  public static void project(de.macbury.geo.core.GeoPoint inLatLng, Vector2 outWorld) {
     double lat = Math.max(Math.min(MAX_LATITUDE, inLatLng.lat), -MAX_LATITUDE);
     double sin = Math.sin(lat * D);
     double x   = R * inLatLng.lng * D;
@@ -24,11 +24,11 @@ public class MercatorProjection {
   }
 
   /**
-   * Transform world {@link Vector2} into {@link GeoPoint}
+   * Transform world {@link Vector2} into {@link de.macbury.geo.core.GeoPoint}
    * @param inWorld in meters
    * @param outLatLng
    */
-  public static void unproject(Vector2 inWorld, GeoPoint outLatLng) {
+  public static void unproject(Vector2 inWorld, de.macbury.geo.core.GeoPoint outLatLng) {
     double lat = (2.0 * Math.atan(Math.exp(inWorld.y / R)) - (Math.PI / 2.0)) * D2;
     double lng = (inWorld.x * D2 / R);
     outLatLng.set(lat, lng);

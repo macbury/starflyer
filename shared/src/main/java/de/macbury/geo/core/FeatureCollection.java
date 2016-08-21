@@ -1,7 +1,4 @@
-package de.macbury.geo;
-
-import com.google.gson.annotations.Expose;
-import de.macbury.json.JsonHelper;
+package de.macbury.geo.core;
 
 import java.util.ArrayList;
 import java.util.Iterator;

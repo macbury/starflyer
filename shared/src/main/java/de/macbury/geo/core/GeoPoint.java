@@ -1,4 +1,4 @@
-package de.macbury.geo;
+package de.macbury.geo.core;
 
 /**
  * Encapsulates a geo coordinate. Allows chaining methods by returning a reference to itself

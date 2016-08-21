@@ -1,4 +1,4 @@
-package de.macbury.geo;
+package de.macbury.geo.core;
 
 import com.google.gson.annotations.Expose;
 
@@ -19,7 +19,7 @@ public class Feature extends GeoJSON {
   private HashMap<String, Object> properties;
 
   @Expose
-  private FeatureGeometry geometry;
+  private de.macbury.geo.geometries.FeatureGeometry geometry;
 
   /**
    * Return value for property
@@ -57,7 +57,11 @@ public class Feature extends GeoJSON {
     return (String)properties.get(KEY_LAND_USE);
   }
 
-  public FeatureGeometry getGeometry() {
+  public de.macbury.geo.geometries.FeatureGeometry getGeometry() {
     return geometry;
+  }
+
+  public void setGeometry(de.macbury.geo.geometries.FeatureGeometry geometry) {
+    this.geometry = geometry;
   }
 }

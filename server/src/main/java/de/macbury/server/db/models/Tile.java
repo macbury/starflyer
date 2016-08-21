@@ -1,7 +1,7 @@
 package de.macbury.server.db.models;
 
-import de.macbury.geo.FeatureCollection;
-import de.macbury.geo.GeoJSON;
+import de.macbury.geo.core.FeatureCollection;
+import de.macbury.geo.core.GeoJSON;
 import de.macbury.json.JsonHelper;
 
 /**
