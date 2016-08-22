@@ -22,5 +22,8 @@ public class TestMapZenLayersResult {
     GeoTile tile = result.toGeoTile();
 
     assertNull(tile.getId());
+
+    assertEquals(40, tile.roads.size);
+
   }
 }

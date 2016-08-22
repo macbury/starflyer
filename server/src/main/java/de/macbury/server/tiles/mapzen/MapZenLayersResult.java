@@ -2,8 +2,13 @@ package de.macbury.server.tiles.mapzen;
 
 
 import com.google.gson.annotations.Expose;
+import de.macbury.geo.core.Feature;
 import de.macbury.geo.core.FeatureCollection;
+import de.macbury.geo.core.GeoPath;
+import de.macbury.geo.geometries.MultiLineStringGeometry;
 import de.macbury.model.GeoTile;
+import de.macbury.model.GeoTileFeatureType;
+import de.macbury.model.Road;
 
 /**
  * The Mapzen vector tile service provides worldwide basemap coverage sourced from OpenStreetMap and other open data projects, updated daily as a free & shared service.
@@ -41,6 +46,28 @@ public class MapZenLayersResult {
    * @return
    */
   public GeoTile toGeoTile() {
-    throw new RuntimeException("Implement this");
+    GeoTile geoTile = new GeoTile();
+
+    for (Feature feature: roads) {
+      GeoTileFeatureType type = GeoTileFeatureType.fromKind(feature.getPropKind());
+      switch (type) {
+        case Highway:
+        case MajorRoad:
+        case MinorRoad:
+        case Path:
+          Road road = geoTile.road();
+          road.setType(type);
+
+          MultiLineStringGeometry geometry = (MultiLineStringGeometry) feature.getGeometry();
+
+          for (GeoPath path: geometry.all()) {
+            road.add(path);
+          }
+
+          break;
+      }
+    }
+
+    return geoTile;
   }
 }

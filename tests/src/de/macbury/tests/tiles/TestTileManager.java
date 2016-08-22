@@ -1,14 +1,20 @@
 package de.macbury.tests.tiles;
 
+import com.badlogic.gdx.Gdx;
+import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import de.macbury.json.JsonHelper;
 import de.macbury.model.GeoTile;
 import de.macbury.server.tiles.TilesManager;
+import de.macbury.server.tiles.cache.MemoryTileCache;
 import de.macbury.server.tiles.cache.NullTileCache;
 import de.macbury.server.tiles.mapzen.MapZenApi;
 import de.macbury.server.tiles.mapzen.MapZenLayersResult;
+import de.macbury.tests.support.GdxTestRunner;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 
 import static junit.framework.Assert.*;
@@ -16,24 +22,35 @@ import static org.mockito.Mockito.*;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by macbury on 22.08.16.
- */
+@RunWith(GdxTestRunner.class)
 public class TestTileManager {
   private MapZenApi mapZenMock;
-  private NullTileCache mockCache;
+
+  private String fixture(String name) {
+    return Gdx.files.internal("fixtures/mapzen_layers/"+name+".json").readString();
+  }
+
+  public HttpResponse<MapZenLayersResult> mockResponseWithFixture(String name) {
+    MapZenLayersResult result = JsonHelper.fromJson(fixture("home"), MapZenLayersResult.class);
+    return mockResponse(result);
+  }
+
+  public HttpResponse<MapZenLayersResult> mockResponse(MapZenLayersResult result) {
+    HttpResponse<MapZenLayersResult> response = mock(HttpResponse.class);
+    when(response.getBody()).thenReturn(result);
+    return response;
+  }
 
   @Before
   public void setupMapzenApi() {
     MapZenApi.setApiKey("test");
     mapZenMock = mock(MapZenApi.class);
     MapZenApi.setInstance(mapZenMock);
-
-    this.mockCache = mock(NullTileCache.class);
   }
 
   @Test
   public void itShouldRetrieveGeoTileFromCache() {
+    NullTileCache mockCache = mock(NullTileCache.class);
     TilesManager tilesManager = new TilesManager(mockCache);
 
     when(mockCache.retrieve(eq(0), eq(0))).thenReturn(new GeoTile());
@@ -49,27 +66,21 @@ public class TestTileManager {
   }
 
   @Test
-  public void itShouldTransformMapZenLayersResultIntoGeoTile() {
-    TilesManager tilesManager = new TilesManager(mockCache);
-
-  }
-
-  @Test
   public void itShouldFetchGeoTileUsingApiAndCacheIt() {
-    TilesManager tilesManager = new TilesManager(mockCache);
+    MemoryTileCache cache     = new MemoryTileCache();
+    TilesManager tilesManager = new TilesManager(cache);
     tilesManager.retrieve(1,1);
 
-    ArgumentCaptor<GeoTile> geoTileArgument = ArgumentCaptor.forClass(GeoTile.class);
+    ArgumentCaptor<Callback> callbackArgumentCaptor = ArgumentCaptor.forClass(Callback.class);
 
-    verify(mockCache, times(1)).retrieve(1,1);
-    verify(mockCache, times(1)).save(geoTileArgument.capture());
     try {
-      verify(mapZenMock, times(1)).get(eq(1),eq(1), any(Callback.class));
+      verify(mapZenMock, times(1)).get(eq(1),eq(1), callbackArgumentCaptor.capture());
     } catch (UnirestException e) {
       e.printStackTrace();
     }
 
-    GeoTile geoTile = geoTileArgument.getValue();
-    assertEquals("1/1", geoTile.getId());
+    callbackArgumentCaptor.getValue().completed(mockResponseWithFixture("home"));
+
+    assertNotNull(cache.retrieve(1,1));
   }
 }

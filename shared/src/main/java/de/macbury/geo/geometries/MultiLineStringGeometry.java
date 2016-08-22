@@ -22,6 +22,14 @@ public class MultiLineStringGeometry extends FeatureGeometry {
     return path;
   }
 
+  /**
+   * All paths
+   * @return
+   */
+  public ArrayList<GeoPath> all() {
+    return coordinates;
+  }
+
   public int size() {
     return coordinates.size();
   }
