@@ -1,6 +1,12 @@
 package de.macbury.tests.geo;
 
 import com.badlogic.gdx.Gdx;
+import de.macbury.geo.core.Feature;
+import de.macbury.geo.core.GeoJSON;
+import de.macbury.geo.core.GeoPath;
+import de.macbury.geo.core.GeoPoint;
+import de.macbury.geo.geometries.FeatureGeometry;
+import de.macbury.geo.geometries.MultiLineStringGeometry;
 import de.macbury.tests.support.GdxTestRunner;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -20,19 +26,38 @@ public class TestGeoJSON {
     de.macbury.geo.core.FeatureCollection collection = de.macbury.geo.core.GeoJSON.parse(fixture("home_roads"), de.macbury.geo.core.FeatureCollection.class);
     assertEquals(40, collection.size());
 
-    de.macbury.geo.core.Feature roadFeature = collection.get(0);
-    assertEquals(de.macbury.geo.core.GeoJSON.Type.Feature, roadFeature.getType());
+    Feature roadFeature = collection.get(0);
+    assertEquals(GeoJSON.Type.Feature, roadFeature.getType());
+    MultiLineStringGeometry roadFeatureGeometry = (MultiLineStringGeometry)roadFeature.getGeometry();
+    assertEquals(1, roadFeatureGeometry.size());
+    assertEquals(GeoJSON.Type.LineString, roadFeatureGeometry.getType());
 
-    de.macbury.geo.geometries.LineStringGeometry roadFeatureGeometry = (de.macbury.geo.geometries.LineStringGeometry)roadFeature.getGeometry();
-    assertEquals(2, roadFeatureGeometry.size());
+    GeoPath roadPath       = roadFeatureGeometry.get(0);
+    assertEquals(2, roadPath.size());
 
-    de.macbury.geo.core.GeoPoint firstCoord = roadFeatureGeometry.get(0);
+    GeoPoint firstCoord = roadPath.get(0);
     Assert.assertEquals(50.0928666, firstCoord.lat);
     Assert.assertEquals(20.05896545, firstCoord.lng);
 
-    de.macbury.geo.core.GeoPoint secondCoord = roadFeatureGeometry.get(0);
+    GeoPoint secondCoord = roadPath.get(1);
     Assert.assertEquals(50.09280552, secondCoord.lat);
     Assert.assertEquals(20.05899102, secondCoord.lng);
+
+    Feature multiPathRoadFeature = collection.get(31);
+    MultiLineStringGeometry multiPathGeometry = (MultiLineStringGeometry)multiPathRoadFeature.getGeometry();
+
+    assertEquals(GeoJSON.Type.MultiLineString, multiPathGeometry.getType());
+    assertEquals(2, multiPathGeometry.size());
+
+    GeoPath secondRoad = multiPathGeometry.get(1);
+
+    firstCoord = secondRoad.get(0);
+    Assert.assertEquals(50.09287517, firstCoord.lat);
+    Assert.assertEquals(20.05962449, firstCoord.lng);
+
+    secondCoord = secondRoad.get(1);
+    Assert.assertEquals(50.0928764, secondCoord.lat);
+    Assert.assertEquals(20.05971887, secondCoord.lng);
   }
 
 /*

@@ -1,6 +1,7 @@
 package de.macbury.geo.core;
 
 import com.google.gson.annotations.Expose;
+import de.macbury.geo.geometries.FeatureGeometry;
 
 import java.util.HashMap;
 
@@ -16,10 +17,10 @@ public class Feature extends GeoJSON {
   private static final String KEY_KIND = "kind";
   private static final String KEY_LAND_USE = "landuse_kind";
   @Expose
-  private HashMap<String, Object> properties;
+  private HashMap<String, Object> properties = new HashMap<String, Object>();
 
   @Expose
-  private de.macbury.geo.geometries.FeatureGeometry geometry;
+  private FeatureGeometry geometry;
 
   /**
    * Return value for property
@@ -31,6 +32,10 @@ public class Feature extends GeoJSON {
       return null;
     }
     return properties.get(key);
+  }
+
+  public void putProp(String key, Object value) {
+    properties.put(key, value);
   }
 
   /**
@@ -57,11 +62,11 @@ public class Feature extends GeoJSON {
     return (String)properties.get(KEY_LAND_USE);
   }
 
-  public de.macbury.geo.geometries.FeatureGeometry getGeometry() {
+  public FeatureGeometry getGeometry() {
     return geometry;
   }
 
-  public void setGeometry(de.macbury.geo.geometries.FeatureGeometry geometry) {
+  public void setGeometry(FeatureGeometry geometry) {
     this.geometry = geometry;
   }
 }

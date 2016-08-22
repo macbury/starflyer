@@ -1,8 +1,12 @@
 package de.macbury.json.serializers;
 
 import com.google.gson.*;
+import de.macbury.geo.core.*;
+import de.macbury.geo.geometries.FeatureGeometry;
+import de.macbury.geo.geometries.MultiLineStringGeometry;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 /**
  * Transform json to proper object of {@link de.macbury.geo.core.GeoJSON}
@@ -13,13 +17,13 @@ public class GeoJSONSerializerAndDeserializer implements JsonDeserializer<de.mac
   private static final String KEY_GEOMETRY = "geometry";
   private static final String KEY_PROPERTIES = "properties";
   private static final String KEY_COORDINATES = "coordinates";
-  private static final int INDEX_LAT = 0;
-  private static final int INDEX_LNG = 1;
+  private static final int INDEX_LAT = 1;
+  private static final int INDEX_LNG = 0;
 
   @Override
   public de.macbury.geo.core.GeoJSON deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
     JsonObject root = json.getAsJsonObject();
-    de.macbury.geo.core.GeoJSON.Type mainType = de.macbury.geo.core.GeoJSON.Type.valueOf(root.get(KEY_TYPE).getAsString());
+    GeoJSON.Type mainType = GeoJSON.Type.valueOf(root.get(KEY_TYPE).getAsString());
 
     switch (mainType) {
       case FeatureCollection:
@@ -31,8 +35,8 @@ public class GeoJSONSerializerAndDeserializer implements JsonDeserializer<de.mac
     }
   }
 
-  private de.macbury.geo.core.FeatureCollection assembleFeatureCollection(JsonObject root) {
-    de.macbury.geo.core.FeatureCollection collection = new de.macbury.geo.core.FeatureCollection();
+  private FeatureCollection assembleFeatureCollection(JsonObject root) {
+    FeatureCollection collection = new FeatureCollection();
     JsonArray jsonFeatures       = root.get(KEY_FEATURES).getAsJsonArray();
     for (JsonElement jsonFeatureElement: jsonFeatures) {
       JsonObject jsonFeatureObject = jsonFeatureElement.getAsJsonObject();
@@ -41,38 +45,68 @@ public class GeoJSONSerializerAndDeserializer implements JsonDeserializer<de.mac
     return collection;
   }
 
-  private de.macbury.geo.core.Feature assembleFeature(JsonObject jsonFeatureObject) {
+  private Feature assembleFeature(JsonObject jsonFeatureObject) {
     JsonObject geometryJson   = jsonFeatureObject.getAsJsonObject(KEY_GEOMETRY);
 
-    de.macbury.geo.core.Feature feature = new de.macbury.geo.core.Feature();
-    feature.setType(de.macbury.geo.core.GeoJSON.Type.valueOf(jsonFeatureObject.get(KEY_TYPE).getAsString()));
+    Feature feature = new Feature();
+    feature.setType(GeoJSON.Type.valueOf(jsonFeatureObject.get(KEY_TYPE).getAsString()));
     feature.setGeometry(buildGeometryType(geometryJson));
+
+    JsonObject properties = jsonFeatureObject.getAsJsonObject(KEY_PROPERTIES);
+    for(Map.Entry<String, JsonElement> entry : properties.entrySet()) {
+      feature.putProp(entry.getKey(), entry.getValue().getAsString());
+    }
 
     return feature;
   }
 
-  private de.macbury.geo.geometries.FeatureGeometry buildGeometryType(JsonObject geometryJson) {
-    de.macbury.geo.core.GeoJSON.Type geometryType = de.macbury.geo.core.GeoJSON.Type.valueOf(geometryJson.get(KEY_TYPE).getAsString());
-
+  private FeatureGeometry buildGeometryType(JsonObject geometryJson) {
+    GeoJSON.Type geometryType = GeoJSON.Type.valueOf(geometryJson.get(KEY_TYPE).getAsString());
+    JsonArray jsonCoordinates = null;
+    FeatureGeometry geometry  = null;
     switch (geometryType) {
+      case MultiLineString:
+        MultiLineStringGeometry multiLineStringGeometry = new MultiLineStringGeometry();
+        JsonArray jsonPaths = geometryJson.getAsJsonArray(KEY_COORDINATES);
+        for (int i = 0; i < jsonPaths.size(); i++) {
+          jsonCoordinates = jsonPaths.get(i).getAsJsonArray();
+          GeoPath path = multiLineStringGeometry.path();
+          for (int j = 0; j < jsonCoordinates.size(); j++) {
+            JsonArray singleCoord =  jsonCoordinates.get(j).getAsJsonArray();
+            GeoPoint geoPoint     = new GeoPoint();
+            geoPoint.set(
+                    singleCoord.get(INDEX_LAT).getAsDouble(),
+                    singleCoord.get(INDEX_LNG).getAsDouble()
+            );
+
+            path.add(geoPoint);
+          }
+        }
+        geometry = multiLineStringGeometry;
+        break;
       case LineString:
-        de.macbury.geo.geometries.LineStringGeometry lineStringGeometry = new de.macbury.geo.geometries.LineStringGeometry();
-        //TODO: Treat line string as multiline string
-        JsonArray jsonCoordinates = geometryJson.getAsJsonArray(KEY_COORDINATES);
+        MultiLineStringGeometry lineStringGeometry = new MultiLineStringGeometry();
+        GeoPath path = lineStringGeometry.path();
+        jsonCoordinates = geometryJson.getAsJsonArray(KEY_COORDINATES);
         for (int i = 0; i < jsonCoordinates.size(); i++) {
           JsonArray singleCoord =  jsonCoordinates.get(i).getAsJsonArray();
-          de.macbury.geo.core.GeoPoint geoPoint     = new de.macbury.geo.core.GeoPoint();
+          GeoPoint geoPoint     = new GeoPoint();
           geoPoint.set(
                   singleCoord.get(INDEX_LAT).getAsDouble(),
                   singleCoord.get(INDEX_LNG).getAsDouble()
           );
 
-          lineStringGeometry.add(geoPoint);
+          path.add(geoPoint);
         }
-        return lineStringGeometry;
+        geometry = lineStringGeometry;
+        break;
       default:
         throw new RuntimeException("Unsuported geometry type: " + geometryType.toString());
     }
+
+    geometry.setType(geometryType);
+
+    return geometry;
   }
 
   @Override

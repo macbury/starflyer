@@ -2789,7 +2789,7 @@
 							"containerChangeable": false,
 							"containerExtending": false,
 							"left": 64,
-							"top": 664,
+							"top": 656,
 							"width": 177,
 							"height": 50,
 							"autoResize": false
@@ -2851,8 +2851,8 @@
 							"showShadow": true,
 							"containerChangeable": false,
 							"containerExtending": false,
-							"left": 96,
-							"top": 672,
+							"left": 88,
+							"top": 664,
 							"width": 110,
 							"height": 25,
 							"autoResize": false,
@@ -2926,7 +2926,7 @@
 								"$ref": "AAAAAAFWk2ZDoIzgZKw="
 							},
 							"lineStyle": 1,
-							"points": "138:759;148:697"
+							"points": "135:759;141:689"
 						},
 						{
 							"_type": "UMLTextView",
@@ -3067,6 +3067,50 @@
 							},
 							"lineStyle": 1,
 							"points": "526:697;527:735"
+						},
+						{
+							"_type": "RectangleView",
+							"_id": "AAAAAAFWsNRPwMAAkjk=",
+							"_parent": {
+								"$ref": "AAAAAAFWk2C59YvkXIA="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 704,
+							"top": 608,
+							"width": 272,
+							"height": 144,
+							"autoResize": false
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAFWsNRZWMADa9k=",
+							"_parent": {
+								"$ref": "AAAAAAFWk2C59YvkXIA="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 720,
+							"top": 624,
+							"width": 241,
+							"height": 25,
+							"autoResize": false,
+							"text": "{ id: 1, type: 'Response', payload: {} }",
+							"wordWrap": true
 						}
 					]
 				},
@@ -15184,6 +15228,7 @@
 							"visibility": "public",
 							"isStatic": false,
 							"isLeaf": false,
+							"type": "",
 							"isReadOnly": false,
 							"isOrdered": false,
 							"isUnique": false,
@@ -15369,6 +15414,7 @@
 							"visibility": "public",
 							"isStatic": false,
 							"isLeaf": false,
+							"type": "",
 							"isReadOnly": false,
 							"isOrdered": false,
 							"isUnique": false,
@@ -15386,6 +15432,7 @@
 							"visibility": "public",
 							"isStatic": false,
 							"isLeaf": false,
+							"type": "",
 							"isReadOnly": false,
 							"isOrdered": false,
 							"isUnique": false,
