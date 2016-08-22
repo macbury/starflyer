@@ -1,7 +1,7 @@
 package de.macbury.tests.db;
 
 import de.macbury.server.db.models.Location;
-import de.macbury.tests.support.TestWithDatabase;
+import de.macbury.tests.support.BaseTest;
 import org.junit.Test;
 
 import java.util.Date;
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 /**
  *
  */
-public class TestLocation extends TestWithDatabase {
+public class TestLocation extends BaseTest {
   @Test
   public void itShouldAssignIdAfterCreate() {
     Location exampleLocation = new Location();

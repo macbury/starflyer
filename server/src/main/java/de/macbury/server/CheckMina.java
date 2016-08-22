@@ -1,5 +1,10 @@
 package de.macbury.server;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.async.Callback;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import de.macbury.server.tiles.mapzen.MapZenApi;
+import de.macbury.server.tiles.mapzen.MapZenLayersResult;
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.service.IoHandlerAdapter;
@@ -20,8 +25,32 @@ import java.util.Date;
  */
 public class CheckMina {
   public static void main(String[] args) {
+    MapZenApi.setApiKey("vector-tiles-XmQtRkM");
+    try {
+      for (int i = 0; i < 100; i++) {
+        System.err.println("Enq: " + i);
+        MapZenApi.getTile(72839, 44399, new Callback<MapZenLayersResult>() {
+          @Override
+          public void completed(HttpResponse<MapZenLayersResult> response) {
+            System.err.println(response.toString());
+          }
 
-    IoAcceptor acceptor = new NioSocketAcceptor();
+          @Override
+          public void failed(UnirestException e) {
+            System.err.println(e);
+          }
+
+          @Override
+          public void cancelled() {
+            System.err.println();
+          }
+        });
+      }
+
+    } catch (UnirestException e) {
+      e.printStackTrace();
+    }
+    /*IoAcceptor acceptor = new NioSocketAcceptor();
     acceptor.getFilterChain().addLast("logger", new LoggingFilter());
     acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter( new TextLineCodecFactory( Charset.forName( "UTF-8" ))));
 
@@ -42,7 +71,7 @@ public class CheckMina {
       e.printStackTrace();
     } finally {
       acceptor.dispose(false);
-    }
+    }*/
   }
 
   private static class TimeServerHandler extends IoHandlerAdapter {

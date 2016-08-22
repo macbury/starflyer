@@ -1,10 +1,7 @@
 package de.macbury.tests.geo;
 
 import com.badlogic.gdx.Gdx;
-import de.macbury.geo.core.Feature;
-import de.macbury.geo.core.GeoJSON;
-import de.macbury.geo.core.GeoPath;
-import de.macbury.geo.core.GeoPoint;
+import de.macbury.geo.core.*;
 import de.macbury.geo.geometries.FeatureGeometry;
 import de.macbury.geo.geometries.MultiLineStringGeometry;
 import de.macbury.tests.support.GdxTestRunner;
@@ -23,7 +20,7 @@ public class TestGeoJSON {
 
   @Test
   public void itDeserializesAllRoadsForHome() {
-    de.macbury.geo.core.FeatureCollection collection = de.macbury.geo.core.GeoJSON.parse(fixture("home_roads"), de.macbury.geo.core.FeatureCollection.class);
+    FeatureCollection collection = GeoJSON.parse(fixture("home_roads"), de.macbury.geo.core.FeatureCollection.class);
     assertEquals(40, collection.size());
 
     Feature roadFeature = collection.get(0);

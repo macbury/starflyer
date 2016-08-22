@@ -21,18 +21,22 @@ public class GeoJSONSerializerAndDeserializer implements JsonDeserializer<de.mac
   private static final int INDEX_LNG = 0;
 
   @Override
-  public de.macbury.geo.core.GeoJSON deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-    JsonObject root = json.getAsJsonObject();
+  public GeoJSON deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    JsonObject root       = json.getAsJsonObject();
     GeoJSON.Type mainType = GeoJSON.Type.valueOf(root.get(KEY_TYPE).getAsString());
+    GeoJSON rootGeoJson   = null;
 
     switch (mainType) {
       case FeatureCollection:
-          return assembleFeatureCollection(root);
-
+        rootGeoJson = assembleFeatureCollection(root);
+      break;
       default:
         throw new RuntimeException("Not supported GeoJSON type: " + mainType.toString());
 
     }
+
+    rootGeoJson.setType(mainType);
+    return rootGeoJson;
   }
 
   private FeatureCollection assembleFeatureCollection(JsonObject root) {
@@ -60,6 +64,21 @@ public class GeoJSONSerializerAndDeserializer implements JsonDeserializer<de.mac
     return feature;
   }
 
+
+  private void createPath(JsonArray jsonCoordinates, MultiLineStringGeometry lineStringGeometry) {
+    GeoPath path = lineStringGeometry.path();
+    for (int j = 0; j < jsonCoordinates.size(); j++) {
+      JsonArray singleCoord =  jsonCoordinates.get(j).getAsJsonArray();
+      GeoPoint geoPoint     = new GeoPoint();
+      geoPoint.set(
+              singleCoord.get(INDEX_LAT).getAsDouble(),
+              singleCoord.get(INDEX_LNG).getAsDouble()
+      );
+
+      path.add(geoPoint);
+    }
+  }
+
   private FeatureGeometry buildGeometryType(JsonObject geometryJson) {
     GeoJSON.Type geometryType = GeoJSON.Type.valueOf(geometryJson.get(KEY_TYPE).getAsString());
     JsonArray jsonCoordinates = null;
@@ -70,38 +89,18 @@ public class GeoJSONSerializerAndDeserializer implements JsonDeserializer<de.mac
         JsonArray jsonPaths = geometryJson.getAsJsonArray(KEY_COORDINATES);
         for (int i = 0; i < jsonPaths.size(); i++) {
           jsonCoordinates = jsonPaths.get(i).getAsJsonArray();
-          GeoPath path = multiLineStringGeometry.path();
-          for (int j = 0; j < jsonCoordinates.size(); j++) {
-            JsonArray singleCoord =  jsonCoordinates.get(j).getAsJsonArray();
-            GeoPoint geoPoint     = new GeoPoint();
-            geoPoint.set(
-                    singleCoord.get(INDEX_LAT).getAsDouble(),
-                    singleCoord.get(INDEX_LNG).getAsDouble()
-            );
-
-            path.add(geoPoint);
-          }
+          createPath(jsonCoordinates, multiLineStringGeometry);
         }
         geometry = multiLineStringGeometry;
         break;
       case LineString:
         MultiLineStringGeometry lineStringGeometry = new MultiLineStringGeometry();
-        GeoPath path = lineStringGeometry.path();
         jsonCoordinates = geometryJson.getAsJsonArray(KEY_COORDINATES);
-        for (int i = 0; i < jsonCoordinates.size(); i++) {
-          JsonArray singleCoord =  jsonCoordinates.get(i).getAsJsonArray();
-          GeoPoint geoPoint     = new GeoPoint();
-          geoPoint.set(
-                  singleCoord.get(INDEX_LAT).getAsDouble(),
-                  singleCoord.get(INDEX_LNG).getAsDouble()
-          );
-
-          path.add(geoPoint);
-        }
+        createPath(jsonCoordinates, lineStringGeometry);
         geometry = lineStringGeometry;
         break;
       default:
-        throw new RuntimeException("Unsuported geometry type: " + geometryType.toString());
+        throw new RuntimeException("Unsupported geometry type: " + geometryType.toString());
     }
 
     geometry.setType(geometryType);
@@ -111,6 +110,6 @@ public class GeoJSONSerializerAndDeserializer implements JsonDeserializer<de.mac
 
   @Override
   public JsonElement serialize(de.macbury.geo.core.GeoJSON src, Type typeOfSrc, JsonSerializationContext context) {
-    return null;
+    throw new RuntimeException("No deserialization avaiable");
   }
 }

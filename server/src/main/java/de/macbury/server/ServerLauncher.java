@@ -29,27 +29,6 @@ public class ServerLauncher {
   public static void main(String[] args) {
     ServerArgs serverArgs = new ServerArgs(args);
     if (serverArgs.isSuccess()) {
-      MapZenApi.setApiKey(serverArgs.getMapZenApiKey());
-      try {
-        MapZenApi.getTile(72839, 44399, new Callback<MapZenLayersResult>() {
-          @Override
-          public void completed(HttpResponse<MapZenLayersResult> response) {
-            System.err.println();
-          }
-
-          @Override
-          public void failed(UnirestException e) {
-            System.err.println();
-          }
-
-          @Override
-          public void cancelled() {
-            System.err.println();
-          }
-        });
-      } catch (UnirestException e) {
-        e.printStackTrace();
-      }
       Database database = new Database(serverArgs.getDatabaseHost(), serverArgs.getDatabasePort(), serverArgs.getDatabaseName());
 
       if (serverArgs.isGoingToImportFile()) { // Import osm into database
