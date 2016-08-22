@@ -62,7 +62,7 @@ public class Database implements Disposable {
 
   /**
    * Create table in current database
-   * @param name
+   * @param tableName
    */
   public void createTable(String tableName) {
     Connection connection = connections.obtain();

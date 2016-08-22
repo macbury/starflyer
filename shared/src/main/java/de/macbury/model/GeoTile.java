@@ -47,4 +47,12 @@ public class GeoTile {
     roads.add(road);
     return road;
   }
+
+  @Override
+  public String toString() {
+    return "GeoTile{" +
+            "id='" + id + '\'' +
+            ", roads=" + roads +
+            '}';
+  }
 }

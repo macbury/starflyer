@@ -56,7 +56,7 @@ public class TilesManager implements Disposable {
   }
 
   /**
-   * Build {@link GeoTile} from {@link MapZenLayersResult}, cache it and trigger {@link Listener#onTileRetreive(GeoTile, TilesManager)}
+   * Build {@link GeoTile} from {@link MapZenLayersResult}, cache it and trigger {@link Listener#onTileRetrieve(GeoTile, TilesManager)}
    * @param x
    * @param y
    * @param result
@@ -65,6 +65,7 @@ public class TilesManager implements Disposable {
     GeoTile geoTile = result.toGeoTile();
     geoTile.setId(x, y);
     tileCache.save(geoTile);
+    triggerOnTileRetreive(geoTile);
   }
 
   /**
@@ -79,12 +80,12 @@ public class TilesManager implements Disposable {
   }
 
   /**
-   * Trigger all listeners with event {@link Listener#onTileRetreive(GeoTile, TilesManager)}
+   * Trigger all listeners with event {@link Listener#onTileRetrieve(GeoTile, TilesManager)}
    * @param tile
    */
   private void triggerOnTileRetreive(GeoTile tile) {
     for (int i = 0; i < listeners.size; i++) {
-      listeners.get(i).onTileRetreive(tile, this);
+      listeners.get(i).onTileRetrieve(tile, this);
     }
   }
 
@@ -99,6 +100,6 @@ public class TilesManager implements Disposable {
      * @param tile
      * @param manager
      */
-    public void onTileRetreive(GeoTile tile, TilesManager manager);
+    void onTileRetrieve(GeoTile tile, TilesManager manager);
   }
 }

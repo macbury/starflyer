@@ -6,7 +6,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import de.macbury.Starflyer;
+import de.macbury.model.GeoTile;
 import de.macbury.server.tiles.TilesManager;
+import de.macbury.server.tiles.cache.MemoryTileCache;
 import de.macbury.server.tiles.cache.NullTileCache;
 import de.macbury.server.tiles.mapzen.MapZenApi;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -16,14 +18,11 @@ public class DesktopLauncher {
   public static void main(String[] args) throws UnirestException {
     MapZenApi.setApiKey("vector-tiles-XmQtRkM");
 
-    TilesManager tilesManager = new TilesManager(new NullTileCache());
-    tilesManager.retrieve(72839, 44399);
-
     createApplication();
   }
 
   private static LwjglApplication createApplication() {
-    return new LwjglApplication(new Starflyer(), getDefaultConfiguration());
+    return new LwjglApplication(new GameExplorer(), getDefaultConfiguration());
   }
 
   private static LwjglApplicationConfiguration getDefaultConfiguration() {

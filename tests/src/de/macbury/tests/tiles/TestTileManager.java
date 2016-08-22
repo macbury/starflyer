@@ -50,8 +50,11 @@ public class TestTileManager {
 
   @Test
   public void itShouldRetrieveGeoTileFromCache() {
+    TilesManager.Listener listener = mock(TilesManager.Listener.class);
+
     NullTileCache mockCache = mock(NullTileCache.class);
     TilesManager tilesManager = new TilesManager(mockCache);
+    tilesManager.addListener(listener);
 
     when(mockCache.retrieve(eq(0), eq(0))).thenReturn(new GeoTile());
     tilesManager.retrieve(0,0);
@@ -63,12 +66,15 @@ public class TestTileManager {
     }
 
     verify(mockCache, times(1)).retrieve(0,0);
+    verify(listener, times(1)).onTileRetrieve(any(GeoTile.class), eq(tilesManager));
   }
 
   @Test
   public void itShouldFetchGeoTileUsingApiAndCacheIt() {
+    TilesManager.Listener listener = mock(TilesManager.Listener.class);
     MemoryTileCache cache     = new MemoryTileCache();
     TilesManager tilesManager = new TilesManager(cache);
+    tilesManager.addListener(listener);
     tilesManager.retrieve(1,1);
 
     ArgumentCaptor<Callback> callbackArgumentCaptor = ArgumentCaptor.forClass(Callback.class);
@@ -82,5 +88,6 @@ public class TestTileManager {
     callbackArgumentCaptor.getValue().completed(mockResponseWithFixture("home"));
 
     assertNotNull(cache.retrieve(1,1));
+    verify(listener, times(1)).onTileRetrieve(any(GeoTile.class), eq(tilesManager));
   }
 }
