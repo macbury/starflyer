@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import de.macbury.geo.core.GeoPath;
 
 /**
- * Describe road in {@link GeoTile}. Road is array of {@link GeoPath}
+ * Describe road in {@link GeoTile}. Road contains many {@link GeoPath}. Each {@link GeoPath} contains many points
  */
 public class Road extends Array<GeoPath> {
   private GeoTileFeatureType type;
