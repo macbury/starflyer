@@ -2,6 +2,7 @@ package de.macbury.geo;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import de.macbury.SharedConsts;
 import de.macbury.geo.core.GeoPoint;
 
 /**
@@ -22,7 +23,7 @@ public class MercatorProjection {
     double sin = Math.sin(lat * D);
     double x   = R * inLatLng.lng * D;
     double y   = R * Math.log( (1.0 + sin) / (1.0 - sin))  / 2.0;
-    outWorld.set((float)x,(float)y);
+    outWorld.set((float)x * SharedConsts.METER_TO_UNIT,(float)y * SharedConsts.METER_TO_UNIT);
   }
 
   /**
@@ -35,7 +36,7 @@ public class MercatorProjection {
     double sin = Math.sin(lat * D);
     double x   = R * inLatLng.lng * D;
     double y   = R * Math.log( (1.0 + sin) / (1.0 - sin))  / 2.0;
-    outWorld.set((float)x, 0, (float)y);
+    outWorld.set((float)x * SharedConsts.METER_TO_UNIT, (float)y * SharedConsts.METER_TO_UNIT, 0);
   }
 
   /**
@@ -44,8 +45,8 @@ public class MercatorProjection {
    * @param outLatLng
    */
   public static void unproject(Vector2 inWorld, de.macbury.geo.core.GeoPoint outLatLng) {
-    double lat = (2.0 * Math.atan(Math.exp(inWorld.y / R)) - (Math.PI / 2.0)) * D2;
-    double lng = (inWorld.x * D2 / R);
+    double lat = (2.0 * Math.atan(Math.exp(inWorld.y * SharedConsts.UNIT_TO_METER / R)) - (Math.PI / 2.0)) * D2;
+    double lng = (inWorld.x * SharedConsts.UNIT_TO_METER * D2 / R);
     outLatLng.set(lat, lng);
   }
 

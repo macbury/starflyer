@@ -1,4 +1,4 @@
-package de.macbury.tests.utils;
+package de.macbury.tests.geo;
 
 import com.badlogic.gdx.math.Vector2;
 import de.macbury.geo.core.GeoPoint;
@@ -26,8 +26,8 @@ public class TestMercatorProjection {
     Vector2 result = new Vector2();
 
     MercatorProjection.project(point, result);
-    assertEquals(20037508.0, result.x, 0);
-    assertEquals(20037508.0, result.y, 0);
+    assertEquals(2003750.875, result.x, 0);
+    assertEquals(2003750.875, result.y, 0);
   }
 
   @Test
@@ -36,8 +36,8 @@ public class TestMercatorProjection {
     Vector2 result = new Vector2();
 
     MercatorProjection.project(point, result);
-    assertEquals(-20037508.0, result.x, 0);
-    assertEquals(-20037508.0, result.y, 0);
+    assertEquals(-2003750.875, result.x, 0);
+    assertEquals(-2003750.875, result.y, 0);
   }
 
   @Test
@@ -46,8 +46,8 @@ public class TestMercatorProjection {
     Vector2 result = new Vector2();
 
     MercatorProjection.project(point, result);
-    assertEquals(3339584.0, result.x, 1);
-    assertEquals(6446275.0, result.y, 1);
+    assertEquals(333958.46875, result.x, 1);
+    assertEquals(644627.625, result.y, 1);
   }
 
   @Test

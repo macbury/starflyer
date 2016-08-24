@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import de.macbury.geo.Tile;
 import de.macbury.model.GeoTile;
 import de.macbury.server.tiles.cache.ITileCache;
 import de.macbury.server.tiles.mapzen.MapZenApi;
@@ -20,6 +21,13 @@ public class TilesManager implements Disposable {
   public TilesManager(ITileCache tileCache) {
     this.tileCache = tileCache;
     this.listeners = new Array<Listener>();
+  }
+
+  /**
+   * Enqueue tile retrieve. If it is stored in cache it will retrieve immediately. Otherwise it will retrieve {@link de.macbury.geo.core.GeoJSON} using {@link MapZenApi} and build {@link GeoTile}
+   */
+  public void retrieve(Tile tile) {
+    retrieve(tile.x, tile.y);
   }
 
   /**
@@ -93,6 +101,7 @@ public class TilesManager implements Disposable {
   public void dispose() {
     listeners.clear();
   }
+
 
   public interface Listener {
     /**
