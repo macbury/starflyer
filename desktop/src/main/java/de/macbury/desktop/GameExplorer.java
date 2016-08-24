@@ -153,9 +153,25 @@ public class GameExplorer extends Starflyer {
     ModelBuilder modelBuilder = new ModelBuilder();
     modelBuilder.begin(); {
       for (Road road: tile.roads) {
+        Color roadColor = Color.WHITE;
+
+        switch (road.getType()) {
+          case Highway:
+            roadColor = Color.BLUE;
+            break;
+          case Path:
+            roadColor = Color.GRAY;
+            break;
+          case MinorRoad:
+            roadColor = Color.GOLD;
+            break;
+          case MajorRoad:
+            roadColor = Color.ORANGE;
+            break;
+        }
+
+        MeshPartBuilder line = modelBuilder.part("road", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(roadColor)));
         for (GeoPath path : road) {
-          MeshPartBuilder line = modelBuilder.part("line-"+path.toString(), GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.LIGHT_GRAY)));
-          line.setColor(Color.WHITE);
           for (int i = 1; i < path.size(); i++) {
             GeoPoint startPoint = path.get(i-1);
             GeoPoint finalPoint = path.get(i);
