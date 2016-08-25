@@ -85,6 +85,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   private void initializeUI() {
     this.menuBarManger = new MenuBarManager();
     statusBarManager   = new MainStatusBarManager();
+    statusBarManager.setSpyCamera(camera);
 
     stage               = new Stage(new ScreenViewport());
 
@@ -109,10 +110,25 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     this.tilesManager  = new TilesManager(new MemoryTileCache());
 
     this.camera = new GeoPerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    camera.setGeoPosition(new GeoPoint(50.093125, 20.059642));
 
     this.cameraController = new CameraInputController(camera);
     //cameraController.target.set(Vector3.Zero);
+
+    fetch(50.093125, 20.059642);
+  }
+
+  private void fetch(double lat, double lng) {
+    GeoPoint point = new GeoPoint(lat, lng);
+
+    tileCursor = new Tile();
+    tileCursor.set(point);
+
+    camera.setGeoPosition(point);
+    cameraController.target.set(camera.position);
+    camera.position.add(0, -30, 10);
+    camera.update();
+
+    tilesManager.retrieve(tileCursor);
   }
 
   private void createUI() {
