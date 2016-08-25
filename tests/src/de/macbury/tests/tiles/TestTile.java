@@ -1,4 +1,4 @@
-package de.macbury.tests.geo;
+package de.macbury.tests.tiles;
 
 import de.macbury.geo.Tile;
 import de.macbury.geo.core.GeoPoint;
@@ -15,7 +15,7 @@ public class TestTile {
     Tile tile = new Tile();
     GeoPoint point = new GeoPoint(50.093113, 20.059572);
 
-    tile.get(point);
+    tile.set(point);
 
     Assert.assertEquals(72839, tile.x);
     Assert.assertEquals(44399, tile.y);
@@ -32,9 +32,31 @@ public class TestTile {
     Tile tile = new Tile();
     GeoPoint point = new GeoPoint(50.093113, 20.059572);
 
-    tile.get(point, 16);
+    tile.set(point, 16);
 
     Assert.assertNotSame(72839, tile.x);
     Assert.assertNotSame(44399, tile.y);
+  }
+
+  @Test
+  public void itShouldCalculateBoundingBoxForTile() {
+    Tile tile = new Tile();
+    tile.set(0,0);
+
+    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getWidth());
+    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getHeight());
+    Assert.assertEquals(Tile.MAX_ELEVATION, tile.box.getDepth());
+
+    tile.set(85.0511287798, 180);
+
+    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getHeight());
+    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getWidth());
+    Assert.assertEquals(Tile.MAX_ELEVATION, tile.box.getDepth());
+
+    tile.set(-85.0511287798, -180);
+
+    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getHeight());
+    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getWidth());
+    Assert.assertEquals(Tile.MAX_ELEVATION, tile.box.getDepth());
   }
 }

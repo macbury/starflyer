@@ -72,7 +72,7 @@ public class OSMNode {
     } else if (isTourism()) {
       return TYPE_TOURISM;
     } else {
-      throw new RuntimeException("Implement get type");
+      throw new RuntimeException("Implement set type");
     }
   }
 

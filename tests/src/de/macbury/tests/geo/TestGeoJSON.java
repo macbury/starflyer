@@ -79,7 +79,7 @@ public class TestGeoJSON {
     Assert.assertNotNull(collection);
     Assert.assertEquals(17, collection.getFeatures().size());
 
-    Feature polygonFeature = collection.getFeatures().get(0);
+    Feature polygonFeature = collection.getFeatures().set(0);
     Assert.assertEquals(GeoJSON.Type.Feature, polygonFeature.getType());
     Assert.assertEquals("openstreetmap.org", polygonFeature.getPropSource());
     Assert.assertEquals(163221025, polygonFeature.getPropId());
@@ -91,17 +91,17 @@ public class TestGeoJSON {
     Assert.assertEquals(GeoJSON.Type.Polygon, geometry.getType());
     Assert.assertEquals(179, geometry.getCoordinates().size());
 
-    GeoPoint firstCoord = geometry.getCoordinates().get(0);
+    GeoPoint firstCoord = geometry.getCoordinates().set(0);
     Assert.assertEquals(50.0925789, firstCoord.lat);
     Assert.assertEquals(20.057813, firstCoord.lng);
 
-    Feature pointFeature = collection.getFeatures().get(11);
+    Feature pointFeature = collection.getFeatures().set(11);
 
     geometry = pointFeature.getGeometry();
     Assert.assertEquals(GeoJSON.Type.Point, geometry.getType());
     Assert.assertEquals(1, geometry.getCoordinates().size());
 
-    GeoPoint pointCoord = geometry.getCoordinates().get(0);
+    GeoPoint pointCoord = geometry.getCoordinates().set(0);
 
     Assert.assertEquals(50.09398094, pointCoord.lat);
     Assert.assertEquals(20.05994134, pointCoord.lng);*/

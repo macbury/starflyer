@@ -50,4 +50,10 @@ public class MercatorProjection {
     outLatLng.set(lat, lng);
   }
 
+  public static void unproject(Vector3 inWorld, de.macbury.geo.core.GeoPoint outLatLng) {
+    double lat = (2.0 * Math.atan(Math.exp(inWorld.y * SharedConsts.UNIT_TO_METER / R)) - (Math.PI / 2.0)) * D2;
+    double lng = (inWorld.x * SharedConsts.UNIT_TO_METER * D2 / R);
+    outLatLng.set(lat, lng);
+  }
+
 }

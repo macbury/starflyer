@@ -13,17 +13,17 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
-import com.martiansoftware.jsap.stringparsers.DoubleStringParser;
+import de.macbury.ActionTimer;
 import de.macbury.Starflyer;
+import de.macbury.desktop.manager.MainStatusBarManager;
+import de.macbury.desktop.manager.MenuBarManager;
 import de.macbury.geo.MercatorProjection;
 import de.macbury.geo.Tile;
 import de.macbury.geo.core.GeoPath;
@@ -31,15 +31,14 @@ import de.macbury.geo.core.GeoPoint;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.model.GeoTile;
 import de.macbury.model.Road;
+import de.macbury.occlusion.VisibleTileProvider;
 import de.macbury.server.tiles.TilesManager;
 import de.macbury.server.tiles.cache.MemoryTileCache;
-
-import java.util.ArrayList;
 
 /**
  * Explore game content
  */
-public class GameExplorer extends Starflyer {
+public class GameExplorer extends Starflyer implements ActionTimer.TimerListener {
   private Stage stage;
   private GeoPerspectiveCamera camera;
   private Model model;
@@ -51,37 +50,19 @@ public class GameExplorer extends Starflyer {
 
   private Array<ModelInstance> tiles = new Array<ModelInstance>();
   private Tile tileCursor;
+  VisibleTileProvider visibleTileProvider = new VisibleTileProvider();
+
+  private VisLabel visibleTileLabel;
+  private MenuBarManager menuBarManger;
+  private MainStatusBarManager statusBarManager;
 
   @Override
   public void create() {
     super.create();
-
-
-    this.tilesManager = new TilesManager(new MemoryTileCache());
-    tilesManager.addListener(new TilesManager.Listener() {
-      @Override
-      public void onTileRetrieve(GeoTile tile, TilesManager manager) {
-        Gdx.app.log("Geo tile", tile.toString());
-      }
-    });
-
     VisUI.load(VisUI.SkinScale.X1);
 
-    stage = new Stage(new ScreenViewport());
-    InputMultiplexer inputMultiplexer = new InputMultiplexer();
-    inputMultiplexer.addProcessor(stage);
-
-    Gdx.input.setInputProcessor(inputMultiplexer);
-
-    this.camera = new GeoPerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    //camera.setGeoPosition(new GeoPoint(0.0001,0.0001));
-    camera.position.set(10,10,10);
-
-
-
-    this.cameraController = new CameraInputController(camera);
-    cameraController.target.set(Vector3.Zero);
-    inputMultiplexer.addProcessor(cameraController);
+    initializeGameEngine();
+    initializeUI();
 
     this.shapeRenderer = new ShapeRenderer();
 
@@ -99,7 +80,39 @@ public class GameExplorer extends Starflyer {
         });
       }
     });
-    createUI();
+  }
+
+  private void initializeUI() {
+    this.menuBarManger = new MenuBarManager();
+    statusBarManager   = new MainStatusBarManager();
+
+    stage               = new Stage(new ScreenViewport());
+
+    VisTable root = new VisTable();
+    root.setFillParent(true);
+    stage.addActor(root);
+
+    root.add(menuBarManger.getTable()).growX().row();
+    root.add().fill().expand().row();
+
+    root.add(statusBarManager).growX().row();
+
+    InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    inputMultiplexer.addProcessor(stage);
+
+    Gdx.input.setInputProcessor(inputMultiplexer);
+
+    inputMultiplexer.addProcessor(cameraController);
+  }
+
+  private void initializeGameEngine() {
+    this.tilesManager  = new TilesManager(new MemoryTileCache());
+
+    this.camera = new GeoPerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    camera.setGeoPosition(new GeoPoint(50.093125, 20.059642));
+
+    this.cameraController = new CameraInputController(camera);
+    //cameraController.target.set(Vector3.Zero);
   }
 
   private void createUI() {
@@ -108,6 +121,9 @@ public class GameExplorer extends Starflyer {
     final VisLabel tilePositionLabel = new VisLabel();
     final VisTextField latField = new VisTextField("50.093113");
     final VisTextField lngField = new VisTextField("20.059572");
+
+    this.visibleTileLabel = new VisLabel("");
+
     final VisTextButton textButton = new VisTextButton("Go to");
 
     textButton.addListener(new ChangeListener() {
@@ -119,7 +135,7 @@ public class GameExplorer extends Starflyer {
         GeoPoint point = new GeoPoint(lat, lng);
 
         tileCursor = new Tile();
-        tileCursor.get(point);
+        tileCursor.set(point);
 
         camera.setGeoPosition(point);
         cameraController.target.set(camera.position);
@@ -135,6 +151,7 @@ public class GameExplorer extends Starflyer {
       }
     });
 
+    window.add(visibleTileLabel).row();
     window.add(cameraPositionLabel).row();
     window.add(tilePositionLabel).row();
     window.add(latField).row();
@@ -240,6 +257,8 @@ public class GameExplorer extends Starflyer {
   @Override
   public void render () {
     cameraController.update();
+    visibleTileProvider.update(camera);
+
     Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
@@ -271,5 +290,10 @@ public class GameExplorer extends Starflyer {
   public void dispose () {
     VisUI.dispose();
     stage.dispose();
+  }
+
+  @Override
+  public void onTimerTick(ActionTimer timer) {
+    //visibleTileLabel.setText("Visible tiles: " + visibleTileProvider.getVisibleCount());
   }
 }

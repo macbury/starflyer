@@ -1,5 +1,8 @@
 package de.macbury.geo;
 
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
+import de.macbury.MathExt;
 import de.macbury.SharedConsts;
 import de.macbury.geo.core.GeoPoint;
 
@@ -7,6 +10,11 @@ import de.macbury.geo.core.GeoPoint;
  * Simple structure to contain information about tile position
  */
 public class Tile {
+  /**
+   * TILE size in game world size
+   */
+  public static final float TILE_SIZE = 31;
+  public static final  float MAX_ELEVATION = TILE_SIZE;
 
   /**
    * X goes from 0 (left edge is 180 °W) to 2zoom − 1 (right edge is 180 °E)
@@ -26,12 +34,21 @@ public class Tile {
   public double east;
   public double west;
 
-  public Tile get(GeoPoint point) {
-    return this.get(point, SharedConsts.DEFAULT_ZOOM);
+  /**
+   * Bounding box in meters
+   */
+  public BoundingBox box = new BoundingBox();
+
+  public Tile set(double lat, double lng) {
+    return this.set(lat, lng, SharedConsts.DEFAULT_ZOOM);
   }
 
-  public Tile get(GeoPoint point, final int zoom) {
-    return this.get(point.lat, point.lng, zoom);
+  public Tile set(GeoPoint point) {
+    return this.set(point, SharedConsts.DEFAULT_ZOOM);
+  }
+
+  public Tile set(GeoPoint point, final int zoom) {
+    return this.set(point.lat, point.lng, zoom);
   }
 
   private static double tile2lng(int tileX, int zoom) {
@@ -58,7 +75,7 @@ public class Tile {
    * @param zoom
    * @return
    */
-  public Tile get(double lat, double lng, final int zoom) {
+  public Tile set(double lat, double lng, final int zoom) {
     this.zoom = zoom;
     this.x = (int)Math.floor( (lng + 180) / 360 * (1<<zoom) ) ;
     this.y = (int)Math.floor( (1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2 * (1<<zoom) ) ;
@@ -74,11 +91,45 @@ public class Tile {
     return this;
   }
 
+  /**
+   * Set tile position and update bounding box
+   * @param tileX
+   * @param tileY
+   * @return
+   */
+  public Tile setTilePosition(int tileX, int tileY) {
+    return setTilePosition(tileX, tileY, SharedConsts.DEFAULT_ZOOM);
+  }
+
+  public Tile setTilePosition(int tileX, int tileY, int zoom) {
+    this.x = tileX;
+    this.y = tileY;
+    this.zoom = zoom;
+    calculateBoundingBox();
+    return this;
+  }
+
   private void calculateBoundingBox() {
     north = tile2lat(y, zoom);
     south = tile2lat(y + 1, zoom);
-    west = tile2lng(x, zoom);
-    east = tile2lng(x + 1, zoom);
+    west  = tile2lng(x, zoom);
+    east  = tile2lng(x + 1, zoom);
+
+    Vector3 tempA = new Vector3();
+    Vector3 tempB = new Vector3();
+
+    GeoPoint startPoint = new GeoPoint(north, west);
+    GeoPoint endPoint   = new GeoPoint(south, east);
+
+    MercatorProjection.project(startPoint, tempA);
+    MercatorProjection.project(endPoint, tempB);
+
+    tempB.z = MAX_ELEVATION;
+
+    MathExt.round(tempA);
+    MathExt.round(tempB);
+
+    box.set(tempA, tempB);
   }
 
   @Override
