@@ -66,4 +66,12 @@ public class VisibleTileProvider implements Disposable {
     tilePool.freeAll(visible);
     visible.clear();
   }
+
+  /**
+   * Return list of visible tiles
+   * @return
+   */
+  public Array<Tile> getVisible() {
+    return visible;
+  }
 }

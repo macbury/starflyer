@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -24,6 +25,7 @@ import de.macbury.ActionTimer;
 import de.macbury.Starflyer;
 import de.macbury.desktop.manager.MainStatusBarManager;
 import de.macbury.desktop.manager.MenuBarManager;
+import de.macbury.desktop.ui.DebugVisibleTileWindow;
 import de.macbury.geo.MercatorProjection;
 import de.macbury.geo.Tile;
 import de.macbury.geo.core.GeoPath;
@@ -57,6 +59,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   private VisLabel visibleTileLabel;
   private MenuBarManager menuBarManger;
   private MainStatusBarManager statusBarManager;
+  private DebugVisibleTileWindow debugVisibleTileWindow;
 
   @Override
   public void create() {
@@ -85,9 +88,9 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   }
 
   private void initializeUI() {
-
+    this.debugVisibleTileWindow = new DebugVisibleTileWindow(visibleTileProvider);
     Overlay overlay = new Overlay();
-    this.menuBarManger = new MenuBarManager();
+    this.menuBarManger = new MenuBarManager(debugVisibleTileWindow);
     statusBarManager   = new MainStatusBarManager();
     statusBarManager.setSpyCamera(camera);
 
@@ -98,12 +101,14 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     stage.addActor(root);
 
     root.add(menuBarManger.getTable()).growX().row();
+
     root.add(overlay).fill().expand().row();
 
     root.add(statusBarManager).growX().row();
 
     cameraController.setOverlay(overlay);
     Gdx.input.setInputProcessor(stage);
+    stage.addActor(debugVisibleTileWindow);
   }
 
   private void initializeGameEngine() {
