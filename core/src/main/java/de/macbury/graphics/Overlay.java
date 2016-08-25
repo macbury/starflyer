@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 public class Overlay extends Widget {
   public Overlay() {
     super();
-    setFillParent(true);
+    setFillParent(false);
     setZIndex(2);
   }
 

@@ -27,11 +27,11 @@ public class RTSCameraController implements Disposable {
   private int scrollAmount;
   private float scrollSpeed;
 
-  private float rotationSpeed;
-  private float rotation = (float)-Math.PI;
+  private double rotationSpeed;
+  private double rotation = -Math.PI;
 
-  private float tiltSpeed;
-  private float tilt = 1.20f;
+  private double tiltSpeed;
+  private double tilt = 1.20f;
   private float minTilt;
   private float maxTilt;
 
@@ -134,10 +134,13 @@ public class RTSCameraController implements Disposable {
 
       @Override
       public boolean mouseMoved(InputEvent event, float screenX, float screenY) {
+        screenX = overlay.getOriginX() + screenX;
+        screenY = overlay.getOriginY() + screenY;
+
         if (RTSCameraController.this.overlay.focused()) {
           leftHotCorent = (screenX <= CAMERA_MOVE_PADDING);
-          rightHotCorent = (Gdx.graphics.getWidth() - CAMERA_MOVE_PADDING <= screenX);
-          topHotCorent = (Gdx.graphics.getHeight() - CAMERA_MOVE_PADDING <= screenY);
+          rightHotCorent = (overlay.getWidth() - CAMERA_MOVE_PADDING <= screenX);
+          topHotCorent = (overlay.getHeight() - CAMERA_MOVE_PADDING <= screenY);
           bottomHotCorent = (screenY <= CAMERA_MOVE_PADDING);
 
           return true;
@@ -219,9 +222,9 @@ public class RTSCameraController implements Disposable {
       currentZoom = minZoom;
 
     if (leftPressed || leftHotCorent)
-      offX -= sideSpeed * delta;
-    else if (rightPressed || rightHotCorent)
       offX += sideSpeed * delta;
+    else if (rightPressed || rightHotCorent)
+      offX -= sideSpeed * delta;
 
     if (forwardPressed || topHotCorent)
       offY -= forwardSpeed * delta;
@@ -261,15 +264,15 @@ public class RTSCameraController implements Disposable {
       tilt = minTilt;
 
     center.x += offX * Math.cos(-rotation) + offY * Math.sin(rotation);
-    center.z += offX * Math.sin(-rotation) + offY * Math.cos(rotation);
+    center.y += offX * Math.sin(-rotation) + offY * Math.cos(rotation);
 
     position.x = center.x + (float) (currentZoom * Math.cos(tilt) * Math.sin(rotation));
-    position.y = center.y + (float) (currentZoom * Math.sin(tilt));
-    position.z = center.z + (float) (currentZoom * Math.cos(tilt) * Math.cos(rotation));
+    position.z = center.z + (float) (currentZoom * Math.sin(tilt));
+    position.y = center.y + (float) (currentZoom * Math.cos(tilt) * Math.cos(rotation));
 
 
     if (listener != null) {
-      position.y = Math.max(listener.getCameraElevation(this, position), position.y);
+      position.z = Math.max(listener.getCameraElevation(this, position), position.z);
       listener.getCameraBounds(tempBoundingBox);
       if (!tempBoundingBox.contains(center)) {
         center.set(oldCenter);
@@ -300,10 +303,10 @@ public class RTSCameraController implements Disposable {
     return cam;
   }
 
-  public void setCenter(float x, float z) {
-    this.position.set(x,0,z);
+  public void setCenter(float x, float y) {
+    this.position.set(x,y,0);
     this.center.x = x;
-    this.center.z = z;
+    this.center.y = y;
   }
 
 
@@ -312,9 +315,14 @@ public class RTSCameraController implements Disposable {
     if (!enabled) {
       return acted;
     }
-    /*if (input.isEqual(InputManager.Action.CameraRotateLeft, keycode)) {
+
+    if (Input.Keys.Q == keycode) {
       rotateLeftPressed = state;
       acted = true;
+    }
+
+    /*if (input.isEqual(InputManager.Action.CameraRotateLeft, keycode)) {
+
     }
 
     if (input.isEqual(InputManager.Action.CameraRotateRight, keycode)) {
@@ -383,14 +391,6 @@ public class RTSCameraController implements Disposable {
 
   public Vector3 getCenter() {
     return center;
-  }
-
-  public float getTilt() {
-    return tilt;
-  }
-
-  public float getRotation() {
-    return rotation;
   }
 
   public float getCurrentZoom() {

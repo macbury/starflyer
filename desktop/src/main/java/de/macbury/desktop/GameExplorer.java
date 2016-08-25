@@ -29,6 +29,8 @@ import de.macbury.geo.Tile;
 import de.macbury.geo.core.GeoPath;
 import de.macbury.geo.core.GeoPoint;
 import de.macbury.graphics.GeoPerspectiveCamera;
+import de.macbury.graphics.Overlay;
+import de.macbury.graphics.RTSCameraController;
 import de.macbury.model.GeoTile;
 import de.macbury.model.Road;
 import de.macbury.occlusion.VisibleTileProvider;
@@ -46,7 +48,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   private ModelBatch modelBatch;
   public TilesManager tilesManager;
   private ShapeRenderer shapeRenderer;
-  private CameraInputController cameraController;
+  private RTSCameraController cameraController;
 
   private Array<ModelInstance> tiles = new Array<ModelInstance>();
   private Tile tileCursor;
@@ -83,6 +85,8 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   }
 
   private void initializeUI() {
+
+    Overlay overlay = new Overlay();
     this.menuBarManger = new MenuBarManager();
     statusBarManager   = new MainStatusBarManager();
     statusBarManager.setSpyCamera(camera);
@@ -94,16 +98,12 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     stage.addActor(root);
 
     root.add(menuBarManger.getTable()).growX().row();
-    root.add().fill().expand().row();
+    root.add(overlay).fill().expand().row();
 
     root.add(statusBarManager).growX().row();
 
-    InputMultiplexer inputMultiplexer = new InputMultiplexer();
-    inputMultiplexer.addProcessor(stage);
-
-    Gdx.input.setInputProcessor(inputMultiplexer);
-
-    inputMultiplexer.addProcessor(cameraController);
+    cameraController.setOverlay(overlay);
+    Gdx.input.setInputProcessor(stage);
   }
 
   private void initializeGameEngine() {
@@ -111,7 +111,8 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
     this.camera = new GeoPerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-    this.cameraController = new CameraInputController(camera);
+    this.cameraController = new RTSCameraController();
+    cameraController.setCamera(camera);
     //cameraController.target.set(Vector3.Zero);
 
     fetch(50.093125, 20.059642);
@@ -123,8 +124,13 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     tileCursor = new Tile();
     tileCursor.set(point);
 
+    Vector3 target = new Vector3();
+
+    MercatorProjection.project(point, target);
     camera.setGeoPosition(point);
-    cameraController.target.set(camera.position);
+
+    cameraController.setCenter(target.x, target.y);
+
     camera.position.add(0, -30, 10);
     camera.update();
 
@@ -154,7 +160,6 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
         tileCursor.set(point);
 
         camera.setGeoPosition(point);
-        cameraController.target.set(camera.position);
         camera.position.add(0, -30, 10);
         camera.update();
 
@@ -272,7 +277,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
   @Override
   public void render () {
-    cameraController.update();
+    cameraController.update(Gdx.graphics.getDeltaTime());
     visibleTileProvider.update(camera);
 
     Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
