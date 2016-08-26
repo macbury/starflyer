@@ -31,7 +31,7 @@ public class DebugVisibleTileWindow extends VisWindow implements TimerListener {
   public DebugVisibleTileWindow(VisibleTileProvider visibleTileProvider) {
     super("Visible tiles");
 
-    setVisible(true);
+    setVisible(false);
     setWidth(120);
     setHeight(320);
     setResizable(true);

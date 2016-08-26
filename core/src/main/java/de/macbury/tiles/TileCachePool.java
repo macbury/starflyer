@@ -1,6 +1,5 @@
 package de.macbury.tiles;
 
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -11,12 +10,12 @@ import de.macbury.tiles.downloaders.AbstractGeoTileDownloader;
 /**
  * Manage all loaded {@link TileInstance}.
  */
-public class TileCachePool implements Disposable, AbstractGeoTileDownloader.Listener, TileAssembler.Listener {
+public class TileCachePool implements Disposable, AbstractGeoTileDownloader.Listener, de.macbury.tiles.assembler.TileAssembler.Listener {
   private final Array<TileInstance> instances;
   private final AbstractGeoTileDownloader downloader;
-  private final TileAssembler assembler;
+  private final de.macbury.tiles.assembler.TileAssembler assembler;
 
-  public TileCachePool(AbstractGeoTileDownloader downloader, TileAssembler assembler) {
+  public TileCachePool(AbstractGeoTileDownloader downloader, de.macbury.tiles.assembler.TileAssembler assembler) {
     this.downloader = downloader;
     this.assembler  = assembler;
     instances       = new Array<TileInstance>();
@@ -26,7 +25,7 @@ public class TileCachePool implements Disposable, AbstractGeoTileDownloader.List
   }
 
   /**
-   * Update assigned {@link TileAssembler} and {@link AbstractGeoTileDownloader}. Run this on OpenGL thread.
+   * Update assigned {@link de.macbury.tiles.assembler.TileAssembler} and {@link AbstractGeoTileDownloader}. Run this on OpenGL thread.
    */
   public void update() {
     assembler.update();
@@ -123,7 +122,7 @@ public class TileCachePool implements Disposable, AbstractGeoTileDownloader.List
    * @param assembler
    */
   @Override
-  public void onGeoJsonModelAssemblyFinish(ModelInstance modelInstance, GeoTile geoTile, TileAssembler assembler) {
+  public void onGeoJsonModelAssemblyFinish(ModelInstance modelInstance, GeoTile geoTile, de.macbury.tiles.assembler.TileAssembler assembler) {
     TileInstance instance = find(geoTile.x, geoTile.y);
     if (instance == null) { // instance was removed before assembling was finished, dispose this model
       modelInstance.model.dispose();
