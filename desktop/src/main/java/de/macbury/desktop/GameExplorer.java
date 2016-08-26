@@ -21,11 +21,13 @@ import de.macbury.Starflyer;
 import de.macbury.desktop.manager.MainStatusBarManager;
 import de.macbury.desktop.manager.MenuBarManager;
 import de.macbury.desktop.tiles.downloaders.MapZenGeoTileDownloader;
+import de.macbury.desktop.ui.DebugTileCachePoolWindow;
 import de.macbury.desktop.ui.DebugVisibleTileWindow;
 import de.macbury.geo.MercatorProjection;
 import de.macbury.geo.Tile;
 import de.macbury.geo.core.GeoPath;
 import de.macbury.geo.core.GeoPoint;
+import de.macbury.graphics.FrustumDebugAndRenderer;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.graphics.Overlay;
 import de.macbury.graphics.RTSCameraController;
@@ -57,6 +59,9 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   private DebugVisibleTileWindow debugVisibleTileWindow;
   private TileCachePool tileCachePool;
   private TilesToRender tilesToRender;
+  private DebugTileCachePoolWindow debugTileCachePoolWindow;
+  private FrustumDebugAndRenderer frustumDebugger;
+
   @Override
   public void create() {
     super.create();
@@ -68,22 +73,10 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     this.shapeRenderer = new ShapeRenderer();
 
     modelBatch = new ModelBatch();
-
-    /*tilesManager.addListener(new TilesManager.Listener() {
-      @Override
-      public void onTileRetrieve(GeoTile tile, TilesManager manager) {
-        final GeoTile t = tile;
-        Gdx.app.postRunnable(new Runnable() {
-          @Override
-          public void run() {
-            generateGeoTileMesh(t);
-          }
-        });
-      }
-    });*/
   }
 
   private void initializeUI() {
+    this.debugTileCachePoolWindow = new DebugTileCachePoolWindow(tileCachePool);
     this.debugVisibleTileWindow = new DebugVisibleTileWindow(visibleTileProvider);
     Overlay overlay = new Overlay();
     this.menuBarManger = new MenuBarManager();
@@ -110,6 +103,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   }
 
   private void initializeGameEngine() {
+    this.frustumDebugger = new FrustumDebugAndRenderer();
     this.tileCachePool = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new de.macbury.tiles.assembler.TileAssembler());
     this.tilesToRender = new TilesToRender();
     this.camera = new GeoPerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -184,90 +178,6 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     window.pack();
     window.left().top();
     stage.addActor(window.fadeIn());*/
-  }
-
-  private void generateGeoTileMesh(GeoTile tile) {
-    Vector3 startVec = new Vector3();
-    Vector3 finalVec = new Vector3();
-    Vector3 originVec = new Vector3(0f, 0f,0f);
-
-    ModelBuilder modelBuilder = new ModelBuilder();
-    modelBuilder.begin(); {
-      for (Road road: tile.roads) {
-        Color roadColor = Color.WHITE;
-
-        switch (road.getType()) {
-          case Highway:
-            roadColor = Color.BLUE;
-            break;
-          case Path:
-            roadColor = Color.GRAY;
-            break;
-          case MinorRoad:
-            roadColor = Color.GOLD;
-            break;
-          case MajorRoad:
-            roadColor = Color.ORANGE;
-            break;
-        }
-
-        MeshPartBuilder line = modelBuilder.part("road", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(roadColor)));
-        for (GeoPath path : road) {
-          for (int i = 1; i < path.size(); i++) {
-            GeoPoint startPoint = path.get(i-1);
-            GeoPoint finalPoint = path.get(i);
-
-            MercatorProjection.project(startPoint, startVec);
-            MercatorProjection.project(finalPoint, finalVec);
-            line.line(startVec.sub(originVec), finalVec.sub(originVec));
-          }
-        }
-      }
-
-      GeoPoint startPoint = new GeoPoint();
-      GeoPoint finalPoint = new GeoPoint();
-
-     // MeshPartBuilder boundingLine = modelBuilder.part("boundingBox", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
-/*
-      //TOP line
-      startPoint.set(tileCursor.north, tileCursor.west);
-      finalPoint.set(tileCursor.north, tileCursor.east);
-
-      MercatorProjection.project(startPoint, startVec);
-      MercatorProjection.project(finalPoint, finalVec);
-
-      boundingLine.line(startVec, finalVec);
-
-      // BOTTOM line
-      startPoint.set(tileCursor.south, tileCursor.east);
-      finalPoint.set(tileCursor.south, tileCursor.west);
-
-      MercatorProjection.project(startPoint, startVec);
-      MercatorProjection.project(finalPoint, finalVec);
-
-      boundingLine.line(startVec, finalVec);
-
-      // right line
-      startPoint.set(tileCursor.south, tileCursor.east);
-      finalPoint.set(tileCursor.north, tileCursor.east);
-
-      MercatorProjection.project(startPoint, startVec);
-      MercatorProjection.project(finalPoint, finalVec);
-
-      boundingLine.line(startVec, finalVec);
-
-      // left line
-      startPoint.set(tileCursor.south, tileCursor.west);
-      finalPoint.set(tileCursor.north, tileCursor.west);
-
-      MercatorProjection.project(startPoint, startVec);
-      MercatorProjection.project(finalPoint, finalVec);
-
-      boundingLine.line(startVec, finalVec);*/
-    } model = modelBuilder.end();
-
-    instance = new ModelInstance(model);
-    tiles.add(instance);
   }
 
   @Override
@@ -359,59 +269,8 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
       } shapeRenderer.end();
     } tilesToRender.end();
 
+    frustumDebugger.render(camera);
 
-
-    //shapeRenderer.setProjectionMatrix(camera.combined);
-    //shapeRenderer.translate(camera.position.x, camera.position.y, 0);
-    /*shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
-      /*shapeRenderer.setColor(Color.GREEN);
-      shapeRenderer.line(Vector3.Zero, new Vector3(0,1,0));
-      shapeRenderer.setColor(Color.RED);
-      shapeRenderer.line(Vector3.Zero, new Vector3(1,0,0));
-      shapeRenderer.setColor(Color.BLUE);
-      shapeRenderer.line(Vector3.Zero, new Vector3(0,0,1));
-
-      shapeRenderer.setColor(Color.NAVY);
-      for (Tile tile: visibleTileProvider.getVisible()) {
-        //TOP line
-        tempStartPoint.set(tile.north, tile.west);
-        tempFinalPoint.set(tile.north, tile.east);
-
-        MercatorProjection.project(tempStartPoint, tempStartVec);
-        MercatorProjection.project(tempFinalPoint, tempFinalVec);
-
-        shapeRenderer.line(tempStartVec, tempFinalVec);
-
-        // BOTTOM line
-        tempStartPoint.set(tile.south, tile.east);
-        tempFinalPoint.set(tile.south, tile.west);
-
-        MercatorProjection.project(tempStartPoint, tempStartVec);
-        MercatorProjection.project(tempFinalPoint, tempFinalVec);
-
-        shapeRenderer.line(tempStartVec, tempFinalVec);
-
-        // right line
-        tempStartPoint.set(tile.south, tile.east);
-        tempFinalPoint.set(tile.north, tile.east);
-
-        MercatorProjection.project(tempStartPoint, tempStartVec);
-        MercatorProjection.project(tempFinalPoint, tempFinalVec);
-
-        shapeRenderer.line(tempStartVec, tempFinalVec);
-
-        // left line
-        tempStartPoint.set(tile.south, tile.west);
-        tempFinalPoint.set(tile.north, tile.west);
-
-        MercatorProjection.project(tempStartPoint, tempStartVec);
-        MercatorProjection.project(tempFinalPoint, tempFinalVec);
-
-        shapeRenderer.line(tempStartVec, tempFinalVec);
-      }
-    } shapeRenderer.end();*/
-
-    //Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
     stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
     stage.draw();
   }
@@ -430,13 +289,16 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   @Override
   public void onMenuAction(MenuBarManager.Action action, MenuBarManager menuBarManager) {
     switch (action) {
+      case DebugTileCachePool:
+        debugTileCachePoolWindow.toggle();
+        break;
       case DebugVisibleTiles:
         debugVisibleTileWindow.toggle();
         break;
-      case FrustrumSave:
+      case FrustumSave:
         camera.saveDebugFrustum();
         break;
-      case FrustrumRestore:
+      case FrustumRestore:
         camera.restoreFrustum();
         break;
       default:

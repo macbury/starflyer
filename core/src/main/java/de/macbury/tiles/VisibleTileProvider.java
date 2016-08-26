@@ -39,8 +39,8 @@ public class VisibleTileProvider implements Disposable {
 
     // Calculate how many tiles are around player
     int tileAheadCount = MathUtils.floor(camera.far / Tile.TILE_SIZE);
-    for (int x = -tileAheadCount; x < tileAheadCount; x++) {
-      for (int y = -tileAheadCount; y < tileAheadCount; y++) {
+    for (int x = -tileAheadCount; x <= tileAheadCount; x++) {
+      for (int y = -tileAheadCount; y <= tileAheadCount; y++) {
         Tile cursorTile = tilePool.obtain();
         cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
 

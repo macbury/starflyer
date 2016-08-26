@@ -1,15 +1,11 @@
 package de.macbury.desktop.manager;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuBar;
 import com.kotcrab.vis.ui.widget.MenuItem;
-import de.macbury.desktop.ui.DebugVisibleTileWindow;
-
-import java.util.ArrayList;
 
 /**
  * Configure and create main menu
@@ -18,8 +14,9 @@ public class MenuBarManager extends MenuBar {
   public enum Action {
     DebugVisibleTiles,
     DebugGoToPosition,
-    FrustrumSave,
-    FrustrumRestore
+    DebugTileCachePool,
+    FrustumSave,
+    FrustumRestore
   }
 
   private Array<Listener> listeners = new Array<Listener>();
@@ -34,8 +31,8 @@ public class MenuBarManager extends MenuBar {
     Menu menu = new Menu("Frustum");
     this.addMenu(menu);
 
-    menu.addItem(createMenuItem("Save", Action.FrustrumSave));
-    menu.addItem(createMenuItem("Restore", Action.FrustrumRestore));
+    menu.addItem(createMenuItem("Save", Action.FrustumSave));
+    menu.addItem(createMenuItem("Restore", Action.FrustumRestore));
   }
 
   public void addListener(Listener listener) {
@@ -48,6 +45,7 @@ public class MenuBarManager extends MenuBar {
 
     menu.addItem(createMenuItem("Visible tiles", Action.DebugVisibleTiles));
     menu.addItem(createMenuItem("Go to position", Action.DebugGoToPosition));
+    menu.addItem(createMenuItem("Show tile cache pool", Action.DebugTileCachePool));
   }
 
   private void triggerAction(Action action) {

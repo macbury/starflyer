@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
@@ -12,7 +13,7 @@ import de.macbury.model.GeoTile;
 /**
  * Main tile component for rendering. It have model and information about tile.
  */
-public class TileInstance implements Disposable, RenderableProvider {
+public class TileInstance implements Disposable, RenderableProvider, Comparable<TileInstance> {
   public enum State {
     /**
      * Tile is downloading its {@link de.macbury.geo.core.GeoJSON} from server
@@ -79,5 +80,12 @@ public class TileInstance implements Disposable, RenderableProvider {
     if (state == State.Ready) {
       model.getRenderables(renderables, pool);
     }
+  }
+
+  @Override
+  public int compareTo(TileInstance o) {
+    final int x_d = tileX - this.tileX;
+    final int y_d = tileY - this.tileY;
+    return (int)Math.sqrt(x_d * x_d + y_d * y_d);
   }
 }

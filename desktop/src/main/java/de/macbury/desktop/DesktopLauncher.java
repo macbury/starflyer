@@ -30,6 +30,7 @@ public class DesktopLauncher {
     configuration.title = "Starflyer";
     configuration.width = 1368;
     configuration.height = 768;
+    configuration.vSyncEnabled = true;
 
     for (int size : new int[] { 128, 64, 32, 16 }) {
       configuration.addIcon("libgdx" + size + ".png", FileType.Internal);

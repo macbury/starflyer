@@ -69,6 +69,7 @@ public class TileAssembler implements Disposable {
           }
           assembleGeoTileTaskPool.free(task);
           runningTasks.removeValue(task, true);
+          break;
         }
       }
     } runningTasks.end();

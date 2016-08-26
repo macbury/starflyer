@@ -5,15 +5,17 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import de.macbury.geo.Tile;
 import de.macbury.model.GeoTile;
+import de.macbury.tiles.assembler.TileAssembler;
 import de.macbury.tiles.downloaders.AbstractGeoTileDownloader;
 
 /**
  * Manage all loaded {@link TileInstance}.
  */
 public class TileCachePool implements Disposable, AbstractGeoTileDownloader.Listener, de.macbury.tiles.assembler.TileAssembler.Listener {
+  private final static int MAX_POOL_SIZE = 100;
   private final Array<TileInstance> instances;
   private final AbstractGeoTileDownloader downloader;
-  private final de.macbury.tiles.assembler.TileAssembler assembler;
+  private final TileAssembler assembler;
 
   public TileCachePool(AbstractGeoTileDownloader downloader, de.macbury.tiles.assembler.TileAssembler assembler) {
     this.downloader = downloader;
@@ -81,7 +83,10 @@ public class TileCachePool implements Disposable, AbstractGeoTileDownloader.List
    * @param y
    */
   private void trim(int x, int y) {
-    //TODO implement this
+    int toRemove = instances.size - MAX_POOL_SIZE;
+    if (toRemove > 0) {
+      instances.sort();
+    }
   }
 
   public TileInstance get(Tile tile) {
