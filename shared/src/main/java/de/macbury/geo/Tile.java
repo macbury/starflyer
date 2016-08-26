@@ -127,6 +127,7 @@ public class Tile {
     MercatorProjection.project(startPoint, tempA);
     MercatorProjection.project(endPoint, tempB);
 
+    tempA.z = -10;
     tempB.z = MAX_ELEVATION;
 
     MathExt.round(tempA);

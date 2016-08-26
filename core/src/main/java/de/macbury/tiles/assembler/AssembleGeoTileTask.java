@@ -32,15 +32,22 @@ public class AssembleGeoTileTask implements RunnableFuture<ModelInstance>, Pool.
   private ModelInstance result;
   private GeoTile geoTile;
   private boolean done = false;
+  private final Vector3 startVec = new Vector3();
+  private final Vector3 finalVec = new Vector3();
+  private final Vector3 originVec = new Vector3();
+  private final GeoPoint originPoint = new GeoPoint();
 
   public AssembleGeoTileTask() {
     this.modelBuilder = new ModelBuilder();
   }
 
   private void generateGeoTileMesh(GeoTile tile) {
-    Vector3 startVec = new Vector3();
-    Vector3 finalVec = new Vector3();
-    Vector3 originVec = new Vector3(0f, 0f,0f);
+    this.startVec.setZero();
+    this.finalVec.setZero();
+    this.originVec.setZero();
+
+    originPoint.set(tile.north, tile.west);
+    MercatorProjection.project(originPoint, originVec);
 
     modelBuilder.begin(); {
       for (Road road: tile.roads) {
@@ -74,8 +81,8 @@ public class AssembleGeoTileTask implements RunnableFuture<ModelInstance>, Pool.
         }
       }
 
-      GeoPoint startPoint = new GeoPoint();
-      GeoPoint finalPoint = new GeoPoint();
+      //GeoPoint startPoint = new GeoPoint();
+      //GeoPoint finalPoint = new GeoPoint();
 
       // MeshPartBuilder boundingLine = modelBuilder.part("boundingBox", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
 /*
@@ -147,6 +154,7 @@ public class AssembleGeoTileTask implements RunnableFuture<ModelInstance>, Pool.
     if (result == null) {
       Model model = modelBuilder.end();
       this.result = new ModelInstance(model);
+      this.result.transform.idt().translate(originVec);
     }
 
     return result;

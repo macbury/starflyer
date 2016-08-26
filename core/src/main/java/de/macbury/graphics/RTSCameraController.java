@@ -322,23 +322,38 @@ public class RTSCameraController implements Disposable {
       acted = true;
     }
 
-    if (Input.Keys.UP == keycode) {
+    if (Input.Keys.E == keycode) {
+      rotateRightPressed = state;
+      acted = true;
+    }
+
+    if (Input.Keys.W == keycode) {
       forwardPressed = state;
       acted = true;
     }
 
-    if (Input.Keys.DOWN == keycode) {
+    if (Input.Keys.S == keycode) {
       backwardPressed = state;
       acted = true;
     }
 
-    if (Input.Keys.LEFT == keycode) {
+    if (Input.Keys.A == keycode) {
       leftPressed = state;
       acted = true;
     }
 
-    if (Input.Keys.RIGHT == keycode) {
+    if (Input.Keys.D == keycode) {
       rightPressed = state;
+      acted = true;
+    }
+
+    if (Input.Keys.Z == keycode) {
+      tiltBackward = state;
+      acted = true;
+    }
+
+    if (Input.Keys.X == keycode) {
+      tiltForward = state;
       acted = true;
     }
 
@@ -353,15 +368,7 @@ public class RTSCameraController implements Disposable {
 
 
 
-    if (input.isEqual(InputManager.Action.CameraTiltBackward, keycode)) {
-      tiltBackward = state;
-      acted = true;
-    }
-
-    if (input.isEqual(InputManager.Action.CameraTiltForward, keycode)) {
-      tiltForward = state;
-      acted = true;
-    }*/
+    */
 
     return acted;
   }

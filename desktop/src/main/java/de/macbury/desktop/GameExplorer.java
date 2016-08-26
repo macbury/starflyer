@@ -112,7 +112,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     cameraController.setCamera(camera);
     //cameraController.target.set(Vector3.Zero);
 
-    fetch(50.093125, 20.059642);
+    fetch(50.062191, 19.937002);
   }
 
   private void fetch(double lat, double lng) {
