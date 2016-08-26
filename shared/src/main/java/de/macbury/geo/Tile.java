@@ -109,17 +109,20 @@ public class Tile {
     return this;
   }
 
+  private final Vector3 tempA = new Vector3();
+  private final Vector3 tempB = new Vector3();
+
+  private final GeoPoint startPoint = new GeoPoint(north, west);
+  private final GeoPoint endPoint   = new GeoPoint(south, east);
+
   private void calculateBoundingBox() {
     north = tile2lat(y, zoom);
     south = tile2lat(y + 1, zoom);
     west  = tile2lng(x, zoom);
     east  = tile2lng(x + 1, zoom);
 
-    Vector3 tempA = new Vector3();
-    Vector3 tempB = new Vector3();
-
-    GeoPoint startPoint = new GeoPoint(north, west);
-    GeoPoint endPoint   = new GeoPoint(south, east);
+    startPoint.set(north, west);
+    endPoint.set(south, east);
 
     MercatorProjection.project(startPoint, tempA);
     MercatorProjection.project(endPoint, tempB);

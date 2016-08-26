@@ -9,9 +9,7 @@ import com.kotcrab.vis.ui.widget.VisWindow;
 import de.macbury.ActionTimer;
 import de.macbury.ActionTimer.TimerListener;
 import de.macbury.geo.Tile;
-import de.macbury.occlusion.VisibleTileProvider;
-
-import java.util.ArrayList;
+import de.macbury.tiles.VisibleTileProvider;
 
 /**
  * Created by macbury on 25.08.16.

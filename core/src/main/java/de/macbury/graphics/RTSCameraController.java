@@ -138,11 +138,11 @@ public class RTSCameraController implements Disposable {
         screenY = overlay.getOriginY() + screenY;
 
         if (RTSCameraController.this.overlay.focused()) {
-          leftHotCorent = (screenX <= CAMERA_MOVE_PADDING);
+          /*leftHotCorent = (screenX <= CAMERA_MOVE_PADDING);
           rightHotCorent = (overlay.getWidth() - CAMERA_MOVE_PADDING <= screenX);
           topHotCorent = (overlay.getHeight() - CAMERA_MOVE_PADDING <= screenY);
           bottomHotCorent = (screenY <= CAMERA_MOVE_PADDING);
-
+*/
           return true;
         }
         return false;
@@ -204,6 +204,7 @@ public class RTSCameraController implements Disposable {
 
   public void setCamera(Camera camera) {
     this.cam = camera;
+    this.maxZoom = camera.far - 10;
   }
 
   public void update(final float delta) {
@@ -321,6 +322,26 @@ public class RTSCameraController implements Disposable {
       acted = true;
     }
 
+    if (Input.Keys.UP == keycode) {
+      forwardPressed = state;
+      acted = true;
+    }
+
+    if (Input.Keys.DOWN == keycode) {
+      backwardPressed = state;
+      acted = true;
+    }
+
+    if (Input.Keys.LEFT == keycode) {
+      leftPressed = state;
+      acted = true;
+    }
+
+    if (Input.Keys.RIGHT == keycode) {
+      rightPressed = state;
+      acted = true;
+    }
+
     /*if (input.isEqual(InputManager.Action.CameraRotateLeft, keycode)) {
 
     }
@@ -330,25 +351,7 @@ public class RTSCameraController implements Disposable {
       acted = true;
     }
 
-    if (input.isEqual(InputManager.Action.CameraForward, keycode)) {
-      forwardPressed = state;
-      acted = true;
-    }
 
-    if (input.isEqual(InputManager.Action.CameraBackward, keycode)) {
-      backwardPressed = state;
-      acted = true;
-    }
-
-    if (input.isEqual(InputManager.Action.CameraLeft, keycode)) {
-      leftPressed = state;
-      acted = true;
-    }
-
-    if (input.isEqual(InputManager.Action.CameraRight, keycode)) {
-      rightPressed = state;
-      acted = true;
-    }
 
     if (input.isEqual(InputManager.Action.CameraTiltBackward, keycode)) {
       tiltBackward = state;

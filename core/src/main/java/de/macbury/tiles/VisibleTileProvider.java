@@ -1,4 +1,4 @@
-package de.macbury.occlusion;
+package de.macbury.tiles;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -35,16 +35,16 @@ public class VisibleTileProvider implements Disposable {
     tilePool.freeAll(visible);
     visible.clear();
 
-    originTile.set(camera.geoPosition);
+    originTile.set(camera.normalOrDebugGeoPoint());
 
     // Calculate how many tiles are around player
-    int tileAheadCount = MathUtils.ceil(camera.far / Tile.TILE_SIZE);
+    int tileAheadCount = MathUtils.floor(camera.far / Tile.TILE_SIZE);
     for (int x = -tileAheadCount; x < tileAheadCount; x++) {
       for (int y = -tileAheadCount; y < tileAheadCount; y++) {
         Tile cursorTile = tilePool.obtain();
         cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
 
-        if (camera.frustum.boundsInFrustum(cursorTile.box)) {
+        if (camera.boundsInFrustum(cursorTile.box)) {
           visible.add(cursorTile); // Tile is visible
         } else {
           tilePool.free(cursorTile); // Tile not visible so return it to pool

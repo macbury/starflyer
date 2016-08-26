@@ -1,17 +1,15 @@
 package de.macbury.model;
 
 import com.badlogic.gdx.utils.Array;
+import de.macbury.geo.Tile;
 
 import java.util.ArrayList;
 
 /**
  * This model define a map tile with cropped features like roads, land uses, lakes and buildings
  */
-public class GeoTile {
-  /**
-   * Tile id in format x/y
-   */
-  private String id;
+public class GeoTile extends Tile {
+
   /**
    * List of roads in geotile, Each {@link Road} have type
    */
@@ -22,20 +20,7 @@ public class GeoTile {
    * @return
    */
   public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  /**
-   * Generate id using tile x and tile y
-   * @param x
-   * @param y
-   */
-  public void setId(int x, int y) {
-    this.id = x+"/"+y;
+    return x+"/"+y;
   }
 
   /**
@@ -51,8 +36,12 @@ public class GeoTile {
   @Override
   public String toString() {
     return "GeoTile{" +
-            "id='" + id + '\'' +
+            "id='" + getId() + '\'' +
             ", roads=" + roads +
             '}';
+  }
+
+  public void setId(int x, int y) {
+    setTilePosition(x,y);
   }
 }

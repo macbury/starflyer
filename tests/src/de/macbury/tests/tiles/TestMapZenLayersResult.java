@@ -21,7 +21,7 @@ public class TestMapZenLayersResult {
     MapZenLayersResult result = JsonHelper.fromJson(fixture("home"), MapZenLayersResult.class);
     GeoTile tile = result.toGeoTile();
 
-    assertNull(tile.getId());
+    assertEquals("0/0",tile.getId());
 
     assertEquals(40, tile.roads.size);
 

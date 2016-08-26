@@ -1,21 +1,18 @@
 package de.macbury.desktop;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -25,6 +22,7 @@ import de.macbury.ActionTimer;
 import de.macbury.Starflyer;
 import de.macbury.desktop.manager.MainStatusBarManager;
 import de.macbury.desktop.manager.MenuBarManager;
+import de.macbury.desktop.tiles.downloaders.MapZenGeoTileDownloader;
 import de.macbury.desktop.ui.DebugVisibleTileWindow;
 import de.macbury.geo.MercatorProjection;
 import de.macbury.geo.Tile;
@@ -35,32 +33,32 @@ import de.macbury.graphics.Overlay;
 import de.macbury.graphics.RTSCameraController;
 import de.macbury.model.GeoTile;
 import de.macbury.model.Road;
-import de.macbury.occlusion.VisibleTileProvider;
+import de.macbury.tiles.*;
 import de.macbury.server.tiles.TilesManager;
 import de.macbury.server.tiles.cache.MemoryTileCache;
 
 /**
  * Explore game content
  */
-public class GameExplorer extends Starflyer implements ActionTimer.TimerListener {
+public class GameExplorer extends Starflyer implements ActionTimer.TimerListener, MenuBarManager.Listener {
+  private static final String TAG = "GameExplorer";
   private Stage stage;
   private GeoPerspectiveCamera camera;
   private Model model;
   private ModelInstance instance;
   private ModelBatch modelBatch;
-  public TilesManager tilesManager;
   private ShapeRenderer shapeRenderer;
   private RTSCameraController cameraController;
 
   private Array<ModelInstance> tiles = new Array<ModelInstance>();
-  private Tile tileCursor;
   VisibleTileProvider visibleTileProvider = new VisibleTileProvider();
 
   private VisLabel visibleTileLabel;
   private MenuBarManager menuBarManger;
   private MainStatusBarManager statusBarManager;
   private DebugVisibleTileWindow debugVisibleTileWindow;
-
+  private TileCachePool tileCachePool;
+  private TilesToRender tilesToRender;
   @Override
   public void create() {
     super.create();
@@ -73,7 +71,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
     modelBatch = new ModelBatch();
 
-    tilesManager.addListener(new TilesManager.Listener() {
+    /*tilesManager.addListener(new TilesManager.Listener() {
       @Override
       public void onTileRetrieve(GeoTile tile, TilesManager manager) {
         final GeoTile t = tile;
@@ -84,15 +82,17 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
           }
         });
       }
-    });
+    });*/
   }
 
   private void initializeUI() {
     this.debugVisibleTileWindow = new DebugVisibleTileWindow(visibleTileProvider);
     Overlay overlay = new Overlay();
-    this.menuBarManger = new MenuBarManager(debugVisibleTileWindow);
+    this.menuBarManger = new MenuBarManager();
     statusBarManager   = new MainStatusBarManager();
     statusBarManager.setSpyCamera(camera);
+
+    menuBarManger.addListener(this);
 
     stage               = new Stage(new ScreenViewport());
 
@@ -112,8 +112,8 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   }
 
   private void initializeGameEngine() {
-    this.tilesManager  = new TilesManager(new MemoryTileCache());
-
+    this.tileCachePool = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new TileAssembler());
+    this.tilesToRender = new TilesToRender();
     this.camera = new GeoPerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
     this.cameraController = new RTSCameraController();
@@ -126,7 +126,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   private void fetch(double lat, double lng) {
     GeoPoint point = new GeoPoint(lat, lng);
 
-    tileCursor = new Tile();
+    Tile tileCursor = new Tile();
     tileCursor.set(point);
 
     Vector3 target = new Vector3();
@@ -139,11 +139,11 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     camera.position.add(0, -30, 10);
     camera.update();
 
-    tilesManager.retrieve(tileCursor);
+    //tilesManager.retrieve(tileCursor);
   }
 
   private void createUI() {
-    final VisWindow window = new VisWindow("Debug navigation to");
+    /*final VisWindow window = new VisWindow("Debug navigation to");
     final VisLabel cameraPositionLabel = new VisLabel();
     final VisLabel tilePositionLabel = new VisLabel();
     final VisTextField latField = new VisTextField("50.093113");
@@ -161,7 +161,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
         GeoPoint point = new GeoPoint(lat, lng);
 
-        tileCursor = new Tile();
+        Tile tileCursor = new Tile();
         tileCursor.set(point);
 
         camera.setGeoPosition(point);
@@ -185,7 +185,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     window.add(textButton).pad(10f);
     window.pack();
     window.left().top();
-    stage.addActor(window.fadeIn());
+    stage.addActor(window.fadeIn());*/
   }
 
   private void generateGeoTileMesh(GeoTile tile) {
@@ -229,8 +229,8 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
       GeoPoint startPoint = new GeoPoint();
       GeoPoint finalPoint = new GeoPoint();
 
-      MeshPartBuilder boundingLine = modelBuilder.part("boundingBox", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
-
+     // MeshPartBuilder boundingLine = modelBuilder.part("boundingBox", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
+/*
       //TOP line
       startPoint.set(tileCursor.north, tileCursor.west);
       finalPoint.set(tileCursor.north, tileCursor.east);
@@ -265,7 +265,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
       MercatorProjection.project(startPoint, startVec);
       MercatorProjection.project(finalPoint, finalVec);
 
-      boundingLine.line(startVec, finalVec);
+      boundingLine.line(startVec, finalVec);*/
     } model = modelBuilder.end();
 
     instance = new ModelInstance(model);
@@ -280,32 +280,136 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     camera.update(true);
   }
 
+  private final GeoPoint tempStartPoint = new GeoPoint();
+  private final GeoPoint tempFinalPoint = new GeoPoint();
+  private final Vector3 tempStartVec    = new Vector3();
+  private final Vector3 tempFinalVec    = new Vector3();
+
+
   @Override
   public void render () {
     cameraController.update(Gdx.graphics.getDeltaTime());
     visibleTileProvider.update(camera);
+    tileCachePool.update();
 
     Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-    if (instance != null) {
-      modelBatch.begin(camera); {
-        for (ModelInstance tile: tiles) {
-          modelBatch.render(tile);
-        }
-      } modelBatch.end();
-    }
-
     shapeRenderer.setProjectionMatrix(camera.combined);
-    shapeRenderer.translate(camera.position.x, camera.position.y, 0);
-    shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
-      shapeRenderer.setColor(Color.GREEN);
+
+    tilesToRender.begin(tileCachePool, visibleTileProvider); {
+      modelBatch.begin(camera); {
+        modelBatch.render(tilesToRender);
+      } modelBatch.end();
+
+      shapeRenderer.setProjectionMatrix(camera.combined);
+      shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
+        for (TileInstance tileInstance : tilesToRender) {
+          switch (tileInstance.state) {
+            case Downloading:
+              shapeRenderer.setColor(Color.FIREBRICK);
+              break;
+            case Assembling:
+              shapeRenderer.setColor(Color.NAVY);
+              break;
+            case Error:
+              shapeRenderer.setColor(Color.RED);
+              break;
+            case Ready:
+              shapeRenderer.setColor(Color.GREEN);
+              break;
+          }
+          GeoTile tile = tileInstance.geoTile;
+          //TOP line
+          tempStartPoint.set(tile.north, tile.west);
+          tempFinalPoint.set(tile.north, tile.east);
+
+          MercatorProjection.project(tempStartPoint, tempStartVec);
+          MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+          shapeRenderer.line(tempStartVec, tempFinalVec);
+
+          // BOTTOM line
+          tempStartPoint.set(tile.south, tile.east);
+          tempFinalPoint.set(tile.south, tile.west);
+
+          MercatorProjection.project(tempStartPoint, tempStartVec);
+          MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+          shapeRenderer.line(tempStartVec, tempFinalVec);
+
+          // right line
+          tempStartPoint.set(tile.south, tile.east);
+          tempFinalPoint.set(tile.north, tile.east);
+
+          MercatorProjection.project(tempStartPoint, tempStartVec);
+          MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+          shapeRenderer.line(tempStartVec, tempFinalVec);
+
+          // left line
+          tempStartPoint.set(tile.south, tile.west);
+          tempFinalPoint.set(tile.north, tile.west);
+
+          MercatorProjection.project(tempStartPoint, tempStartVec);
+          MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+          shapeRenderer.line(tempStartVec, tempFinalVec);
+        }
+      } shapeRenderer.end();
+    } tilesToRender.end();
+
+
+
+    //shapeRenderer.setProjectionMatrix(camera.combined);
+    //shapeRenderer.translate(camera.position.x, camera.position.y, 0);
+    /*shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
+      /*shapeRenderer.setColor(Color.GREEN);
       shapeRenderer.line(Vector3.Zero, new Vector3(0,1,0));
       shapeRenderer.setColor(Color.RED);
       shapeRenderer.line(Vector3.Zero, new Vector3(1,0,0));
       shapeRenderer.setColor(Color.BLUE);
       shapeRenderer.line(Vector3.Zero, new Vector3(0,0,1));
-    } shapeRenderer.end();
+
+      shapeRenderer.setColor(Color.NAVY);
+      for (Tile tile: visibleTileProvider.getVisible()) {
+        //TOP line
+        tempStartPoint.set(tile.north, tile.west);
+        tempFinalPoint.set(tile.north, tile.east);
+
+        MercatorProjection.project(tempStartPoint, tempStartVec);
+        MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+        shapeRenderer.line(tempStartVec, tempFinalVec);
+
+        // BOTTOM line
+        tempStartPoint.set(tile.south, tile.east);
+        tempFinalPoint.set(tile.south, tile.west);
+
+        MercatorProjection.project(tempStartPoint, tempStartVec);
+        MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+        shapeRenderer.line(tempStartVec, tempFinalVec);
+
+        // right line
+        tempStartPoint.set(tile.south, tile.east);
+        tempFinalPoint.set(tile.north, tile.east);
+
+        MercatorProjection.project(tempStartPoint, tempStartVec);
+        MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+        shapeRenderer.line(tempStartVec, tempFinalVec);
+
+        // left line
+        tempStartPoint.set(tile.south, tile.west);
+        tempFinalPoint.set(tile.north, tile.west);
+
+        MercatorProjection.project(tempStartPoint, tempStartVec);
+        MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+        shapeRenderer.line(tempStartVec, tempFinalVec);
+      }
+    } shapeRenderer.end();*/
 
     //Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
     stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -321,5 +425,22 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   @Override
   public void onTimerTick(ActionTimer timer) {
     //visibleTileLabel.setText("Visible tiles: " + visibleTileProvider.getVisibleCount());
+  }
+
+  @Override
+  public void onMenuAction(MenuBarManager.Action action, MenuBarManager menuBarManager) {
+    switch (action) {
+      case DebugVisibleTiles:
+        debugVisibleTileWindow.toggle();
+        break;
+      case FrustrumSave:
+        camera.saveDebugFrustum();
+        break;
+      case FrustrumRestore:
+        camera.restoreFrustum();
+        break;
+      default:
+        Gdx.app.log(TAG, "Implement action: " + action.toString());
+    }
   }
 }
