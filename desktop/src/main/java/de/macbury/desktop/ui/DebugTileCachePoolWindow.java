@@ -7,6 +7,9 @@ import com.kotcrab.vis.ui.widget.*;
 import de.macbury.ActionTimer;
 import de.macbury.tiles.TileCachePool;
 import de.macbury.tiles.TileInstance;
+import de.macbury.tiles.TileInstanceComparator;
+
+import java.util.Comparator;
 
 /**
  * Created by macbury on 26.08.16.
@@ -17,12 +20,21 @@ public class DebugTileCachePoolWindow extends VisWindow implements ActionTimer.T
   private final VisLabel tileCachePoolSizeLabel;
   private final TilePoolListAdapter tileAdapter;
   private final ListView<TileInstance> tileListView;
+  private final Comparator<TileInstance> currentTileComparator;
 
   public DebugTileCachePoolWindow(TileCachePool tileCachePool) {
     super("Tile cache pool");
     this.tileCachePool = tileCachePool;
     this.refreshListTimer = new ActionTimer(1f, this);
     refreshListTimer.start();
+
+    currentTileComparator = new Comparator<TileInstance>() {
+      @Override
+      public int compare(TileInstance o1, TileInstance o2) {
+        int result = o1.state.ordinal() - o2.state.ordinal();
+        return result;
+      }
+    };
 
     setVisible(true);
     setWidth(240);
@@ -35,6 +47,7 @@ public class DebugTileCachePoolWindow extends VisWindow implements ActionTimer.T
     add(tileCachePoolSizeLabel).left().row();
 
     this.tileAdapter  = new TilePoolListAdapter(tileCachePool.all());
+    tileAdapter.setItemsSorter(currentTileComparator);
     this.tileListView = new ListView<TileInstance>(tileAdapter);
     add(tileListView.getMainTable()).expand().colspan(2).fill();
   }

@@ -212,69 +212,73 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
         modelBatch.render(tilesToRender);
       } modelBatch.end();
 
-      shapeRenderer.setProjectionMatrix(camera.combined);
-      shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
-        for (TileInstance tileInstance : tilesToRender) {
-
-          switch (tileInstance.state) {
-            case Downloading:
-              shapeRenderer.setColor(Color.FIREBRICK);
-              break;
-            case Assembling:
-              shapeRenderer.setColor(Color.NAVY);
-              break;
-            case Error:
-              shapeRenderer.setColor(Color.RED);
-              break;
-          }
-
-          if (tileInstance.state != TileInstance.State.Ready && tileInstance.state != TileInstance.State.Unloaded) {
-            GeoTile tile = tileInstance.geoTile;
-            //TOP line
-            tempStartPoint.set(tile.north, tile.west);
-            tempFinalPoint.set(tile.north, tile.east);
-
-            MercatorProjection.project(tempStartPoint, tempStartVec);
-            MercatorProjection.project(tempFinalPoint, tempFinalVec);
-
-            shapeRenderer.line(tempStartVec, tempFinalVec);
-
-            // BOTTOM line
-            tempStartPoint.set(tile.south, tile.east);
-            tempFinalPoint.set(tile.south, tile.west);
-
-            MercatorProjection.project(tempStartPoint, tempStartVec);
-            MercatorProjection.project(tempFinalPoint, tempFinalVec);
-
-            shapeRenderer.line(tempStartVec, tempFinalVec);
-
-            // right line
-            tempStartPoint.set(tile.south, tile.east);
-            tempFinalPoint.set(tile.north, tile.east);
-
-            MercatorProjection.project(tempStartPoint, tempStartVec);
-            MercatorProjection.project(tempFinalPoint, tempFinalVec);
-
-            shapeRenderer.line(tempStartVec, tempFinalVec);
-
-            // left line
-            tempStartPoint.set(tile.south, tile.west);
-            tempFinalPoint.set(tile.north, tile.west);
-
-            MercatorProjection.project(tempStartPoint, tempStartVec);
-            MercatorProjection.project(tempFinalPoint, tempFinalVec);
-
-            shapeRenderer.line(tempStartVec, tempFinalVec);
-          }
-
-        }
-      } shapeRenderer.end();
+      renderDebugTiles();
     } tilesToRender.end();
 
     frustumDebugger.render(camera);
 
     stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
     stage.draw();
+  }
+
+  private void renderDebugTiles() {
+    shapeRenderer.setProjectionMatrix(camera.combined);
+    shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
+      for (TileInstance tileInstance : tilesToRender) {
+
+        switch (tileInstance.state) {
+          case Downloading:
+            shapeRenderer.setColor(Color.FIREBRICK);
+            break;
+          case Assembling:
+            shapeRenderer.setColor(Color.NAVY);
+            break;
+          case Error:
+            shapeRenderer.setColor(Color.RED);
+            break;
+        }
+
+        if (tileInstance.state != TileInstance.State.Ready && tileInstance.state != TileInstance.State.Unloaded) {
+          GeoTile tile = tileInstance.geoTile;
+          //TOP line
+          tempStartPoint.set(tile.north, tile.west);
+          tempFinalPoint.set(tile.north, tile.east);
+
+          MercatorProjection.project(tempStartPoint, tempStartVec);
+          MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+          shapeRenderer.line(tempStartVec, tempFinalVec);
+
+          // BOTTOM line
+          tempStartPoint.set(tile.south, tile.east);
+          tempFinalPoint.set(tile.south, tile.west);
+
+          MercatorProjection.project(tempStartPoint, tempStartVec);
+          MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+          shapeRenderer.line(tempStartVec, tempFinalVec);
+
+          // right line
+          tempStartPoint.set(tile.south, tile.east);
+          tempFinalPoint.set(tile.north, tile.east);
+
+          MercatorProjection.project(tempStartPoint, tempStartVec);
+          MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+          shapeRenderer.line(tempStartVec, tempFinalVec);
+
+          // left line
+          tempStartPoint.set(tile.south, tile.west);
+          tempFinalPoint.set(tile.north, tile.west);
+
+          MercatorProjection.project(tempStartPoint, tempStartVec);
+          MercatorProjection.project(tempFinalPoint, tempFinalVec);
+
+          shapeRenderer.line(tempStartVec, tempFinalVec);
+        }
+
+      }
+    } shapeRenderer.end();
   }
 
   @Override

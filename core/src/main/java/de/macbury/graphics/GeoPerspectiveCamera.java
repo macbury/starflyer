@@ -34,6 +34,7 @@ public class GeoPerspectiveCamera extends PerspectiveCamera {
     near = 0.1f;
 
     this.update();
+
   }
 
   //<editor-fold desc="Debug helpers" />
