@@ -8,6 +8,8 @@ import de.macbury.model.GeoTile;
 import de.macbury.tiles.assembler.TileAssembler;
 import de.macbury.tiles.downloaders.AbstractGeoTileDownloader;
 
+import java.util.Comparator;
+
 /**
  * Manage all loaded {@link TileInstance}.
  */
@@ -16,12 +18,16 @@ public class TileCachePool implements Disposable, AbstractGeoTileDownloader.List
   private final Array<TileInstance> instances;
   private final AbstractGeoTileDownloader downloader;
   private final TileAssembler assembler;
+  /**
+   * Should sort {@link TileInstance} from farthest to nearest
+   */
+  private final TileInstanceComparator currentTileComparator;
 
   public TileCachePool(AbstractGeoTileDownloader downloader, de.macbury.tiles.assembler.TileAssembler assembler) {
     this.downloader = downloader;
     this.assembler  = assembler;
     instances       = new Array<TileInstance>();
-
+    currentTileComparator = new TileInstanceComparator();
     assembler.addListener(this);
     downloader.addListener(this);
   }
@@ -85,7 +91,10 @@ public class TileCachePool implements Disposable, AbstractGeoTileDownloader.List
   private void trim(int x, int y) {
     int toRemove = instances.size - MAX_POOL_SIZE;
     if (toRemove > 0) {
-      instances.sort();
+      currentTileComparator.set(x,y);
+      instances.sort(currentTileComparator);
+      TileInstance instanceToRemove = instances.removeIndex(0);
+      instanceToRemove.dispose();
     }
   }
 

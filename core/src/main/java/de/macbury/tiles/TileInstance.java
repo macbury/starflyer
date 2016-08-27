@@ -1,10 +1,8 @@
 package de.macbury.tiles;
 
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
@@ -30,7 +28,11 @@ public class TileInstance implements Disposable, RenderableProvider, Comparable<
     /**
      * There was a error while downloading/assembling phase
      */
-    Error
+    Error,
+    /**
+     * This tile is going to be disposed
+     */
+    Unloaded
   }
   /**
    * Downloaded tile information. At first it can be null
@@ -58,6 +60,7 @@ public class TileInstance implements Disposable, RenderableProvider, Comparable<
 
   @Override
   public void dispose() {
+    state = TileInstance.State.Unloaded;
     if (model != null)
       this.model.model.dispose();
     if (geoTile != null)
@@ -84,8 +87,40 @@ public class TileInstance implements Disposable, RenderableProvider, Comparable<
 
   @Override
   public int compareTo(TileInstance o) {
-    final int x_d = tileX - this.tileX;
-    final int y_d = tileY - this.tileY;
+    return dst(o.tileX, o.tileY);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    TileInstance instance = (TileInstance) o;
+
+    if (tileX != instance.tileX) return false;
+    return tileY == instance.tileY;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = tileX;
+    result = 31 * result + tileY;
+    return result;
+  }
+
+  public int dst(int tx, int ty) {
+    final int x_d = tx - this.tileX;
+    final int y_d = ty - this.tileY;
     return (int)Math.sqrt(x_d * x_d + y_d * y_d);
+  }
+
+  @Override
+  public String toString() {
+    return "TileInstance{" +
+            "tileX=" + tileX +
+            ", tileY=" + tileY +
+            ", state=" + state +
+            '}';
   }
 }

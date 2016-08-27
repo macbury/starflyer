@@ -11,6 +11,8 @@ import de.macbury.geo.core.GeoPoint;
  * Camera with helper functions to set current position using {@link de.macbury.geo.core.GeoPoint}. Additional it calculate what tile ids are visible on screen
  */
 public class GeoPerspectiveCamera extends PerspectiveCamera {
+  private static final float BASE_FOV = 67;
+  private static final float EXTEND_FOV_BY = 19;
   /**
    * Current geo position
    */
@@ -21,14 +23,15 @@ public class GeoPerspectiveCamera extends PerspectiveCamera {
   private final Vector3 debugPosition = new Vector3();
   private final GeoPoint debugGeoPoint = new GeoPoint();
   private DebugFrustum debugFrustrum;
+  private float oldFieldOfView;
   //</editor-fold>
 
-  public GeoPerspectiveCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
-    super(fieldOfViewY, viewportWidth, viewportHeight);
+  public GeoPerspectiveCamera(float viewportWidth, float viewportHeight) {
+    super(BASE_FOV, viewportWidth, viewportHeight);
     this.up.set(0, 0, 1);
     this.direction.set(0,1,0);
     far = 150;
-    near = 1f;
+    near = 0.1f;
 
     this.update();
   }
@@ -43,6 +46,7 @@ public class GeoPerspectiveCamera extends PerspectiveCamera {
     this.debugDirection.set(direction);
     this.debugGeoPoint.set(geoPosition);
     debugPosition.set(position);
+    restoreFov();
   }
 
   public void restoreFrustum() {
@@ -82,6 +86,17 @@ public class GeoPerspectiveCamera extends PerspectiveCamera {
   }
 
   //</editor-fold>
+
+  public void extendFov() {
+    this.oldFieldOfView = this.fieldOfView;
+    this.fieldOfView    += EXTEND_FOV_BY;
+    this.update();
+  }
+
+  public void restoreFov() {
+    this.fieldOfView = this.oldFieldOfView;
+    this.update();
+  }
 
   /**
    * Check if bounding box is in current frustrum or debug frustrum. If user

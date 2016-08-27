@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
+import com.mashape.unirest.http.Unirest;
 import de.macbury.ActionTimer;
 import de.macbury.Starflyer;
 import de.macbury.desktop.manager.MainStatusBarManager;
@@ -66,7 +67,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   public void create() {
     super.create();
     VisUI.load(VisUI.SkinScale.X1);
-
+    //Unirest.setConcurrency(5,1);
     initializeGameEngine();
     initializeUI();
 
@@ -107,7 +108,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     this.frustumDebugger = new FrustumDebugAndRenderer();
     this.tileCachePool = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new de.macbury.tiles.assembler.TileAssembler());
     this.tilesToRender = new TilesToRender();
-    this.camera = new GeoPerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    this.camera = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
     this.cameraController = new RTSCameraController();
     cameraController.setCamera(camera);
@@ -198,8 +199,8 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   @Override
   public void render () {
     cameraController.update(Gdx.graphics.getDeltaTime());
-    visibleTileProvider.update(camera);
     tileCachePool.update();
+    visibleTileProvider.update(camera);
 
     Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -227,7 +228,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
               break;
           }
 
-          if (tileInstance.state != TileInstance.State.Ready) {
+          if (tileInstance.state != TileInstance.State.Ready && tileInstance.state != TileInstance.State.Unloaded) {
             GeoTile tile = tileInstance.geoTile;
             //TOP line
             tempStartPoint.set(tile.north, tile.west);
