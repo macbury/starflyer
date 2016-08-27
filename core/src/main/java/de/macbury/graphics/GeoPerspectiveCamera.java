@@ -27,7 +27,7 @@ public class GeoPerspectiveCamera extends PerspectiveCamera {
     super(fieldOfViewY, viewportWidth, viewportHeight);
     this.up.set(0, 0, 1);
     this.direction.set(0,1,0);
-    far = 100;
+    far = 150;
     near = 1f;
 
     this.update();

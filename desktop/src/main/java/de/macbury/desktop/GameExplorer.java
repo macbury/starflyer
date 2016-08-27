@@ -100,6 +100,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     cameraController.setOverlay(overlay);
     Gdx.input.setInputProcessor(stage);
     stage.addActor(debugVisibleTileWindow);
+    stage.addActor(debugTileCachePoolWindow);
   }
 
   private void initializeGameEngine() {

@@ -35,10 +35,11 @@ public class DebugVisibleTileWindow extends VisWindow implements TimerListener {
     setWidth(120);
     setHeight(320);
     setResizable(true);
-    this.refreshListTimer = new ActionTimer(1f, this);
+
     this.visibleTileCountLabel = new VisLabel("0");
     this.tileList = new VisList<TileListEntry>();
 
+    this.refreshListTimer = new ActionTimer(1f, this);
     refreshListTimer.start();
 
     add(new VisLabel("Visible:")).left();

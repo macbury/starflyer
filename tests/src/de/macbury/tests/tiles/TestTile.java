@@ -45,18 +45,18 @@ public class TestTile {
 
     Assert.assertEquals(Tile.TILE_SIZE, tile.box.getWidth());
     Assert.assertEquals(Tile.TILE_SIZE, tile.box.getHeight());
-    Assert.assertEquals(Tile.MAX_ELEVATION, tile.box.getDepth());
+    Assert.assertEquals(Tile.MAX_ELEVATION+10, tile.box.getDepth());
 
     tile.set(85.0511287798, 180);
 
     Assert.assertEquals(Tile.TILE_SIZE, tile.box.getHeight());
     Assert.assertEquals(Tile.TILE_SIZE, tile.box.getWidth());
-    Assert.assertEquals(Tile.MAX_ELEVATION, tile.box.getDepth());
+    Assert.assertEquals(Tile.MAX_ELEVATION+10, tile.box.getDepth());
 
     tile.set(-85.0511287798, -180);
 
     Assert.assertEquals(Tile.TILE_SIZE, tile.box.getHeight());
     Assert.assertEquals(Tile.TILE_SIZE, tile.box.getWidth());
-    Assert.assertEquals(Tile.MAX_ELEVATION, tile.box.getDepth());
+    Assert.assertEquals(Tile.MAX_ELEVATION+10, tile.box.getDepth());
   }
 }

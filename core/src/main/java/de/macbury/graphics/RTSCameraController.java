@@ -204,7 +204,6 @@ public class RTSCameraController implements Disposable {
 
   public void setCamera(Camera camera) {
     this.cam = camera;
-    this.maxZoom = camera.far - 10;
   }
 
   public void update(final float delta) {

@@ -12,7 +12,7 @@ import de.macbury.tiles.downloaders.AbstractGeoTileDownloader;
  * Manage all loaded {@link TileInstance}.
  */
 public class TileCachePool implements Disposable, AbstractGeoTileDownloader.Listener, de.macbury.tiles.assembler.TileAssembler.Listener {
-  private final static int MAX_POOL_SIZE = 100;
+  public final static int MAX_POOL_SIZE = 100;
   private final Array<TileInstance> instances;
   private final AbstractGeoTileDownloader downloader;
   private final TileAssembler assembler;
@@ -135,5 +135,21 @@ public class TileCachePool implements Disposable, AbstractGeoTileDownloader.List
       instance.state = TileInstance.State.Ready;
       instance.model = modelInstance;
     }
+  }
+
+  /**
+   * Return number of {@link TileInstance} allocated in pool
+   * @return
+   */
+  public int getSize() {
+    return instances.size;
+  }
+
+  /**
+   * Return all created {@link TileInstance}
+   * @return
+   */
+  public Array<TileInstance> all() {
+    return instances;
   }
 }
