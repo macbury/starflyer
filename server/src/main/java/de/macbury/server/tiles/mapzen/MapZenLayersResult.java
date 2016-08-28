@@ -52,22 +52,33 @@ public class MapZenLayersResult {
       GeoTileFeatureType type = GeoTileFeatureType.fromKind(feature.getPropKind());
       switch (type) {
         case Highway:
+          buildRoad(geoTile, feature, type);
+          break;
         case MajorRoad:
+          buildRoad(geoTile, feature, type);
+          break;
         case MinorRoad:
+          buildRoad(geoTile, feature, type);
+          break;
         case Path:
-          Road road = geoTile.road();
-          road.setType(type);
-
-          MultiLineStringGeometry geometry = (MultiLineStringGeometry) feature.getGeometry();
-
-          for (GeoPath path: geometry.all()) {
-            road.add(path);
-          }
-
+          //if (feature.isLandUsePark() || feature.isLandUseFootway()) {
+            buildRoad(geoTile, feature, type);
+          //}
           break;
       }
     }
 
     return geoTile;
+  }
+
+  private void buildRoad(GeoTile geoTile, Feature feature, GeoTileFeatureType type) {
+    Road road = geoTile.road();
+    road.setType(type);
+
+    MultiLineStringGeometry geometry = (MultiLineStringGeometry) feature.getGeometry();
+
+    for (GeoPath path: geometry.all()) {
+      road.add(path);
+    }
   }
 }

@@ -16,6 +16,10 @@ public class Feature extends GeoJSON {
   private static final String KEY_ID = "id";
   private static final String KEY_KIND = "kind";
   private static final String KEY_LAND_USE = "landuse_kind";
+
+  private static final String VALUE_PARK = "park";
+  private static final String VALUE_FOOTWAY = "footway";
+
   @Expose
   private HashMap<String, Object> properties = new HashMap<String, Object>();
 
@@ -68,5 +72,13 @@ public class Feature extends GeoJSON {
 
   public void setGeometry(FeatureGeometry geometry) {
     this.geometry = geometry;
+  }
+
+  public boolean isLandUsePark() {
+    return VALUE_PARK.equals(getPropLandUse());
+  }
+
+  public boolean isLandUseFootway() {
+    return VALUE_FOOTWAY.equals(getPropLandUse());
   }
 }
