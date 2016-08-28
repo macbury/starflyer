@@ -37,6 +37,7 @@ import de.macbury.model.Road;
 import de.macbury.tiles.*;
 import de.macbury.server.tiles.TilesManager;
 import de.macbury.server.tiles.cache.MemoryTileCache;
+import de.macbury.tiles.assembler.TileAssembler;
 
 /**
  * Explore game content
@@ -77,7 +78,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   }
 
   private void initializeUI() {
-    this.debugTileCachePoolWindow = new DebugTileCachePoolWindow(tileCachePool);
+    this.debugTileCachePoolWindow = new DebugTileCachePoolWindow(tileCachePool, visibleTileProvider);
     this.debugVisibleTileWindow = new DebugVisibleTileWindow(visibleTileProvider);
     Overlay overlay = new Overlay();
     this.menuBarManger = new MenuBarManager();
@@ -106,7 +107,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
   private void initializeGameEngine() {
     this.frustumDebugger = new FrustumDebugAndRenderer();
-    this.tileCachePool = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new de.macbury.tiles.assembler.TileAssembler());
+    this.tileCachePool = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new TileAssembler());
     this.tilesToRender = new TilesToRender();
     this.camera = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -212,7 +213,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
         modelBatch.render(tilesToRender);
       } modelBatch.end();
 
-      renderDebugTiles();
+      //renderDebugTiles();
     } tilesToRender.end();
 
     frustumDebugger.render(camera);

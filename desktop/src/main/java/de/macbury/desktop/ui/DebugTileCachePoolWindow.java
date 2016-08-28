@@ -8,6 +8,7 @@ import de.macbury.ActionTimer;
 import de.macbury.tiles.TileCachePool;
 import de.macbury.tiles.TileInstance;
 import de.macbury.tiles.TileInstanceComparator;
+import de.macbury.tiles.VisibleTileProvider;
 
 import java.util.Comparator;
 
@@ -21,10 +22,12 @@ public class DebugTileCachePoolWindow extends VisWindow implements ActionTimer.T
   private final TilePoolListAdapter tileAdapter;
   private final ListView<TileInstance> tileListView;
   private final Comparator<TileInstance> currentTileComparator;
+  private final VisibleTileProvider visibleTileProvider;
 
-  public DebugTileCachePoolWindow(TileCachePool tileCachePool) {
+  public DebugTileCachePoolWindow(TileCachePool tileCachePool, VisibleTileProvider visibleTileProvider) {
     super("Tile cache pool");
     this.tileCachePool = tileCachePool;
+    this.visibleTileProvider = visibleTileProvider;
     this.refreshListTimer = new ActionTimer(1f, this);
     refreshListTimer.start();
 
@@ -63,7 +66,7 @@ public class DebugTileCachePoolWindow extends VisWindow implements ActionTimer.T
 
   @Override
   public void onTimerTick(ActionTimer timer) {
-    tileCachePoolSizeLabel.setText(String.valueOf(tileCachePool.getSize()) + "/"+TileCachePool.MAX_POOL_SIZE);
+    tileCachePoolSizeLabel.setText( String.valueOf(visibleTileProvider.getVisibleCount()) + "/" + String.valueOf(tileCachePool.getSize()) + "/"+TileCachePool.MAX_POOL_SIZE);
     tileAdapter.itemsChanged();
   }
 

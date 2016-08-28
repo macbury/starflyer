@@ -210,7 +210,7 @@ public class RTSCameraController implements Disposable {
     if (this.cam == null) {
       return;
     }
-    cam.update();
+
     double offX = 0;
     double offY = 0;
 
@@ -296,7 +296,7 @@ public class RTSCameraController implements Disposable {
 
     cam.direction.set(tempVec);
     scrollAmount = 0;
-
+    cam.update();
   }
 
   public Camera getCamera() {

@@ -47,7 +47,6 @@ public class GeoPerspectiveCamera extends PerspectiveCamera {
     this.debugDirection.set(direction);
     this.debugGeoPoint.set(geoPosition);
     debugPosition.set(position);
-    restoreFov();
   }
 
   public void restoreFrustum() {

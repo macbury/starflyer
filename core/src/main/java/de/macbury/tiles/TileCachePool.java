@@ -78,7 +78,7 @@ public class TileCachePool implements Disposable, AbstractGeoTileDownloader.List
   private TileInstance build(int x, int y) {
     TileInstance instance = new TileInstance(x, y);
     instances.add(instance);
-    trim(x,y);
+    //trim(x,y);
     downloader.retrieve(x,y);
     return instance;
   }

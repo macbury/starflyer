@@ -31,28 +31,26 @@ public class VisibleTileProvider implements Disposable {
    * Recalculate what is visible
    */
   public void update(GeoPerspectiveCamera camera) {
+    camera.update();
     // Clear pool and visible tiles
     tilePool.freeAll(visible);
     visible.clear();
 
     originTile.set(camera.normalOrDebugGeoPoint());
-    camera.extendFov(); {
-      // Calculate how many tiles are around player
-      int tileAheadCount = MathUtils.floor(camera.far / Tile.TILE_SIZE);
-      for (int x = -tileAheadCount; x <= tileAheadCount; x++) {
-        for (int y = -tileAheadCount; y <= tileAheadCount; y++) {
-          Tile cursorTile = tilePool.obtain();
-          cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
+    // Calculate how many tiles are around player
+    int tileAheadCount = MathUtils.floor(camera.far / Tile.TILE_SIZE) + 2;
+    for (int x = -tileAheadCount; x <= tileAheadCount; x++) {
+      for (int y = -tileAheadCount; y <= tileAheadCount; y++) {
+        Tile cursorTile = tilePool.obtain();
+        cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
 
-          if (camera.boundsInFrustum(cursorTile.box)) {
-            visible.add(cursorTile); // Tile is visible
-          } else {
-            tilePool.free(cursorTile); // Tile not visible so return it to pool
-          }
+        if (camera.boundsInFrustum(cursorTile.box)) {
+          visible.add(cursorTile); // Tile is visible
+        } else {
+          tilePool.free(cursorTile); // Tile not visible so return it to pool
         }
       }
-    } camera.restoreFov();
-
+    }
   }
 
   /**
