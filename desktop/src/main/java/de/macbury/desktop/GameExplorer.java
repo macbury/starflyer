@@ -1,6 +1,9 @@
 package de.macbury.desktop;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.msg.MessageDispatcher;
+import com.badlogic.gdx.ai.msg.MessageManager;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -10,6 +13,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -24,6 +28,10 @@ import de.macbury.desktop.manager.MenuBarManager;
 import de.macbury.desktop.tiles.downloaders.MapZenGeoTileDownloader;
 import de.macbury.desktop.ui.DebugTileCachePoolWindow;
 import de.macbury.desktop.ui.DebugVisibleTileWindow;
+import de.macbury.entity.EntityManager;
+import de.macbury.entity.EntityManagerBuilder;
+import de.macbury.entity.components.PlayerComponent;
+import de.macbury.entity.messages.MessagesManager;
 import de.macbury.geo.MercatorProjection;
 import de.macbury.geo.Tile;
 import de.macbury.geo.core.GeoPath;
@@ -46,16 +54,11 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   private static final String TAG = "GameExplorer";
   private Stage stage;
   private GeoPerspectiveCamera camera;
-  private Model model;
-  private ModelInstance instance;
   private ModelBatch modelBatch;
   private ShapeRenderer shapeRenderer;
-  private RTSCameraController cameraController;
 
-  private Array<ModelInstance> tiles = new Array<ModelInstance>();
   VisibleTileProvider visibleTileProvider = new VisibleTileProvider();
 
-  private VisLabel visibleTileLabel;
   private MenuBarManager menuBarManger;
   private MainStatusBarManager statusBarManager;
   private DebugVisibleTileWindow debugVisibleTileWindow;
@@ -63,6 +66,8 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   private TilesToRender tilesToRender;
   private DebugTileCachePoolWindow debugTileCachePoolWindow;
   private FrustumDebugAndRenderer frustumDebugger;
+  private EntityManager entities;
+  private MessagesManager messages;
 
   @Override
   public void create() {
@@ -79,41 +84,39 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
   private void initializeUI() {
     this.debugTileCachePoolWindow = new DebugTileCachePoolWindow(tileCachePool, visibleTileProvider);
-    this.debugVisibleTileWindow = new DebugVisibleTileWindow(visibleTileProvider);
-    Overlay overlay = new Overlay();
-    this.menuBarManger = new MenuBarManager();
-    statusBarManager   = new MainStatusBarManager();
+    this.debugVisibleTileWindow   = new DebugVisibleTileWindow(visibleTileProvider);
+    this.menuBarManger            = new MenuBarManager();
+    statusBarManager              = new MainStatusBarManager();
     statusBarManager.setSpyCamera(camera);
 
     menuBarManger.addListener(this);
 
     stage               = new Stage(new ScreenViewport());
 
-    VisTable root = new VisTable();
+    VisTable root       = new VisTable();
     root.setFillParent(true);
     stage.addActor(root);
 
     root.add(menuBarManger.getTable()).growX().row();
 
-    root.add(overlay).fill().expand().row();
+    root.add(entities.getRtsCameraSystem().getOverlay()).fill().expand().row();
 
     root.add(statusBarManager).growX().row();
-
-    cameraController.setOverlay(overlay);
     Gdx.input.setInputProcessor(stage);
     stage.addActor(debugVisibleTileWindow);
     stage.addActor(debugTileCachePoolWindow);
   }
 
   private void initializeGameEngine() {
-    this.frustumDebugger = new FrustumDebugAndRenderer();
-    this.tileCachePool = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new TileAssembler());
-    this.tilesToRender = new TilesToRender();
-    this.camera = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    this.messages         = new MessagesManager();
+    this.frustumDebugger  = new FrustumDebugAndRenderer();
+    this.tileCachePool    = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new TileAssembler());
+    this.tilesToRender    = new TilesToRender();
+    this.camera           = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-    this.cameraController = new RTSCameraController();
-    cameraController.setCamera(camera);
-    //cameraController.target.set(Vector3.Zero);
+    this.entities = new EntityManagerBuilder()
+            .withMessageDispatcher(messages)
+            .withRTSGameCamera(camera).build();
 
     fetch(50.062191, 19.937002);
   }
@@ -129,12 +132,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     MercatorProjection.project(point, target);
     camera.setGeoPosition(point);
 
-    cameraController.setCenter(target.x, target.y);
-
-    camera.position.add(0, -30, 10);
-    camera.update();
-
-    //tilesManager.retrieve(tileCursor);
+    messages.camera.centerAt(new Vector2(target.x, target.y));
   }
 
   private void createUI() {
@@ -199,7 +197,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
   @Override
   public void render () {
-    cameraController.update(Gdx.graphics.getDeltaTime());
+    entities.update(Gdx.graphics.getDeltaTime());
     tileCachePool.update();
     visibleTileProvider.update(camera);
 
@@ -213,7 +211,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
         modelBatch.render(tilesToRender);
       } modelBatch.end();
 
-      //renderDebugTiles();
+      renderDebugTiles();
     } tilesToRender.end();
 
     frustumDebugger.render(camera);

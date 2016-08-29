@@ -185,6 +185,8 @@ public class RTSCameraController implements Disposable {
       }
 
     };
+
+    setOverlay(new Overlay());
   }
 
   public void setOverlay(Overlay overlay) {
@@ -432,5 +434,9 @@ public class RTSCameraController implements Disposable {
       this.overlay.removeCaptureListener(overlayInputListener);
     overlay = null;
     listener  = null;
+  }
+
+  public Overlay getOverlay() {
+    return overlay;
   }
 }
