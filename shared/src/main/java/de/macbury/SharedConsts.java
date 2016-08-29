@@ -16,6 +16,6 @@ public class SharedConsts {
   /**
    * Default tile zoom level
    */
-  public final static int DEFAULT_ZOOM = 17;
+  public final static int DEFAULT_ZOOM = 16;
 
 }

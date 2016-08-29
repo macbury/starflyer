@@ -7,6 +7,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
+import de.macbury.SharedConsts;
 import de.macbury.geo.core.GeoJSON;
 import de.macbury.json.JsonHelper;
 
@@ -17,7 +18,6 @@ import java.util.concurrent.Future;
  */
 public class MapZenApi {
   private final static String ENDPOINT = "https://vector.mapzen.com/osm/buildings,water,roads,landuse/{zoom}/{x}/{y}.json";
-  private static final int DEFAULT_ZOOM = 17;
   private static String apiKey;
   private static MapZenApi instance;
 
@@ -57,7 +57,7 @@ public class MapZenApi {
   public Future<HttpResponse<MapZenLayersResult>> get(int x, int y, Callback<MapZenLayersResult> callback) throws UnirestException {
     GetRequest request = new GetRequest(HttpMethod.GET, ENDPOINT);
     return request
-            .routeParam("zoom", String.valueOf(DEFAULT_ZOOM))
+            .routeParam("zoom", String.valueOf(SharedConsts.DEFAULT_ZOOM))
             .routeParam("x", String.valueOf(x))
             .routeParam("y", String.valueOf(y))
             .queryString("api_key", apiKey)

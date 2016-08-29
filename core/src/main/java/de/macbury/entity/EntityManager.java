@@ -7,6 +7,8 @@ import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.badlogic.gdx.utils.Disposable;
 import de.macbury.entity.messages.MessagesManager;
 import de.macbury.entity.systems.RTSCameraSystem;
+import de.macbury.entity.systems.RenderingSystem;
+import de.macbury.entity.systems.TileSystem;
 
 /**
  * Manage all {@link com.badlogic.ashley.core.Entity} in game
@@ -14,6 +16,7 @@ import de.macbury.entity.systems.RTSCameraSystem;
 public class EntityManager extends PooledEngine implements Disposable {
   private MessagesManager messages;
   private RTSCameraSystem rtsCameraSystem;
+  private TileSystem tileSystem;
 
   public EntityManager(MessagesManager messages) {
     super();
@@ -56,5 +59,18 @@ public class EntityManager extends PooledEngine implements Disposable {
     }
 
     messages = null;
+  }
+
+  public void setTileSystem(TileSystem tileSystem) {
+    this.tileSystem = tileSystem;
+    addSystem(tileSystem);
+  }
+
+  public TileSystem getTileSystem() {
+    return tileSystem;
+  }
+
+  public void setRenderingSystem(RenderingSystem renderingSystem) {
+    addSystem(renderingSystem);
   }
 }

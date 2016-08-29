@@ -74,4 +74,13 @@ public class VisibleTileProvider implements Disposable {
   public Array<Tile> getVisible() {
     return visible;
   }
+
+  public boolean isVisible(int tileX, int tileY) {
+    for (Tile tile: visible) {
+      if (tile.x == tileX && tile.y == tileY) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

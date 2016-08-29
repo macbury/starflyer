@@ -33,6 +33,7 @@ public class RTSCameraSystem extends EntitySystem implements Disposable, Telegra
 
   @Override
   public void dispose() {
+    messages.removeListener(this, MessageType.CenterCamera);
     this.controller.dispose();
     messages = null;
   }

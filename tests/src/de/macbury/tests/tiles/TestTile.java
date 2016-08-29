@@ -17,14 +17,14 @@ public class TestTile {
 
     tile.set(point);
 
-    Assert.assertEquals(72839, tile.x);
-    Assert.assertEquals(44399, tile.y);
+    Assert.assertEquals(36419, tile.x);
+    Assert.assertEquals(22199, tile.y);
 
-    Assert.assertEquals(50.094155252302016, tile.north);
+    Assert.assertEquals(50.09591722887199, tile.north);
     Assert.assertEquals(50.09239321093879, tile.south);
 
     Assert.assertEquals(20.06103515625, tile.east);
-    Assert.assertEquals(20.05828857421875, tile.west);
+    Assert.assertEquals(20.0555419921875, tile.west);
   }
 
   @Test

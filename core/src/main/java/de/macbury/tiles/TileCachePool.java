@@ -14,7 +14,7 @@ import java.util.Comparator;
  * Manage all loaded {@link TileInstance}.
  */
 public class TileCachePool implements Disposable, AbstractGeoTileDownloader.Listener, de.macbury.tiles.assembler.TileAssembler.Listener {
-  public final static int MAX_POOL_SIZE = 100;
+  public final static int MAX_POOL_SIZE = 200;
   private final Array<TileInstance> instances;
   private final AbstractGeoTileDownloader downloader;
   private final TileAssembler assembler;
@@ -78,7 +78,6 @@ public class TileCachePool implements Disposable, AbstractGeoTileDownloader.List
   private TileInstance build(int x, int y) {
     TileInstance instance = new TileInstance(x, y);
     instances.add(instance);
-    //trim(x,y);
     downloader.retrieve(x,y);
     return instance;
   }

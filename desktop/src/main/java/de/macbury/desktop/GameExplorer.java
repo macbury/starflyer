@@ -63,7 +63,6 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   private MainStatusBarManager statusBarManager;
   private DebugVisibleTileWindow debugVisibleTileWindow;
   private TileCachePool tileCachePool;
-  private TilesToRender tilesToRender;
   private DebugTileCachePoolWindow debugTileCachePoolWindow;
   private FrustumDebugAndRenderer frustumDebugger;
   private EntityManager entities;
@@ -79,7 +78,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
     this.shapeRenderer = new ShapeRenderer();
 
-    modelBatch = new ModelBatch();
+
   }
 
   private void initializeUI() {
@@ -108,15 +107,19 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
   }
 
   private void initializeGameEngine() {
+    modelBatch            = new ModelBatch();
     this.messages         = new MessagesManager();
     this.frustumDebugger  = new FrustumDebugAndRenderer();
     this.tileCachePool    = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new TileAssembler());
-    this.tilesToRender    = new TilesToRender();
+
     this.camera           = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
     this.entities = new EntityManagerBuilder()
             .withMessageDispatcher(messages)
-            .withRTSGameCamera(camera).build();
+            .withTileCachePool(tileCachePool)
+            .withRTSGameCamera(camera)
+            .withModelBatch(modelBatch)
+            .build();
 
     fetch(50.062191, 19.937002);
   }
@@ -197,22 +200,24 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
   @Override
   public void render () {
-    entities.update(Gdx.graphics.getDeltaTime());
-    tileCachePool.update();
-    visibleTileProvider.update(camera);
-
     Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+    entities.update(Gdx.graphics.getDeltaTime());
+    //tileCachePool.update();
+    //visibleTileProvider.update(camera);
+
+
+
     shapeRenderer.setProjectionMatrix(camera.combined);
 
-    tilesToRender.begin(tileCachePool, visibleTileProvider); {
+    /*tilesToRender.begin(tileCachePool, visibleTileProvider); {
       modelBatch.begin(camera); {
         modelBatch.render(tilesToRender);
       } modelBatch.end();
 
       renderDebugTiles();
-    } tilesToRender.end();
+    } tilesToRender.end();*/
 
     frustumDebugger.render(camera);
 
@@ -220,7 +225,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
     stage.draw();
   }
 
-  private void renderDebugTiles() {
+  /*private void renderDebugTiles() {
     shapeRenderer.setProjectionMatrix(camera.combined);
     shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
       for (TileInstance tileInstance : tilesToRender) {
@@ -278,7 +283,7 @@ public class GameExplorer extends Starflyer implements ActionTimer.TimerListener
 
       }
     } shapeRenderer.end();
-  }
+  }*/
 
   @Override
   public void dispose () {

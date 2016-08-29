@@ -1,9 +1,13 @@
 package de.macbury.entity;
 
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import de.macbury.entity.messages.MessagesManager;
 import de.macbury.entity.systems.RTSCameraSystem;
+import de.macbury.entity.systems.RenderingSystem;
+import de.macbury.entity.systems.TileSystem;
 import de.macbury.graphics.GeoPerspectiveCamera;
+import de.macbury.tiles.TileCachePool;
 
 /**
  * Helps with building {@link EntityManager} instance
@@ -12,6 +16,8 @@ public class EntityManagerBuilder {
   private GeoPerspectiveCamera camera;
   private boolean createRTSCamera;
   private MessagesManager messages;
+  private TileCachePool tileCachePool;
+  private ModelBatch modelBatch;
 
   /**
    * Camera that will be used to display game entities
@@ -36,6 +42,9 @@ public class EntityManagerBuilder {
     );
     if (createRTSCamera)
       manager.setRtsCameraSystem(new RTSCameraSystem(camera, messages));
+    manager.setTileSystem(new TileSystem(tileCachePool, camera));
+
+    manager.setRenderingSystem(new RenderingSystem(camera, modelBatch));
     return manager;
   }
 
@@ -45,6 +54,12 @@ public class EntityManagerBuilder {
   private void validate() {
     if (messages == null)
       throw new RuntimeException("MessageDispatcher is required!");
+
+    if (tileCachePool == null)
+      throw new RuntimeException("TileCachePool is required!");
+
+    if (modelBatch == null)
+      throw new RuntimeException("ModelBatch is required!");
   }
 
   /**
@@ -54,6 +69,16 @@ public class EntityManagerBuilder {
    */
   public EntityManagerBuilder withMessageDispatcher(MessagesManager messages) {
     this.messages = messages;
+    return this;
+  }
+
+  public EntityManagerBuilder withModelBatch(ModelBatch modelBatch) {
+    this.modelBatch = modelBatch;
+    return this;
+  }
+
+  public EntityManagerBuilder withTileCachePool(TileCachePool tileCachePool) {
+    this.tileCachePool = tileCachePool;
     return this;
   }
 }
