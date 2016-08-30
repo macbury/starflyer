@@ -24,10 +24,6 @@ public abstract class AbstractScreen implements ApplicationListener, Disposable 
   /** Called when this screen becomes the current screen for a Game. */
   public abstract void show ();
 
-  /** Called when the screen should update itself.
-   * @param delta The time in seconds since the last render. */
-  public abstract void update(float delta);
-
   /**
    * If return true, after {@link AbstractScreen#hide()} it will call {@link AbstractScreen#dispose()}
    * @return

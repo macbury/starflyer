@@ -6,6 +6,7 @@ import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.badlogic.gdx.utils.Disposable;
 import de.macbury.entity.messages.MessagesManager;
+import de.macbury.entity.systems.CameraSystem;
 import de.macbury.entity.systems.RTSCameraSystem;
 import de.macbury.entity.systems.RenderingSystem;
 import de.macbury.entity.systems.TileSystem;
@@ -17,6 +18,7 @@ public class EntityManager extends PooledEngine implements Disposable {
   private MessagesManager messages;
   private RTSCameraSystem rtsCameraSystem;
   private TileSystem tileSystem;
+  private CameraSystem cameraSystem;
 
   public EntityManager(MessagesManager messages) {
     super();
@@ -72,5 +74,10 @@ public class EntityManager extends PooledEngine implements Disposable {
 
   public void setRenderingSystem(RenderingSystem renderingSystem) {
     addSystem(renderingSystem);
+  }
+
+  public void setCameraSystem(CameraSystem cameraSystem) {
+    this.cameraSystem = cameraSystem;
+    addSystem(cameraSystem);
   }
 }

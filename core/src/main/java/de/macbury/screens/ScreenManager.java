@@ -128,7 +128,6 @@ public class ScreenManager implements Disposable {
   public void tick(float delta) {
     if (haveCurrentScreen()) {
       AbstractScreen screen = getCurrent();
-      screen.update(delta);
       screen.render();
     }
   }

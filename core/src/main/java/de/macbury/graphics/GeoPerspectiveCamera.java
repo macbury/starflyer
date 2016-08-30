@@ -126,4 +126,14 @@ public class GeoPerspectiveCamera extends PerspectiveCamera {
       MercatorProjection.unproject(position, geoPosition);
   }
 
+  /**
+   * Update viewport
+   * @param width
+   * @param height
+   */
+  public void resize(int width, int height) {
+    viewportWidth = width;
+    viewportHeight = height;
+    update(true);
+  }
 }

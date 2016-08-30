@@ -3,6 +3,7 @@ package de.macbury.entity;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import de.macbury.entity.messages.MessagesManager;
+import de.macbury.entity.systems.CameraSystem;
 import de.macbury.entity.systems.RTSCameraSystem;
 import de.macbury.entity.systems.RenderingSystem;
 import de.macbury.entity.systems.TileSystem;
@@ -27,8 +28,7 @@ public class EntityManagerBuilder {
    */
   public EntityManagerBuilder withRTSGameCamera(GeoPerspectiveCamera camera) {
     this.createRTSCamera = true;
-    this.camera = camera;
-    return this;
+    return withCamera(camera);
   }
 
   /**
@@ -40,9 +40,11 @@ public class EntityManagerBuilder {
     EntityManager manager = new EntityManager(
             messages
     );
+    manager.setCameraSystem(new CameraSystem(camera));
     if (createRTSCamera)
       manager.setRtsCameraSystem(new RTSCameraSystem(camera, messages));
-    manager.setTileSystem(new TileSystem(tileCachePool, camera));
+    if (tileCachePool != null)
+      manager.setTileSystem(new TileSystem(tileCachePool, camera));
 
     manager.setRenderingSystem(new RenderingSystem(camera, modelBatch));
     return manager;
@@ -52,11 +54,10 @@ public class EntityManagerBuilder {
    * Validate if we have all ingredients to build new {@link EntityManager}
    */
   private void validate() {
+    if (camera == null)
+      throw new RuntimeException("Camera is required!");
     if (messages == null)
       throw new RuntimeException("MessageDispatcher is required!");
-
-    if (tileCachePool == null)
-      throw new RuntimeException("TileCachePool is required!");
 
     if (modelBatch == null)
       throw new RuntimeException("ModelBatch is required!");
@@ -79,6 +80,11 @@ public class EntityManagerBuilder {
 
   public EntityManagerBuilder withTileCachePool(TileCachePool tileCachePool) {
     this.tileCachePool = tileCachePool;
+    return this;
+  }
+
+  public EntityManagerBuilder withCamera(GeoPerspectiveCamera camera) {
+    this.camera = camera;
     return this;
   }
 }

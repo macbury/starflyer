@@ -9,4 +9,6 @@ import com.badlogic.ashley.core.Entity;
 public class Components {
   public static final ComponentMapper<TileComponent> Tile = ComponentMapper.getFor(TileComponent.class);
   public static final ComponentMapper<PositionComponent> Position = ComponentMapper.getFor(PositionComponent.class);
+  public static final ComponentMapper<CameraComponent> Camera = ComponentMapper.getFor(CameraComponent.class);
+  public static final ComponentMapper<ModelInstanceComponent> ModelInstance = ComponentMapper.getFor(ModelInstanceComponent.class);
 }
