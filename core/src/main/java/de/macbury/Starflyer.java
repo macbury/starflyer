@@ -21,9 +21,39 @@ import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
+import de.macbury.screens.ScreenManager;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Starflyer extends ApplicationAdapter {
+  public ScreenManager screens;
 
+  @Override
+  public void create() {
+    screens = new ScreenManager(this);
+  }
 
+  @Override
+  public void resize(int width, int height) {
+    screens.resize(width, height);
+  }
+
+  @Override
+  public void render() {
+    screens.tick(Gdx.graphics.getDeltaTime());
+  }
+
+  @Override
+  public void pause() {
+    screens.pause();
+  }
+
+  @Override
+  public void resume() {
+    screens.resume();
+  }
+
+  @Override
+  public void dispose() {
+    screens.dispose();
+  }
 }
