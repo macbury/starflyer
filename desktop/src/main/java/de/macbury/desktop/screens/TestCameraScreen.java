@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -42,6 +43,7 @@ public class TestCameraScreen extends AbstractScreen {
   private VisSlider zoomSlider;
   private VisSlider cameraXSlider;
   private VisSlider cameraYSlider;
+  private Vector3 origin;
 
   @Override
   public void preload() {
@@ -60,6 +62,8 @@ public class TestCameraScreen extends AbstractScreen {
             .withCamera(camera)
             .withModelBatch(modelBatch)
             .build();
+
+    this.origin = new Vector3(200000, 200000, 0);
 
     createPlayer();
     createBoxModel();
@@ -138,7 +142,7 @@ public class TestCameraScreen extends AbstractScreen {
     Entity boxEntity                 = this.entities.createEntity();
     PositionComponent positionComponent = entities.createComponent(PositionComponent.class);
 
-    positionComponent.set(10, 10,0);
+    positionComponent.set(origin);
     positionComponent.visible = true;
     boxEntity.add(positionComponent);
 
@@ -162,7 +166,7 @@ public class TestCameraScreen extends AbstractScreen {
     cameraComponent.tilt = 0.4f;
     cameraComponent.rotation = 0.0f;
 
-    positionComponent.set(9, 9,0);
+    positionComponent.set(origin);
 
     playerEntity.add(positionComponent);
     playerEntity.add(cameraComponent);
