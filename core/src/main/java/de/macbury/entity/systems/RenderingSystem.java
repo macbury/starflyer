@@ -5,8 +5,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.utils.Disposable;
 import de.macbury.entity.components.Components;
+import de.macbury.entity.components.ModelInstanceComponent;
 import de.macbury.entity.components.PositionComponent;
 import de.macbury.entity.components.TileComponent;
 import de.macbury.graphics.GeoPerspectiveCamera;
@@ -19,7 +21,7 @@ public class RenderingSystem extends IteratingSystem implements Disposable {
   private GeoPerspectiveCamera camera;
 
   public RenderingSystem(GeoPerspectiveCamera camera, ModelBatch modelBatch) {
-    super(Family.all(PositionComponent.class).one(TileComponent.class).get());
+    super(Family.all(PositionComponent.class).one(ModelInstanceComponent.class, TileComponent.class).get());
     this.camera     = camera;
     this.modelBatch = modelBatch;
   }
@@ -33,8 +35,15 @@ public class RenderingSystem extends IteratingSystem implements Disposable {
 
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
+    PositionComponent positionComponent = Components.Position.get(entity);
     if (Components.Position.get(entity).isVisible()) {
-      modelBatch.render(Components.Tile.get(entity).getInstance());
+      if (Components.Tile.has(entity)) {
+        modelBatch.render(Components.Tile.get(entity).getInstance());
+      } else if (Components.ModelInstance.has(entity)) {
+        ModelInstanceComponent modelInstanceComponent = Components.ModelInstance.get(entity);
+        modelBatch.render(modelInstanceComponent);
+      }
+
     }
   }
 

@@ -54,12 +54,13 @@ public class TestCameraScreen extends AbstractScreen {
     Entity boxEntity                 = this.entities.createEntity();
     PositionComponent positionComponent = entities.createComponent(PositionComponent.class);
 
+    positionComponent.visible = true;
     boxEntity.add(positionComponent);
 
     ModelBuilder modelBuilder = new ModelBuilder();
     modelBuilder.begin(); {
       MeshPartBuilder box = modelBuilder.part("box", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
-      box.box(3,3,3);
+      box.box(1,1,1);
     };
 
     boxEntity.add(new ModelInstanceComponent(modelBuilder.end()));
@@ -71,6 +72,10 @@ public class TestCameraScreen extends AbstractScreen {
     Entity playerEntity                 = this.entities.createEntity();
     PositionComponent positionComponent = entities.createComponent(PositionComponent.class);
     CameraComponent cameraComponent     = entities.createComponent(CameraComponent.class);
+
+    cameraComponent.zoom = 10;
+    cameraComponent.tilt = 0.4f;
+    cameraComponent.rotation = 0.3f;
 
     playerEntity.add(positionComponent);
     playerEntity.add(cameraComponent);

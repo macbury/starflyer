@@ -8,16 +8,14 @@ import com.badlogic.gdx.utils.Pool;
  * Entity with this component will be followed by {@link de.macbury.graphics.GeoPerspectiveCamera}
  */
 public class CameraComponent implements Component, Pool.Poolable {
+  public float tilt;
+  public float rotation;
   public float zoom;
-  public float yaw;
-  public float pitch;
-  public float roll;
 
   @Override
   public void reset() {
     zoom = 10;
-    yaw  = 0;
-    pitch = 0;
-    roll = 0;
+    rotation  = 0;
+    tilt = 0;
   }
 }

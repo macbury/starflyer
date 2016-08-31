@@ -36,7 +36,6 @@ public class CameraSystem extends EntitySystem {
 
   @Override
   public void update(float deltaTime) {
-    camera.update();
     if (entities.size() == 1) {
       Entity targetCameraEntity = entities.get(0);
       process(targetCameraEntity);
@@ -53,11 +52,18 @@ public class CameraSystem extends EntitySystem {
    */
   private void process(Entity targetCameraEntity) {
     CameraComponent cameraComponent = Components.Camera.get(targetCameraEntity);
+    float tilt = cameraComponent.tilt;
+    float rotation = cameraComponent.rotation;
+    float currentZoom = cameraComponent.zoom;
 
-    float circleX = cameraComponent.zoom * MathUtils.cos(cameraComponent.roll);
-    float circleZ = cameraComponent.zoom * MathUtils.sin(cameraComponent.yaw);
+    //cameraComponent.rotation += 0.05f;
 
-    camera.position.set(circleX, cameraComponent.zoom, circleZ);
+    camera.position.x = (currentZoom * MathUtils.cos(tilt) * MathUtils.sin(rotation));
+    camera.position.z = (currentZoom * MathUtils.sin(tilt));
+    camera.position.y = (currentZoom * MathUtils.cos(tilt) * MathUtils.cos(rotation));
+
     camera.lookAt(Vector3.Zero);
+
+    camera.update();
   }
 }
