@@ -40,6 +40,8 @@ public class TestCameraScreen extends AbstractScreen {
   private VisSlider rotationSlider;
   private VisSlider tiltSlider;
   private VisSlider zoomSlider;
+  private VisSlider cameraXSlider;
+  private VisSlider cameraYSlider;
 
   @Override
   public void preload() {
@@ -64,7 +66,7 @@ public class TestCameraScreen extends AbstractScreen {
 
   }
 
-  private void createCameraInspector(final CameraComponent cameraComponent) {
+  private void createCameraInspector(final CameraComponent cameraComponent, final PositionComponent cameraPositionComponent) {
     VisWindow cameraInspectorWindow = new VisWindow("Camera");
 
     this.rotationSlider = new VisSlider(0, MathUtils.PI2, 0.01f, false);
@@ -104,6 +106,29 @@ public class TestCameraScreen extends AbstractScreen {
     cameraInspectorWindow.add(new VisLabel("Zoom")).right().padRight(15);
     cameraInspectorWindow.add(zoomSlider).row();
 
+    this.cameraXSlider     = new VisSlider(-100f, 100.0f, 0.1f, false);
+    cameraXSlider.setValue(cameraPositionComponent.x);
+    cameraXSlider.addCaptureListener(new ChangeListener() {
+      @Override
+      public void changed(ChangeEvent event, Actor actor) {
+        cameraPositionComponent.x = cameraXSlider.getValue();
+      }
+    });
+
+    cameraInspectorWindow.add(new VisLabel("X")).right().padRight(15);
+    cameraInspectorWindow.add(cameraXSlider).row();
+
+    this.cameraYSlider     = new VisSlider(-100f, 100.0f, 0.1f, false);
+    cameraYSlider.setValue(cameraPositionComponent.y);
+    cameraYSlider.addCaptureListener(new ChangeListener() {
+      @Override
+      public void changed(ChangeEvent event, Actor actor) {
+        cameraPositionComponent.y = cameraYSlider.getValue();
+      }
+    });
+    cameraInspectorWindow.add(new VisLabel("Y")).right().padRight(15);
+    cameraInspectorWindow.add(cameraYSlider).row();
+
     cameraInspectorWindow.pack();
 
     this.stage.addActor(cameraInspectorWindow);
@@ -113,6 +138,7 @@ public class TestCameraScreen extends AbstractScreen {
     Entity boxEntity                 = this.entities.createEntity();
     PositionComponent positionComponent = entities.createComponent(PositionComponent.class);
 
+    positionComponent.set(10, 10,0);
     positionComponent.visible = true;
     boxEntity.add(positionComponent);
 
@@ -134,7 +160,9 @@ public class TestCameraScreen extends AbstractScreen {
 
     cameraComponent.zoom = 10;
     cameraComponent.tilt = 0.4f;
-    cameraComponent.rotation = 0.3f;
+    cameraComponent.rotation = 0.0f;
+
+    positionComponent.set(9, 9,0);
 
     playerEntity.add(positionComponent);
     playerEntity.add(cameraComponent);
@@ -142,7 +170,7 @@ public class TestCameraScreen extends AbstractScreen {
     entities.addEntity(playerEntity);
 
 
-    createCameraInspector(cameraComponent);
+    createCameraInspector(cameraComponent, positionComponent);
   }
 
   @Override

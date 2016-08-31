@@ -74,6 +74,7 @@ public class EntityManager extends PooledEngine implements Disposable {
 
   public void setRenderingSystem(RenderingSystem renderingSystem) {
     addSystem(renderingSystem);
+    addEntityListener(renderingSystem);
   }
 
   public void setCameraSystem(CameraSystem cameraSystem) {
