@@ -11,6 +11,14 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisSlider;
+import com.kotcrab.vis.ui.widget.VisWindow;
 import de.macbury.entity.EntityManager;
 import de.macbury.entity.EntityManagerBuilder;
 import de.macbury.entity.components.CameraComponent;
@@ -28,6 +36,10 @@ public class TestCameraScreen extends AbstractScreen {
   private GeoPerspectiveCamera camera;
   private EntityManager entities;
   private ModelBatch modelBatch;
+  private Stage stage;
+  private VisSlider rotationSlider;
+  private VisSlider tiltSlider;
+  private VisSlider zoomSlider;
 
   @Override
   public void preload() {
@@ -36,6 +48,7 @@ public class TestCameraScreen extends AbstractScreen {
 
   @Override
   public void create() {
+    stage               = new Stage(new ScreenViewport());
     this.modelBatch       = new ModelBatch();
     this.messages         = new MessagesManager();
     this.camera           = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -48,6 +61,52 @@ public class TestCameraScreen extends AbstractScreen {
 
     createPlayer();
     createBoxModel();
+
+  }
+
+  private void createCameraInspector(final CameraComponent cameraComponent) {
+    VisWindow cameraInspectorWindow = new VisWindow("Camera");
+
+    this.rotationSlider = new VisSlider(0, MathUtils.PI2, 0.01f, false);
+    rotationSlider.setValue(cameraComponent.rotation);
+
+    rotationSlider.addCaptureListener(new ChangeListener() {
+      @Override
+      public void changed(ChangeEvent event, Actor actor) {
+        cameraComponent.rotation = rotationSlider.getValue();
+      }
+    });
+
+    this.tiltSlider     = new VisSlider(0, MathUtils.PI2, 0.01f, false);
+    tiltSlider.setValue(cameraComponent.tilt);
+
+    tiltSlider.addCaptureListener(new ChangeListener() {
+      @Override
+      public void changed(ChangeEvent event, Actor actor) {
+        cameraComponent.tilt = tiltSlider.getValue();
+      }
+    });
+
+    this.zoomSlider     = new VisSlider(1f, 100.0f, 0.1f, false);
+    zoomSlider.setValue(cameraComponent.zoom);
+
+    zoomSlider.addCaptureListener(new ChangeListener() {
+      @Override
+      public void changed(ChangeEvent event, Actor actor) {
+        cameraComponent.zoom = zoomSlider.getValue();
+      }
+    });
+
+    cameraInspectorWindow.add(new VisLabel("Rotation")).right().padRight(15);
+    cameraInspectorWindow.add(rotationSlider).row();
+    cameraInspectorWindow.add(new VisLabel("Tilt")).right().padRight(15);
+    cameraInspectorWindow.add(tiltSlider).row();
+    cameraInspectorWindow.add(new VisLabel("Zoom")).right().padRight(15);
+    cameraInspectorWindow.add(zoomSlider).row();
+
+    cameraInspectorWindow.pack();
+
+    this.stage.addActor(cameraInspectorWindow);
   }
 
   private void createBoxModel() {
@@ -60,7 +119,7 @@ public class TestCameraScreen extends AbstractScreen {
     ModelBuilder modelBuilder = new ModelBuilder();
     modelBuilder.begin(); {
       MeshPartBuilder box = modelBuilder.part("box", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
-      box.box(1,1,1);
+      box.box(2,2,0.2f);
     };
 
     boxEntity.add(new ModelInstanceComponent(modelBuilder.end()));
@@ -81,11 +140,14 @@ public class TestCameraScreen extends AbstractScreen {
     playerEntity.add(cameraComponent);
 
     entities.addEntity(playerEntity);
+
+
+    createCameraInspector(cameraComponent);
   }
 
   @Override
   public void show() {
-
+    Gdx.input.setInputProcessor(stage);
   }
 
   @Override
@@ -101,6 +163,7 @@ public class TestCameraScreen extends AbstractScreen {
   @Override
   public void resize(int width, int height) {
     camera.resize(width, height);
+    stage.getViewport().update(width, height, true);
   }
 
   @Override
@@ -108,6 +171,9 @@ public class TestCameraScreen extends AbstractScreen {
     Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     entities.update(Gdx.graphics.getDeltaTime());
+
+    stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+    stage.draw();
   }
 
   @Override

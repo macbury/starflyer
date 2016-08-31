@@ -18,7 +18,7 @@ public class CameraSystem extends EntitySystem {
   private final GeoPerspectiveCamera camera;
   private final Family family;
   private ImmutableArray<Entity> entities;
-
+  private Vector3 center = new Vector3();
   public CameraSystem(GeoPerspectiveCamera camera) {
     this.camera = camera;
     this.family = Family.all(CameraComponent.class).get();
@@ -56,13 +56,12 @@ public class CameraSystem extends EntitySystem {
     float rotation = cameraComponent.rotation;
     float currentZoom = cameraComponent.zoom;
 
-    //cameraComponent.rotation += 0.05f;
-
     camera.position.x = (currentZoom * MathUtils.cos(tilt) * MathUtils.sin(rotation));
     camera.position.z = (currentZoom * MathUtils.sin(tilt));
     camera.position.y = (currentZoom * MathUtils.cos(tilt) * MathUtils.cos(rotation));
 
-    camera.lookAt(Vector3.Zero);
+    center.set(Vector3.Zero).sub(camera.position).nor();
+    camera.direction.set(center);
 
     camera.update();
   }
