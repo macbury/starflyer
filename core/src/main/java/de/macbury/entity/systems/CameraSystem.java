@@ -8,7 +8,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import de.macbury.entity.components.CameraComponent;
-import de.macbury.entity.components.Components;
+import de.macbury.entity.Components;
 import de.macbury.graphics.GeoPerspectiveCamera;
 
 /**

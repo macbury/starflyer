@@ -12,6 +12,7 @@ import de.macbury.model.GeoTile;
  * Main tile component for rendering. It have model and information about tile.
  */
 public class TileInstance implements Disposable, RenderableProvider, Comparable<TileInstance> {
+
   public enum State {
     /**
      * Tile is downloading its {@link de.macbury.geo.core.GeoJSON} from server
@@ -80,9 +81,13 @@ public class TileInstance implements Disposable, RenderableProvider, Comparable<
 
   @Override
   public void getRenderables(Array<Renderable> renderables, Pool<Renderable> pool) {
-    if (state == State.Ready) {
+    if (isReady()) {
       model.getRenderables(renderables, pool);
     }
+  }
+
+  public boolean isReady() {
+    return this.state == State.Ready;
   }
 
   @Override

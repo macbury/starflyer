@@ -84,7 +84,7 @@ public class AssembleGeoTileTask implements RunnableFuture<ModelInstance>, Pool.
       //GeoPoint startPoint = new GeoPoint();
       //GeoPoint finalPoint = new GeoPoint();
 
-      // MeshPartBuilder boundingLine = modelBuilder.part("boundingBox", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
+      // MeshPartBuilder boundingLine = modelBuilder.part("boundingBox", GL30.GL_LINES, VertexAttributes.Usage.WorldPosition, new Material(ColorAttribute.createDiffuse(Color.RED)));
 /*
       //TOP line
       startPoint.set(tileCursor.north, tileCursor.west);

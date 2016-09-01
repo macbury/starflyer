@@ -24,7 +24,8 @@ import de.macbury.entity.EntityManager;
 import de.macbury.entity.EntityManagerBuilder;
 import de.macbury.entity.components.CameraComponent;
 import de.macbury.entity.components.ModelInstanceComponent;
-import de.macbury.entity.components.PositionComponent;
+import de.macbury.entity.components.ScenePositionComponent;
+import de.macbury.entity.components.WorldPositionComponent;
 import de.macbury.entity.messages.MessagesManager;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.screens.AbstractScreen;
@@ -44,6 +45,7 @@ public class TestCameraScreen extends AbstractScreen {
   private VisSlider cameraXSlider;
   private VisSlider cameraYSlider;
   private Vector3 origin;
+  private VisLabel tiltValueLabel;
 
   @Override
   public void preload() {
@@ -63,16 +65,15 @@ public class TestCameraScreen extends AbstractScreen {
             .withModelBatch(modelBatch)
             .build();
 
-    this.origin = new Vector3(200000, 200000, 0);
+    this.origin = new Vector3(50, -50, 0);
 
     createPlayer();
     createBoxModel();
 
   }
 
-  private void createCameraInspector(final CameraComponent cameraComponent, final PositionComponent cameraPositionComponent) {
+  private void createCameraInspector(final CameraComponent cameraComponent, final WorldPositionComponent cameraWorldPositionComponent) {
     VisWindow cameraInspectorWindow = new VisWindow("Camera");
-
     this.rotationSlider = new VisSlider(0, MathUtils.PI2, 0.01f, false);
     rotationSlider.setValue(cameraComponent.rotation);
 
@@ -83,7 +84,7 @@ public class TestCameraScreen extends AbstractScreen {
       }
     });
 
-    this.tiltSlider     = new VisSlider(0, MathUtils.PI2, 0.01f, false);
+    this.tiltSlider     = new VisSlider(0.3f, 1.2f, 0.01f, false);
     tiltSlider.setValue(cameraComponent.tilt);
 
     tiltSlider.addCaptureListener(new ChangeListener() {
@@ -103,6 +104,8 @@ public class TestCameraScreen extends AbstractScreen {
       }
     });
 
+    this.tiltValueLabel = new VisLabel("");
+
     cameraInspectorWindow.add(new VisLabel("Rotation")).right().padRight(15);
     cameraInspectorWindow.add(rotationSlider).row();
     cameraInspectorWindow.add(new VisLabel("Tilt")).right().padRight(15);
@@ -110,28 +113,32 @@ public class TestCameraScreen extends AbstractScreen {
     cameraInspectorWindow.add(new VisLabel("Zoom")).right().padRight(15);
     cameraInspectorWindow.add(zoomSlider).row();
 
-    this.cameraXSlider     = new VisSlider(-100f, 100.0f, 0.1f, false);
-    cameraXSlider.setValue(cameraPositionComponent.x);
+    this.cameraXSlider     = new VisSlider(-100f, 100.0f, 0.01f, false);
+    cameraXSlider.setValue(cameraWorldPositionComponent.x);
     cameraXSlider.addCaptureListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
-        cameraPositionComponent.x = cameraXSlider.getValue();
+        cameraWorldPositionComponent.x = cameraXSlider.getValue();
       }
     });
 
     cameraInspectorWindow.add(new VisLabel("X")).right().padRight(15);
     cameraInspectorWindow.add(cameraXSlider).row();
 
-    this.cameraYSlider     = new VisSlider(-100f, 100.0f, 0.1f, false);
-    cameraYSlider.setValue(cameraPositionComponent.y);
+    this.cameraYSlider     = new VisSlider(-100f, 100.0f, 0.01f, false);
+
+    cameraYSlider.setValue(cameraWorldPositionComponent.y);
     cameraYSlider.addCaptureListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
-        cameraPositionComponent.y = cameraYSlider.getValue();
+        cameraWorldPositionComponent.y = cameraYSlider.getValue();
       }
     });
     cameraInspectorWindow.add(new VisLabel("Y")).right().padRight(15);
     cameraInspectorWindow.add(cameraYSlider).row();
+
+    cameraXSlider.setWidth(480);
+    cameraYSlider.setWidth(480);
 
     cameraInspectorWindow.pack();
 
@@ -140,16 +147,17 @@ public class TestCameraScreen extends AbstractScreen {
 
   private void createBoxModel() {
     Entity boxEntity                 = this.entities.createEntity();
-    PositionComponent positionComponent = entities.createComponent(PositionComponent.class);
+    WorldPositionComponent worldPositionComponent = entities.createComponent(WorldPositionComponent.class);
 
-    positionComponent.set(origin);
-    positionComponent.visible = true;
-    boxEntity.add(positionComponent);
+    worldPositionComponent.set(origin);
+    worldPositionComponent.visible = true;
+    boxEntity.add(worldPositionComponent);
+    boxEntity.add(entities.createComponent(ScenePositionComponent.class));
 
     ModelBuilder modelBuilder = new ModelBuilder();
     modelBuilder.begin(); {
       MeshPartBuilder box = modelBuilder.part("box", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
-      box.box(2,2,0.2f);
+      box.box(6,6,0.1f);
     };
 
     boxEntity.add(new ModelInstanceComponent(modelBuilder.end()));
@@ -159,22 +167,22 @@ public class TestCameraScreen extends AbstractScreen {
 
   private void createPlayer() {
     Entity playerEntity                 = this.entities.createEntity();
-    PositionComponent positionComponent = entities.createComponent(PositionComponent.class);
+    WorldPositionComponent worldPositionComponent = entities.createComponent(WorldPositionComponent.class);
     CameraComponent cameraComponent     = entities.createComponent(CameraComponent.class);
 
     cameraComponent.zoom = 10;
     cameraComponent.tilt = 0.4f;
     cameraComponent.rotation = 0.0f;
 
-    positionComponent.set(origin);
+    worldPositionComponent.set(origin);
 
-    playerEntity.add(positionComponent);
+    playerEntity.add(worldPositionComponent);
     playerEntity.add(cameraComponent);
 
     entities.addEntity(playerEntity);
 
 
-    createCameraInspector(cameraComponent, positionComponent);
+    createCameraInspector(cameraComponent, worldPositionComponent);
   }
 
   @Override

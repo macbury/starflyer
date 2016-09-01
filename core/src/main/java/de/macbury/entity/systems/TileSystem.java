@@ -7,8 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import de.macbury.entity.EntityManager;
-import de.macbury.entity.components.Components;
-import de.macbury.entity.components.PositionComponent;
+import de.macbury.entity.Components;
+import de.macbury.entity.components.WorldPositionComponent;
 import de.macbury.entity.components.TileComponent;
 import de.macbury.geo.Tile;
 import de.macbury.graphics.GeoPerspectiveCamera;
@@ -27,7 +27,7 @@ public class TileSystem extends IteratingSystem implements Disposable {
   private TileCachePool tileCachePool;
   private final Array<Entity> invisibleEntities;
   public TileSystem(TileCachePool tileCachePool, GeoPerspectiveCamera camera) {
-    super(Family.all(PositionComponent.class, TileComponent.class).get());
+    super(Family.all(WorldPositionComponent.class, TileComponent.class).get());
     this.tileCachePool       = tileCachePool;
     this.camera              = camera;
     this.visibleTileProvider = new VisibleTileProvider();
@@ -67,8 +67,8 @@ public class TileSystem extends IteratingSystem implements Disposable {
         tileComponent.setInstance(tileCachePool.get(visibleTile));
         tileEntity.add(tileComponent);
 
-        PositionComponent positionComponent = manager().createComponent(PositionComponent.class);
-        tileEntity.add(positionComponent);
+        WorldPositionComponent worldPositionComponent = manager().createComponent(WorldPositionComponent.class);
+        tileEntity.add(worldPositionComponent);
 
         manager().addEntity(tileEntity);
         Gdx.app.log(TAG, "Adding entity");
@@ -93,7 +93,7 @@ public class TileSystem extends IteratingSystem implements Disposable {
 
   @Override
   protected void processEntity(Entity entity, float deltaTime) {
-    PositionComponent position = Components.Position.get(entity);
+    WorldPositionComponent position = Components.WorldPosition.get(entity);
     TileComponent tile         = Components.Tile.get(entity);
     TileInstance tileInstance  = tile.getInstance();
 
