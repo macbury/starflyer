@@ -11,11 +11,13 @@ public class CameraComponent implements Component, Pool.Poolable {
   public float tilt;
   public float rotation;
   public float zoom;
+  public float zoomSpeed = 800;
 
   @Override
   public void reset() {
     zoom = 10;
     rotation  = 0;
     tilt = 0;
+    zoomSpeed = 800;
   }
 }

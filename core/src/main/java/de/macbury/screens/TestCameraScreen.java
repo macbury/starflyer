@@ -1,4 +1,4 @@
-package de.macbury.desktop.screens;
+package de.macbury.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;

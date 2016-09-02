@@ -2,7 +2,7 @@ package de.macbury.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
-import de.macbury.Starflyer;
+import de.macbury.CoreGame;
 
 import java.util.Stack;
 
@@ -10,7 +10,7 @@ import java.util.Stack;
  * Manages in game screenStack.
  */
 public class ScreenManager implements Disposable {
-  protected final Starflyer game;
+  protected final CoreGame game;
 
   public class Exception extends RuntimeException {
     public Exception(String s) {
@@ -24,7 +24,7 @@ public class ScreenManager implements Disposable {
    */
   private Stack<AbstractScreen> screenStack;
 
-  public ScreenManager(Starflyer game) {
+  public ScreenManager(CoreGame game) {
     this.game   = game;
     screenStack = new Stack<AbstractScreen>();
   }

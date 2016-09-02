@@ -24,7 +24,7 @@ import com.kotcrab.vis.ui.widget.VisWindow;
 import de.macbury.screens.ScreenManager;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Starflyer extends ApplicationAdapter {
+public class CoreGame extends ApplicationAdapter {
   public ScreenManager screens;
 
   @Override

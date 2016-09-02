@@ -1,17 +1,17 @@
 package de.macbury.tests.support;
 
-import de.macbury.Starflyer;
+import de.macbury.CoreGame;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
 @RunWith(GdxTestRunner.class)
 public abstract class BaseGameTest {
-  protected Starflyer game;
+  protected CoreGame game;
 
   @Before
   public void configureRPGGame() {
-    this.game = new Starflyer();
+    this.game = new CoreGame();
     game.create();
   }
 

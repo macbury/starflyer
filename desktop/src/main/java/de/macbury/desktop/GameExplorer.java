@@ -1,14 +1,13 @@
 package de.macbury.desktop;
 
 import com.kotcrab.vis.ui.VisUI;
-import de.macbury.Starflyer;
-import de.macbury.desktop.screens.TestCameraScreen;
-import de.macbury.desktop.screens.WorldExploreScreen;
+import de.macbury.CoreGame;
+import de.macbury.screens.TestCameraScreen;
 
 /**
  * Explore game content
  */
-public class GameExplorer extends Starflyer {
+public class GameExplorer extends CoreGame {
   private static final String TAG = "GameExplorer";
 
   @Override

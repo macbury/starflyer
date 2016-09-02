@@ -8,6 +8,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
@@ -34,6 +35,9 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
   private float startTouchRotation;
   private Entity targetCameraEntity;
   private float startCameraRotation;
+  private boolean pinching;
+  private float previousZoom;
+  private float zoom;
 
   public CameraControllerSystem(InputMultiplexer inputMultiplexer, GeoPerspectiveCamera camera) {
     this.camera           = camera;
@@ -60,8 +64,6 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
     entities = null;
   }
 
-  private Vector3 temp = new Vector3();
-
   @Override
   public void update(float deltaTime) {
     screenCenter.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
@@ -71,8 +73,13 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
       CameraComponent cameraComponent = Components.Camera.get(targetCameraEntity);
 
       if (dragging) {
-        float currentTouchRotation    = getRotationRad(currentTouch);
-        cameraComponent.rotation = startCameraRotation + (startTouchRotation - currentTouchRotation);
+        float currentTouchRotation = getRotationRad(currentTouch);
+        float targetRotation       = startCameraRotation + (startTouchRotation - currentTouchRotation);
+        cameraComponent.rotation   = targetRotation;
+      }
+
+      if (pinching) {
+        cameraComponent.zoom -= zoom * deltaTime * cameraComponent.zoomSpeed;
       }
     }
 
@@ -139,17 +146,25 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
   }
 
   @Override
-  public boolean zoom(float initialDistance, float distance) {
-    return false;
+  public boolean zoom(float originalDistance, float currentDistance) {
+    float newZoom = currentDistance - originalDistance;
+    float amount  = newZoom - previousZoom;
+    previousZoom  = newZoom;
+
+    float w = Gdx.graphics.getWidth(), h = Gdx.graphics.getHeight();
+    zoom = amount / ((w > h) ? h : w);
+
+    return pinching;
   }
 
   @Override
   public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-    return false;
+    this.pinching = true;
+    return pinching;
   }
 
   @Override
   public void pinchStop() {
-
+    pinching = false;
   }
 }
