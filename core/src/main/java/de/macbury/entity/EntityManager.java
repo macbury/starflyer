@@ -17,6 +17,7 @@ public class EntityManager extends PooledEngine implements Disposable {
   private TileSystem tileSystem;
   private CameraSystem cameraSystem;
   private SceneOffsetSystem sceneOffsetSystem;
+  private CameraControllerSystem cameraControllerSystem;
 
   public EntityManager(MessagesManager messages) {
     super();
@@ -80,5 +81,14 @@ public class EntityManager extends PooledEngine implements Disposable {
     addSystem(cameraSystem);
     addSystem(sceneOffsetSystem);
     addEntityListener(sceneOffsetSystem);
+  }
+
+  public void setCameraControllerSystem(CameraControllerSystem cameraControllerSystem) {
+    this.cameraControllerSystem = cameraControllerSystem;
+    this.addSystem(cameraControllerSystem);
+  }
+
+  public CameraControllerSystem getCameraControllerSystem() {
+    return cameraControllerSystem;
   }
 }

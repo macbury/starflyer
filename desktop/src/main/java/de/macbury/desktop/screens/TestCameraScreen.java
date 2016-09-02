@@ -2,6 +2,7 @@ package de.macbury.desktop.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
@@ -46,6 +47,7 @@ public class TestCameraScreen extends AbstractScreen {
   private VisSlider cameraYSlider;
   private Vector3 origin;
   private VisLabel tiltValueLabel;
+  private InputMultiplexer inputMultiplexer;
 
   @Override
   public void preload() {
@@ -54,7 +56,12 @@ public class TestCameraScreen extends AbstractScreen {
 
   @Override
   public void create() {
-    stage               = new Stage(new ScreenViewport());
+    this.inputMultiplexer = new InputMultiplexer();
+
+    stage                 = new Stage(new ScreenViewport());
+    inputMultiplexer.addProcessor(stage);
+
+
     this.modelBatch       = new ModelBatch();
     this.messages         = new MessagesManager();
     this.camera           = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -62,6 +69,7 @@ public class TestCameraScreen extends AbstractScreen {
     this.entities = new EntityManagerBuilder()
             .withMessageDispatcher(messages)
             .withCamera(camera)
+            .withInputMultiplexer(inputMultiplexer)
             .withModelBatch(modelBatch)
             .build();
 
@@ -69,7 +77,6 @@ public class TestCameraScreen extends AbstractScreen {
 
     createPlayer();
     createBoxModel();
-
   }
 
   private void createCameraInspector(final CameraComponent cameraComponent, final WorldPositionComponent cameraWorldPositionComponent) {
@@ -187,7 +194,7 @@ public class TestCameraScreen extends AbstractScreen {
 
   @Override
   public void show() {
-    Gdx.input.setInputProcessor(stage);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override

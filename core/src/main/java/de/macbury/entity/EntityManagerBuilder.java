@@ -1,12 +1,10 @@
 package de.macbury.entity;
 
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import de.macbury.entity.messages.MessagesManager;
-import de.macbury.entity.systems.CameraSystem;
-import de.macbury.entity.systems.RTSCameraSystem;
-import de.macbury.entity.systems.RenderingSystem;
-import de.macbury.entity.systems.TileSystem;
+import de.macbury.entity.systems.*;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.tiles.TileCachePool;
 
@@ -19,6 +17,7 @@ public class EntityManagerBuilder {
   private MessagesManager messages;
   private TileCachePool tileCachePool;
   private ModelBatch modelBatch;
+  private InputMultiplexer inputMultiplexer;
 
   /**
    * Camera that will be used to display game entities
@@ -40,7 +39,12 @@ public class EntityManagerBuilder {
     EntityManager manager = new EntityManager(
             messages
     );
+
+    if (inputMultiplexer != null)
+      manager.setCameraControllerSystem(new CameraControllerSystem(inputMultiplexer, camera));
+
     manager.setCameraSystem(new CameraSystem(camera));
+
     if (createRTSCamera)
       manager.setRtsCameraSystem(new RTSCameraSystem(camera, messages));
     if (tileCachePool != null)
@@ -85,6 +89,16 @@ public class EntityManagerBuilder {
 
   public EntityManagerBuilder withCamera(GeoPerspectiveCamera camera) {
     this.camera = camera;
+    return this;
+  }
+
+  /**
+   * Used by camera controller
+   * @param inputMultiplexer
+   * @return
+   */
+  public EntityManagerBuilder withInputMultiplexer(InputMultiplexer inputMultiplexer) {
+    this.inputMultiplexer = inputMultiplexer;
     return this;
   }
 }
