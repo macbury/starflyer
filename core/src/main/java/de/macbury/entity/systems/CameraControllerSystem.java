@@ -7,19 +7,24 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.ai.msg.Telegraph;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import de.macbury.entity.Components;
 import de.macbury.entity.components.CameraComponent;
+import de.macbury.entity.components.WorldPositionComponent;
+import de.macbury.entity.messages.MessageType;
+import de.macbury.entity.messages.MessagesManager;
+import de.macbury.geo.MercatorProjection;
+import de.macbury.geo.core.GeoPoint;
 import de.macbury.graphics.GeoPerspectiveCamera;
 
 /**
  * Handles user input in controlling the {@link de.macbury.entity.components.CameraComponent}
  */
-public class CameraControllerSystem extends EntitySystem implements Disposable, GestureDetector.GestureListener {
+public class CameraControllerSystem extends EntitySystem implements Disposable, GestureDetector.GestureListener, Telegraph {
   private static final String TAG = "CameraControllerSystem";
   private final Family family;
   private final Vector2 screenCenter;
@@ -29,6 +34,7 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
   private final GestureDetector gestureDetector;
   private final Vector2 delta;
   private final GeoPerspectiveCamera camera;
+  private final MessagesManager messages;
   private InputMultiplexer inputMultiplexer;
   private ImmutableArray<Entity> entities;
   private boolean dragging;
@@ -37,9 +43,10 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
   private float startCameraRotation;
   private boolean pinching;
   private float previousZoom;
-  private float zoom;
+  private float zoomFactor;
 
-  public CameraControllerSystem(InputMultiplexer inputMultiplexer, GeoPerspectiveCamera camera) {
+  public CameraControllerSystem(InputMultiplexer inputMultiplexer, GeoPerspectiveCamera camera, MessagesManager messages) {
+    this.messages         = messages;
     this.camera           = camera;
     this.inputMultiplexer = inputMultiplexer;
     this.family = Family.all(CameraComponent.class).get();
@@ -52,6 +59,8 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
     this.gestureDetector = new GestureDetector(this);
 
     inputMultiplexer.addProcessor(gestureDetector);
+
+    messages.addListener(this, MessageType.CenterCamera);
   }
 
   @Override
@@ -79,7 +88,7 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
       }
 
       if (pinching) {
-        cameraComponent.zoom -= zoom * deltaTime * cameraComponent.zoomSpeed;
+        cameraComponent.zoom -= zoomFactor * deltaTime * cameraComponent.zoomSpeed;
       }
     }
 
@@ -99,6 +108,7 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
 
   @Override
   public void dispose() {
+    messages.removeListener(this, MessageType.CenterCamera);
     inputMultiplexer.removeProcessor(gestureDetector);
     inputMultiplexer = null;
   }
@@ -152,7 +162,7 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
     previousZoom  = newZoom;
 
     float w = Gdx.graphics.getWidth(), h = Gdx.graphics.getHeight();
-    zoom = amount / ((w > h) ? h : w);
+    zoomFactor = amount / ((w > h) ? h : w);
 
     return pinching;
   }
@@ -166,5 +176,24 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
   @Override
   public void pinchStop() {
     pinching = false;
+  }
+
+  @Override
+  public boolean handleMessage(Telegram msg) {
+    if (targetCameraEntity == null)
+      return false;
+    switch (MessageType.get(msg)) {
+      case CenterCamera:
+        WorldPositionComponent worldPosition = Components.WorldPosition.get(targetCameraEntity);
+        if (GeoPoint.class.isInstance(msg.extraInfo)) {
+          GeoPoint centerPoint = (GeoPoint)msg.extraInfo;
+          MercatorProjection.project(centerPoint, worldPosition);
+        } else {
+          throw new RuntimeException("Payload not supported: " + msg.extraInfo);
+        }
+        return true;
+    }
+
+    return false;
   }
 }

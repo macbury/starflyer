@@ -39,8 +39,8 @@ public class EntityManager extends PooledEngine implements Disposable {
    */
   @Override
   public void update(float deltaTime) {
-    messages.update();
     super.update(deltaTime);
+    messages.update();
   }
 
   /**

@@ -15,7 +15,7 @@ public class DesktopLauncher {
   }
 
   private static LwjglApplication createApplication() {
-    return new LwjglApplication(new GameExplorer(), getDefaultConfiguration());
+    return new LwjglApplication(new DesktopGame(), getDefaultConfiguration());
   }
 
   private static LwjglApplicationConfiguration getDefaultConfiguration() {

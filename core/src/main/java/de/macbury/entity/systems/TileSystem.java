@@ -43,7 +43,7 @@ public class TileSystem extends IteratingSystem implements Disposable {
     tileCachePool.update();
     visibleTileProvider.update(camera);
 
-    createNewVisibleTiles();
+    //createNewVisibleTiles();
     invisibleEntities.clear();
 
     super.update(deltaTime);

@@ -41,7 +41,7 @@ public class EntityManagerBuilder {
     );
 
     if (inputMultiplexer != null)
-      manager.setCameraControllerSystem(new CameraControllerSystem(inputMultiplexer, camera));
+      manager.setCameraControllerSystem(new CameraControllerSystem(inputMultiplexer, camera, messages));
 
     manager.setCameraSystem(new CameraSystem(camera));
 

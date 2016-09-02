@@ -1,4 +1,4 @@
-package de.macbury.screens;
+package de.macbury.desktop.screens;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSlider;
 import com.kotcrab.vis.ui.widget.VisWindow;
+import de.macbury.desktop.tiles.downloaders.MapZenGeoTileDownloader;
 import de.macbury.entity.EntityManager;
 import de.macbury.entity.EntityManagerBuilder;
 import de.macbury.entity.components.CameraComponent;
@@ -30,11 +31,15 @@ import de.macbury.entity.components.WorldPositionComponent;
 import de.macbury.entity.messages.MessagesManager;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.screens.AbstractScreen;
+import de.macbury.server.tiles.TilesManager;
+import de.macbury.server.tiles.cache.MemoryTileCache;
+import de.macbury.tiles.TileCachePool;
+import de.macbury.tiles.assembler.TileAssembler;
 
 /**
- * Created by macbury on 30.08.16.
+ * Created by macbury on 02.09.16.
  */
-public class TestCameraScreen extends AbstractScreen {
+public class TestOcculsionScreen extends AbstractScreen {
   private MessagesManager messages;
   private GeoPerspectiveCamera camera;
   private EntityManager entities;
@@ -48,6 +53,7 @@ public class TestCameraScreen extends AbstractScreen {
   private Vector3 origin;
   private VisLabel tiltValueLabel;
   private InputMultiplexer inputMultiplexer;
+  private TileCachePool tileCachePool;
 
   @Override
   public void preload() {
@@ -58,25 +64,28 @@ public class TestCameraScreen extends AbstractScreen {
   public void create() {
     this.inputMultiplexer = new InputMultiplexer();
 
-    stage                 = new Stage(new ScreenViewport());
+    stage = new Stage(new ScreenViewport());
     inputMultiplexer.addProcessor(stage);
 
 
     this.modelBatch       = new ModelBatch();
     this.messages         = new MessagesManager();
     this.camera           = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    this.tileCachePool    = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new TileAssembler());
 
     this.entities = new EntityManagerBuilder()
             .withMessageDispatcher(messages)
             .withCamera(camera)
+            .withTileCachePool(tileCachePool)
             .withInputMultiplexer(inputMultiplexer)
             .withModelBatch(modelBatch)
             .build();
 
-    this.origin = new Vector3(50, -50, 0);
+    this.origin = new Vector3(0, 0, 0);
+
 
     createPlayer();
-    createBoxModel();
+    //createBoxModel();
   }
 
   private void createCameraInspector(final CameraComponent cameraComponent, final WorldPositionComponent cameraWorldPositionComponent) {
@@ -91,7 +100,7 @@ public class TestCameraScreen extends AbstractScreen {
       }
     });
 
-    this.tiltSlider     = new VisSlider(0.3f, 1.2f, 0.01f, false);
+    this.tiltSlider = new VisSlider(0.3f, 1.2f, 0.01f, false);
     tiltSlider.setValue(cameraComponent.tilt);
 
     tiltSlider.addCaptureListener(new ChangeListener() {
@@ -101,7 +110,7 @@ public class TestCameraScreen extends AbstractScreen {
       }
     });
 
-    this.zoomSlider     = new VisSlider(1f, 100.0f, 0.1f, false);
+    this.zoomSlider = new VisSlider(1f, 100.0f, 0.1f, false);
     zoomSlider.setValue(cameraComponent.zoom);
 
     zoomSlider.addCaptureListener(new ChangeListener() {
@@ -120,7 +129,7 @@ public class TestCameraScreen extends AbstractScreen {
     cameraInspectorWindow.add(new VisLabel("Zoom")).right().padRight(15);
     cameraInspectorWindow.add(zoomSlider).row();
 
-    this.cameraXSlider     = new VisSlider(-100f, 100.0f, 0.01f, false);
+    this.cameraXSlider = new VisSlider(-100f, 100.0f, 0.01f, false);
     cameraXSlider.setValue(cameraWorldPositionComponent.x);
     cameraXSlider.addCaptureListener(new ChangeListener() {
       @Override
@@ -132,7 +141,7 @@ public class TestCameraScreen extends AbstractScreen {
     cameraInspectorWindow.add(new VisLabel("X")).right().padRight(15);
     cameraInspectorWindow.add(cameraXSlider).row();
 
-    this.cameraYSlider     = new VisSlider(-100f, 100.0f, 0.01f, false);
+    this.cameraYSlider = new VisSlider(-100f, 100.0f, 0.01f, false);
 
     cameraYSlider.setValue(cameraWorldPositionComponent.y);
     cameraYSlider.addCaptureListener(new ChangeListener() {
@@ -152,30 +161,11 @@ public class TestCameraScreen extends AbstractScreen {
     this.stage.addActor(cameraInspectorWindow);
   }
 
-  private void createBoxModel() {
-    Entity boxEntity                 = this.entities.createEntity();
-    WorldPositionComponent worldPositionComponent = entities.createComponent(WorldPositionComponent.class);
-
-    worldPositionComponent.set(origin);
-    worldPositionComponent.visible = true;
-    boxEntity.add(worldPositionComponent);
-    boxEntity.add(entities.createComponent(ScenePositionComponent.class));
-
-    ModelBuilder modelBuilder = new ModelBuilder();
-    modelBuilder.begin(); {
-      MeshPartBuilder box = modelBuilder.part("box", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
-      box.box(30,30,0.1f);
-    };
-
-    boxEntity.add(new ModelInstanceComponent(modelBuilder.end()));
-
-    entities.addEntity(boxEntity);
-  }
 
   private void createPlayer() {
-    Entity playerEntity                 = this.entities.createEntity();
+    Entity playerEntity = this.entities.createEntity();
     WorldPositionComponent worldPositionComponent = entities.createComponent(WorldPositionComponent.class);
-    CameraComponent cameraComponent     = entities.createComponent(CameraComponent.class);
+    CameraComponent cameraComponent = entities.createComponent(CameraComponent.class);
 
     cameraComponent.zoom = 10;
     cameraComponent.tilt = 0.4f;
@@ -189,7 +179,7 @@ public class TestCameraScreen extends AbstractScreen {
     entities.addEntity(playerEntity);
 
 
-    createCameraInspector(cameraComponent, worldPositionComponent);
+    //createCameraInspector(cameraComponent, worldPositionComponent);
   }
 
   @Override

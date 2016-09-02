@@ -17,11 +17,6 @@ public class DummyScreen extends AbstractScreen {
   }
 
   @Override
-  public void update(float delta) {
-
-  }
-
-  @Override
   public boolean isDisposedAfterHide() {
     return false;
   }

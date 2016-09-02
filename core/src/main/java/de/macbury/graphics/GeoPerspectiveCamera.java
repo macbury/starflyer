@@ -1,5 +1,6 @@
 package de.macbury.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector3;
@@ -25,6 +26,10 @@ public class GeoPerspectiveCamera extends PerspectiveCamera {
   private DebugFrustum debugFrustrum;
   private float oldFieldOfView;
   //</editor-fold>
+
+  public GeoPerspectiveCamera() {
+    this(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+  }
 
   public GeoPerspectiveCamera(float viewportWidth, float viewportHeight) {
     super(BASE_FOV, viewportWidth, viewportHeight);
