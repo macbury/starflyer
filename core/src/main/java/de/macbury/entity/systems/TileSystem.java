@@ -8,13 +8,18 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import de.macbury.entity.EntityManager;
 import de.macbury.entity.Components;
+import de.macbury.entity.components.ScenePositionComponent;
 import de.macbury.entity.components.WorldPositionComponent;
 import de.macbury.entity.components.TileComponent;
+import de.macbury.geo.MercatorProjection;
 import de.macbury.geo.Tile;
+import de.macbury.geo.core.GeoPoint;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.tiles.TileCachePool;
 import de.macbury.tiles.TileInstance;
 import de.macbury.tiles.VisibleTileProvider;
+
+import java.awt.image.renderable.ParameterBlock;
 
 /**
  * Check what tiles are visible, create them and assign to {@link Entity} that can be later render, etc.
@@ -26,12 +31,15 @@ public class TileSystem extends IteratingSystem implements Disposable {
   private final GeoPerspectiveCamera camera;
   private TileCachePool tileCachePool;
   private final Array<Entity> invisibleEntities;
+  private final GeoPoint tempPoint;
+
   public TileSystem(TileCachePool tileCachePool, GeoPerspectiveCamera camera) {
     super(Family.all(WorldPositionComponent.class, TileComponent.class).get());
     this.tileCachePool       = tileCachePool;
     this.camera              = camera;
     this.visibleTileProvider = new VisibleTileProvider();
     this.invisibleEntities   = new Array<Entity>();
+    this.tempPoint           = new GeoPoint();
   }
 
   private EntityManager manager() {
@@ -62,13 +70,18 @@ public class TileSystem extends IteratingSystem implements Disposable {
       Entity tileEntity = findEntityForTile(visibleTile);
       if (tileEntity == null) {
         tileEntity                  = manager().createEntity();
-
+        TileInstance tileInstance   = tileCachePool.get(visibleTile);
         TileComponent tileComponent = manager().createComponent(TileComponent.class);
-        tileComponent.setInstance(tileCachePool.get(visibleTile));
+
+        tileComponent.setInstance(tileInstance);
         tileEntity.add(tileComponent);
 
         WorldPositionComponent worldPositionComponent = manager().createComponent(WorldPositionComponent.class);
+        tempPoint.set(visibleTile.north, visibleTile.west);
+        MercatorProjection.project(tempPoint, worldPositionComponent);
+
         tileEntity.add(worldPositionComponent);
+        tileEntity.add(manager().createComponent(ScenePositionComponent.class));
 
         manager().addEntity(tileEntity);
         Gdx.app.log(TAG, "Adding entity");

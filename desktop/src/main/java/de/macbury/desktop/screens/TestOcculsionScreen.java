@@ -67,7 +67,6 @@ public class TestOcculsionScreen extends AbstractScreen {
     stage = new Stage(new ScreenViewport());
     inputMultiplexer.addProcessor(stage);
 
-
     this.modelBatch       = new ModelBatch();
     this.messages         = new MessagesManager();
     this.camera           = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -85,7 +84,28 @@ public class TestOcculsionScreen extends AbstractScreen {
 
 
     createPlayer();
-    //createBoxModel();
+    createBoxModel();
+  }
+
+
+  private void createBoxModel() {
+    Entity boxEntity                 = this.entities.createEntity();
+    WorldPositionComponent worldPositionComponent = entities.createComponent(WorldPositionComponent.class);
+
+    worldPositionComponent.set(origin);
+    worldPositionComponent.visible = true;
+    boxEntity.add(worldPositionComponent);
+    boxEntity.add(entities.createComponent(ScenePositionComponent.class));
+
+    ModelBuilder modelBuilder = new ModelBuilder();
+    modelBuilder.begin(); {
+      MeshPartBuilder box = modelBuilder.part("box", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
+      box.box(1f,1f,1f);
+    };
+
+    boxEntity.add(new ModelInstanceComponent(modelBuilder.end()));
+
+    entities.addEntity(boxEntity);
   }
 
   private void createCameraInspector(final CameraComponent cameraComponent, final WorldPositionComponent cameraWorldPositionComponent) {

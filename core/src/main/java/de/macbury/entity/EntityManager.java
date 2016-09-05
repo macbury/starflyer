@@ -13,7 +13,6 @@ import de.macbury.entity.systems.*;
  */
 public class EntityManager extends PooledEngine implements Disposable {
   private MessagesManager messages;
-  private RTSCameraSystem rtsCameraSystem;
   private TileSystem tileSystem;
   private CameraSystem cameraSystem;
   private SceneOffsetSystem sceneOffsetSystem;
@@ -23,16 +22,6 @@ public class EntityManager extends PooledEngine implements Disposable {
     super();
     this.messages = messages;
   }
-
-  public RTSCameraSystem getRtsCameraSystem() {
-    return rtsCameraSystem;
-  }
-
-  public void setRtsCameraSystem(RTSCameraSystem rtsCameraSystem) {
-    this.rtsCameraSystem = rtsCameraSystem;
-    addSystem(rtsCameraSystem);
-  }
-
   /**
    * Update {@link MessageDispatcher} and {@link EntitySystem}s
    * @param deltaTime

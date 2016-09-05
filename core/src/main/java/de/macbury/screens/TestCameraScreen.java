@@ -164,7 +164,7 @@ public class TestCameraScreen extends AbstractScreen {
     ModelBuilder modelBuilder = new ModelBuilder();
     modelBuilder.begin(); {
       MeshPartBuilder box = modelBuilder.part("box", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
-      box.box(30,30,0.1f);
+      box.box(1,1,2f);
     };
 
     boxEntity.add(new ModelInstanceComponent(modelBuilder.end()));

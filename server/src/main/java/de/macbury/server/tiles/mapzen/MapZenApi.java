@@ -33,8 +33,7 @@ public class MapZenApi {
         try {
           return JsonHelper.fromJson(value, valueType);
         } catch (Exception e) {
-          e.printStackTrace();
-          return null;
+          throw e;
         }
       }
 

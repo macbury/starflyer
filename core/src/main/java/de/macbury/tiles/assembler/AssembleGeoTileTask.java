@@ -154,7 +154,6 @@ public class AssembleGeoTileTask implements RunnableFuture<ModelInstance>, Pool.
     if (result == null) {
       Model model = modelBuilder.end();
       this.result = new ModelInstance(model);
-      this.result.transform.idt().translate(originVec);
     }
 
     return result;

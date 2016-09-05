@@ -59,7 +59,6 @@ public class WorldExploreScreen extends AbstractScreen implements MenuBarManager
     this.entities = new EntityManagerBuilder()
             .withMessageDispatcher(messages)
             .withTileCachePool(tileCachePool)
-            .withRTSGameCamera(camera)
             .withModelBatch(modelBatch)
             .build();
 
@@ -83,7 +82,7 @@ public class WorldExploreScreen extends AbstractScreen implements MenuBarManager
 
     root.add(menuBarManger.getTable()).growX().row();
 
-    root.add(entities.getRtsCameraSystem().getOverlay()).fill().expand().row();
+    root.add().fill().expand().row();
 
     root.add(statusBarManager).growX().row();
     stage.addActor(debugVisibleTileWindow);

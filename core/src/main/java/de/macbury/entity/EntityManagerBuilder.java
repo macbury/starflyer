@@ -13,22 +13,11 @@ import de.macbury.tiles.TileCachePool;
  */
 public class EntityManagerBuilder {
   private GeoPerspectiveCamera camera;
-  private boolean createRTSCamera;
   private MessagesManager messages;
   private TileCachePool tileCachePool;
   private ModelBatch modelBatch;
   private InputMultiplexer inputMultiplexer;
 
-  /**
-   * Camera that will be used to display game entities
-   * Required
-   * @param camera
-   * @return
-   */
-  public EntityManagerBuilder withRTSGameCamera(GeoPerspectiveCamera camera) {
-    this.createRTSCamera = true;
-    return withCamera(camera);
-  }
 
   /**
    * Create {@link EntityManager} with passed options
@@ -45,8 +34,6 @@ public class EntityManagerBuilder {
 
     manager.setCameraSystem(new CameraSystem(camera));
 
-    if (createRTSCamera)
-      manager.setRtsCameraSystem(new RTSCameraSystem(camera, messages));
     if (tileCachePool != null)
       manager.setTileSystem(new TileSystem(tileCachePool, camera));
 
