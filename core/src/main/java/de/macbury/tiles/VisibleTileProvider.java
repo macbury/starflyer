@@ -1,7 +1,9 @@
 package de.macbury.tiles;
 
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
@@ -30,7 +32,6 @@ public class VisibleTileProvider implements Disposable {
    */
   private final Tile originTile = new Tile();
   private final GeoPoint originPoint = new GeoPoint();
-
   /**
    * Recalculate what is visible
    */
@@ -41,6 +42,8 @@ public class VisibleTileProvider implements Disposable {
 
     MercatorProjection.unproject(cameraWorldPosition, originPoint);
     originTile.set(originPoint);
+
+
     // Calculate how many tiles are around player
     int tileAheadCount = MathUtils.ceil(camera.far / Tile.TILE_SIZE) + 2;
     for (int x = -tileAheadCount; x <= tileAheadCount; x++) {
@@ -49,9 +52,10 @@ public class VisibleTileProvider implements Disposable {
         cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
 
         //if (camera.boundsInFrustum(cursorTile.box)) {
+        //  cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
           visible.add(cursorTile); // Tile is visible
         //} else {
-          //tilePool.free(cursorTile); // Tile not visible so return it to pool
+        //  tilePool.free(cursorTile); // Tile not visible so return it to pool
         //}
       }
     }

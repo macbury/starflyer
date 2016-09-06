@@ -108,7 +108,7 @@ public class TestOcculsionScreen extends AbstractScreen {
     ModelBuilder modelBuilder = new ModelBuilder();
     modelBuilder.begin(); {
       MeshPartBuilder box = modelBuilder.part("box", GL30.GL_LINES, VertexAttributes.Usage.Position, new Material(ColorAttribute.createDiffuse(Color.RED)));
-      box.box(1f,1f,1f);
+      box.box(1f,1f,1.85f);
     };
 
     boxEntity.add(new ModelInstanceComponent(modelBuilder.end()));

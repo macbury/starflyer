@@ -13,7 +13,7 @@ public class Tile {
   /**
    * TILE size in game world size
    */
-  public static final float TILE_SIZE = 61;
+  public static final float TILE_SIZE = 122.0f;
   public static final  float MAX_ELEVATION = TILE_SIZE;
 
   /**

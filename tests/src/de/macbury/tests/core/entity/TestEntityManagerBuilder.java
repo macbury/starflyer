@@ -2,12 +2,14 @@ package de.macbury.tests.core.entity;
 
 
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.sun.javafx.sg.prism.NGShape;
 import de.macbury.entity.EntityManager;
 import de.macbury.entity.EntityManagerBuilder;
 import de.macbury.entity.messages.MessagesManager;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.tests.support.GdxTestRunner;
 import de.macbury.tiles.TileCachePool;
+import de.macbury.tiles.VisibleTileProvider;
 import de.macbury.tiles.assembler.TileAssembler;
 import de.macbury.tiles.downloaders.AbstractGeoTileDownloader;
 import junit.framework.Assert;
@@ -28,11 +30,10 @@ public class TestEntityManagerBuilder {
   @Test
   public void itBuildsValidDesktopEntityManager() {
     EntityManager entityManager = new EntityManagerBuilder()
-            .withRTSGameCamera(new GeoPerspectiveCamera(1,1))
             .withMessageDispatcher(new MessagesManager())
-            .withTileCachePool(new TileCachePool(Mockito.mock(AbstractGeoTileDownloader.class), Mockito.mock(TileAssembler.class)))
+            .withTileCachePool(new TileCachePool(Mockito.mock(AbstractGeoTileDownloader.class), Mockito.mock(TileAssembler.class)), Mockito.mock(VisibleTileProvider.class))
             .withModelBatch(Mockito.mock(ModelBatch.class))
+            .withCamera(Mockito.mock(GeoPerspectiveCamera.class))
             .build();
-    Assert.assertNotNull(entityManager.getRtsCameraSystem());
   }
 }

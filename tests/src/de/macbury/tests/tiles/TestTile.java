@@ -43,20 +43,20 @@ public class TestTile {
     Tile tile = new Tile();
     tile.set(0,0);
 
-    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getWidth());
-    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getHeight());
+    Assert.assertEquals(123.0, tile.box.getHeight(), 1.0);
+    Assert.assertEquals(123.0, tile.box.getWidth(), 1.0);
     Assert.assertEquals(Tile.MAX_ELEVATION+10, tile.box.getDepth());
 
     tile.set(85.0511287798, 180);
 
-    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getHeight());
-    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getWidth());
+    Assert.assertEquals(123.0, tile.box.getHeight(), 1.0);
+    Assert.assertEquals(123.0, tile.box.getWidth(), 1.0);
     Assert.assertEquals(Tile.MAX_ELEVATION+10, tile.box.getDepth());
 
     tile.set(-85.0511287798, -180);
 
-    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getHeight());
-    Assert.assertEquals(Tile.TILE_SIZE, tile.box.getWidth());
+    Assert.assertEquals(123.0, tile.box.getHeight(), 1.0);
+    Assert.assertEquals(123.0, tile.box.getWidth(), 1.0);
     Assert.assertEquals(Tile.MAX_ELEVATION+10, tile.box.getDepth());
   }
 }

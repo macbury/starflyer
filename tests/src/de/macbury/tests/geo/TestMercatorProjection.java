@@ -26,8 +26,8 @@ public class TestMercatorProjection {
     Vector2 result = new Vector2();
 
     MercatorProjection.project(point, result);
-    assertEquals(2003750.875, result.x, 0);
-    assertEquals(2003750.875, result.y, 0);
+    assertEquals(4007501.75, result.x, 0);
+    assertEquals(4007501.75, result.y, 0);
   }
 
   @Test
@@ -36,8 +36,8 @@ public class TestMercatorProjection {
     Vector2 result = new Vector2();
 
     MercatorProjection.project(point, result);
-    assertEquals(-2003750.875, result.x, 0);
-    assertEquals(-2003750.875, result.y, 0);
+    assertEquals(-4007501.75, result.x, 0);
+    assertEquals(-4007501.75, result.y, 0);
   }
 
   @Test
@@ -46,8 +46,8 @@ public class TestMercatorProjection {
     Vector2 result = new Vector2();
 
     MercatorProjection.project(point, result);
-    assertEquals(333958.46875, result.x, 1);
-    assertEquals(644627.625, result.y, 1);
+    assertEquals(667916.9375, result.x, 1);
+    assertEquals(1289255.25, result.y, 1);
   }
 
   @Test

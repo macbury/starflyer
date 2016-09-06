@@ -10,8 +10,9 @@ public class SharedConsts {
   /**
    * How many meter fit in each world unit
    */
-  public static final float METER_TO_UNIT = 0.1f;
-  public static final float UNIT_TO_METER = 10;
+  public static final float PROJECTION_SCALE = 5f;
+  public static final float METER_TO_UNIT = 1f / PROJECTION_SCALE;
+  public static final float UNIT_TO_METER = PROJECTION_SCALE;
 
   /**
    * Default tile zoom level

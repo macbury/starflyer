@@ -37,13 +37,13 @@ public class TestCameraControllerSystem {
 
     entities.addEntity(playerEntity);
 
-    CameraControllerSystem cameraControllerSystem = new CameraControllerSystem(new InputMultiplexer(), camera, messages);
+    CameraControllerSystem cameraControllerSystem = new CameraControllerSystem(new InputMultiplexer(), messages);
     entities.setCameraControllerSystem(cameraControllerSystem);
     entities.update(10);
 
     messages.dispatchMessage(MessageType.CenterCamera.ordinal(), new GeoPoint(10, 10));
 
-    Assert.assertEquals(111319.49f, worldPositionComponent.x);
-    Assert.assertEquals(111889f, worldPositionComponent.y);
+    Assert.assertEquals(222638.98f, worldPositionComponent.x);
+    Assert.assertEquals(223778.0f, worldPositionComponent.y);
   }
 }
