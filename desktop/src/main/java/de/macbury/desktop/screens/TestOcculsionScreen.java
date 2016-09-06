@@ -22,6 +22,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSlider;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import de.macbury.desktop.tiles.downloaders.MapZenGeoTileDownloader;
+import de.macbury.desktop.ui.DebugTileCachePoolWindow;
 import de.macbury.entity.EntityManager;
 import de.macbury.entity.EntityManagerBuilder;
 import de.macbury.entity.components.CameraComponent;
@@ -29,11 +30,14 @@ import de.macbury.entity.components.ModelInstanceComponent;
 import de.macbury.entity.components.ScenePositionComponent;
 import de.macbury.entity.components.WorldPositionComponent;
 import de.macbury.entity.messages.MessagesManager;
+import de.macbury.geo.MercatorProjection;
+import de.macbury.geo.core.GeoPoint;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.screens.AbstractScreen;
 import de.macbury.server.tiles.TilesManager;
 import de.macbury.server.tiles.cache.MemoryTileCache;
 import de.macbury.tiles.TileCachePool;
+import de.macbury.tiles.VisibleTileProvider;
 import de.macbury.tiles.assembler.TileAssembler;
 
 /**
@@ -54,6 +58,8 @@ public class TestOcculsionScreen extends AbstractScreen {
   private VisLabel tiltValueLabel;
   private InputMultiplexer inputMultiplexer;
   private TileCachePool tileCachePool;
+  private VisibleTileProvider visibleTileProvider;
+  private DebugTileCachePoolWindow debugTileCachePoolWindow;
 
   @Override
   public void preload() {
@@ -69,20 +75,22 @@ public class TestOcculsionScreen extends AbstractScreen {
 
     this.modelBatch       = new ModelBatch();
     this.messages         = new MessagesManager();
+    this.visibleTileProvider = new VisibleTileProvider();
     this.camera           = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     this.tileCachePool    = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new TileAssembler());
-
+    this.debugTileCachePoolWindow = new DebugTileCachePoolWindow(tileCachePool, visibleTileProvider);
     this.entities = new EntityManagerBuilder()
             .withMessageDispatcher(messages)
             .withCamera(camera)
-            .withTileCachePool(tileCachePool)
+            .withTileCachePool(tileCachePool, visibleTileProvider)
             .withInputMultiplexer(inputMultiplexer)
             .withModelBatch(modelBatch)
             .build();
 
     this.origin = new Vector3(0, 0, 0);
-
-
+    MercatorProjection.project(new GeoPoint(50.093114, 20.059579), origin);
+    stage.addActor(debugTileCachePoolWindow);
+    debugTileCachePoolWindow.setVisible(true);
     createPlayer();
     createBoxModel();
   }
@@ -199,7 +207,7 @@ public class TestOcculsionScreen extends AbstractScreen {
     entities.addEntity(playerEntity);
 
 
-    //createCameraInspector(cameraComponent, worldPositionComponent);
+    createCameraInspector(cameraComponent, worldPositionComponent);
   }
 
   @Override

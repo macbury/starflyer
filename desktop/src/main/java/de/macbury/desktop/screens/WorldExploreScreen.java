@@ -41,6 +41,7 @@ public class WorldExploreScreen extends AbstractScreen implements MenuBarManager
   private MenuBarManager menuBarManger;
   private MainStatusBarManager statusBarManager;
   private Stage stage;
+  private VisibleTileProvider visibleTileProvider;
 
   @Override
   public void preload() {
@@ -53,12 +54,12 @@ public class WorldExploreScreen extends AbstractScreen implements MenuBarManager
     this.messages         = new MessagesManager();
     this.frustumDebugger  = new FrustumDebugAndRenderer();
     this.tileCachePool    = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new TileAssembler());
-
+    this.visibleTileProvider = new VisibleTileProvider();
     this.camera           = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
     this.entities = new EntityManagerBuilder()
             .withMessageDispatcher(messages)
-            .withTileCachePool(tileCachePool)
+            .withTileCachePool(tileCachePool, visibleTileProvider)
             .withModelBatch(modelBatch)
             .build();
 

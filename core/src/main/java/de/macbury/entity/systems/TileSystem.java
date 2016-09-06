@@ -33,11 +33,11 @@ public class TileSystem extends IteratingSystem implements Disposable {
   private final Array<Entity> invisibleEntities;
   private final GeoPoint tempPoint;
 
-  public TileSystem(TileCachePool tileCachePool, GeoPerspectiveCamera camera) {
+  public TileSystem(TileCachePool tileCachePool, GeoPerspectiveCamera camera, VisibleTileProvider visibleTileProvider) {
     super(Family.all(WorldPositionComponent.class, TileComponent.class).get());
     this.tileCachePool       = tileCachePool;
     this.camera              = camera;
-    this.visibleTileProvider = new VisibleTileProvider();
+    this.visibleTileProvider = visibleTileProvider;
     this.invisibleEntities   = new Array<Entity>();
     this.tempPoint           = new GeoPoint();
   }
@@ -48,10 +48,13 @@ public class TileSystem extends IteratingSystem implements Disposable {
 
   @Override
   public void update(float deltaTime) {
+    Entity cameraEntity                        = manager().getCameraEntity();
+    WorldPositionComponent cameraWorldPosition = Components.WorldPosition.get(cameraEntity);
     tileCachePool.update();
-    visibleTileProvider.update(camera);
 
-    //createNewVisibleTiles();
+    visibleTileProvider.update(cameraWorldPosition, camera);
+
+    createNewVisibleTiles();
     invisibleEntities.clear();
 
     super.update(deltaTime);

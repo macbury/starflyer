@@ -1,10 +1,13 @@
 package de.macbury.tiles;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
+import de.macbury.geo.MercatorProjection;
 import de.macbury.geo.Tile;
+import de.macbury.geo.core.GeoPoint;
 import de.macbury.graphics.GeoPerspectiveCamera;
 
 /**
@@ -25,30 +28,31 @@ public class VisibleTileProvider implements Disposable {
   /**
    * On this tile {@link GeoPerspectiveCamera} sits
    */
-  private Tile originTile = new Tile();
+  private final Tile originTile = new Tile();
+  private final GeoPoint originPoint = new GeoPoint();
 
   /**
    * Recalculate what is visible
    */
-  public void update(GeoPerspectiveCamera camera) {
-    camera.update();
+  public void update(Vector3 cameraWorldPosition, GeoPerspectiveCamera camera) {
     // Clear pool and visible tiles
     tilePool.freeAll(visible);
     visible.clear();
 
-    originTile.set(camera.normalOrDebugGeoPoint());
+    MercatorProjection.unproject(cameraWorldPosition, originPoint);
+    originTile.set(originPoint);
     // Calculate how many tiles are around player
-    int tileAheadCount = MathUtils.floor(camera.far / Tile.TILE_SIZE) + 2;
+    int tileAheadCount = MathUtils.ceil(camera.far / Tile.TILE_SIZE) + 2;
     for (int x = -tileAheadCount; x <= tileAheadCount; x++) {
       for (int y = -tileAheadCount; y <= tileAheadCount; y++) {
         Tile cursorTile = tilePool.obtain();
         cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
 
-        if (camera.boundsInFrustum(cursorTile.box)) {
+        //if (camera.boundsInFrustum(cursorTile.box)) {
           visible.add(cursorTile); // Tile is visible
-        } else {
-          tilePool.free(cursorTile); // Tile not visible so return it to pool
-        }
+        //} else {
+          //tilePool.free(cursorTile); // Tile not visible so return it to pool
+        //}
       }
     }
   }

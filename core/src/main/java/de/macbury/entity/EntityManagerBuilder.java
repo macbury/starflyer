@@ -7,6 +7,7 @@ import de.macbury.entity.messages.MessagesManager;
 import de.macbury.entity.systems.*;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.tiles.TileCachePool;
+import de.macbury.tiles.VisibleTileProvider;
 
 /**
  * Helps with building {@link EntityManager} instance
@@ -17,6 +18,7 @@ public class EntityManagerBuilder {
   private TileCachePool tileCachePool;
   private ModelBatch modelBatch;
   private InputMultiplexer inputMultiplexer;
+  private VisibleTileProvider visibleTileProvider;
 
 
   /**
@@ -30,12 +32,12 @@ public class EntityManagerBuilder {
     );
 
     if (inputMultiplexer != null)
-      manager.setCameraControllerSystem(new CameraControllerSystem(inputMultiplexer, camera, messages));
+      manager.setCameraControllerSystem(new CameraControllerSystem(inputMultiplexer, messages));
 
     manager.setCameraSystem(new CameraSystem(camera));
 
-    if (tileCachePool != null)
-      manager.setTileSystem(new TileSystem(tileCachePool, camera));
+    if (tileCachePool != null && visibleTileProvider != null)
+      manager.setTileSystem(new TileSystem(tileCachePool, camera, visibleTileProvider));
 
     manager.setRenderingSystem(new RenderingSystem(camera, modelBatch));
     return manager;
@@ -69,8 +71,9 @@ public class EntityManagerBuilder {
     return this;
   }
 
-  public EntityManagerBuilder withTileCachePool(TileCachePool tileCachePool) {
+  public EntityManagerBuilder withTileCachePool(TileCachePool tileCachePool, VisibleTileProvider visibleTileProvider) {
     this.tileCachePool = tileCachePool;
+    this.visibleTileProvider = visibleTileProvider;
     return this;
   }
 
@@ -88,4 +91,5 @@ public class EntityManagerBuilder {
     this.inputMultiplexer = inputMultiplexer;
     return this;
   }
+
 }

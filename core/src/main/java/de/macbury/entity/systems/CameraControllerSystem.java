@@ -30,10 +30,7 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
   private final Vector2 screenCenter;
   private final Vector2 currentTouch;
   private final Vector2 tempDir;
-  private final Vector2 prevTouch;
   private final GestureDetector gestureDetector;
-  private final Vector2 delta;
-  private final GeoPerspectiveCamera camera;
   private final MessagesManager messages;
   private InputMultiplexer inputMultiplexer;
   private ImmutableArray<Entity> entities;
@@ -45,17 +42,14 @@ public class CameraControllerSystem extends EntitySystem implements Disposable, 
   private float previousZoom;
   private float zoomFactor;
 
-  public CameraControllerSystem(InputMultiplexer inputMultiplexer, GeoPerspectiveCamera camera, MessagesManager messages) {
+  public CameraControllerSystem(InputMultiplexer inputMultiplexer, MessagesManager messages) {
     this.messages         = messages;
-    this.camera           = camera;
     this.inputMultiplexer = inputMultiplexer;
     this.family = Family.all(CameraComponent.class).get();
 
     this.screenCenter = new Vector2();
-    this.prevTouch = new Vector2();
     this.currentTouch = new Vector2();
     this.tempDir = new Vector2();
-    this.delta = new Vector2();
     this.gestureDetector = new GestureDetector(this);
 
     inputMultiplexer.addProcessor(gestureDetector);
