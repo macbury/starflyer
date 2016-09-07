@@ -12,17 +12,22 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSlider;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import de.macbury.desktop.tiles.downloaders.MapZenGeoTileDownloader;
 import de.macbury.desktop.ui.DebugTileCachePoolWindow;
+import de.macbury.desktop.ui.DebugVisibleTileWindow;
 import de.macbury.entity.EntityManager;
 import de.macbury.entity.EntityManagerBuilder;
 import de.macbury.entity.components.CameraComponent;
@@ -31,7 +36,10 @@ import de.macbury.entity.components.ScenePositionComponent;
 import de.macbury.entity.components.WorldPositionComponent;
 import de.macbury.entity.messages.MessagesManager;
 import de.macbury.geo.MercatorProjection;
+import de.macbury.geo.Tile;
 import de.macbury.geo.core.GeoPoint;
+import de.macbury.graphics.DebugShape;
+import de.macbury.graphics.FrustumDebugAndRenderer;
 import de.macbury.graphics.GeoPerspectiveCamera;
 import de.macbury.screens.AbstractScreen;
 import de.macbury.server.tiles.TilesManager;
@@ -60,6 +68,10 @@ public class TestOcculsionScreen extends AbstractScreen {
   private TileCachePool tileCachePool;
   private VisibleTileProvider visibleTileProvider;
   private DebugTileCachePoolWindow debugTileCachePoolWindow;
+  private DebugVisibleTileWindow debugVisibleTileWindow;
+  private VisTextButton saveFrustumButton;
+  private FrustumDebugAndRenderer frustumDebugger;
+  private ShapeRenderer shapeRenderer;
 
   @Override
   public void preload() {
@@ -72,13 +84,15 @@ public class TestOcculsionScreen extends AbstractScreen {
 
     stage = new Stage(new ScreenViewport());
     inputMultiplexer.addProcessor(stage);
-
+    this.shapeRenderer    = new ShapeRenderer();
+    this.frustumDebugger  = new FrustumDebugAndRenderer();
     this.modelBatch       = new ModelBatch();
     this.messages         = new MessagesManager();
     this.visibleTileProvider = new VisibleTileProvider();
     this.camera           = new GeoPerspectiveCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     this.tileCachePool    = new TileCachePool(new MapZenGeoTileDownloader(new TilesManager(new MemoryTileCache())), new TileAssembler());
     this.debugTileCachePoolWindow = new DebugTileCachePoolWindow(tileCachePool, visibleTileProvider);
+    this.debugVisibleTileWindow   = new DebugVisibleTileWindow(visibleTileProvider);
     this.entities = new EntityManagerBuilder()
             .withMessageDispatcher(messages)
             .withCamera(camera)
@@ -88,11 +102,17 @@ public class TestOcculsionScreen extends AbstractScreen {
             .build();
 
     this.origin = new Vector3(0, 0, 0);
-    MercatorProjection.project(new GeoPoint(50.093114, 20.059579), origin);
+    MercatorProjection.project(new GeoPoint(50.093340, 20.059798), origin);
     stage.addActor(debugTileCachePoolWindow);
+    stage.addActor(debugVisibleTileWindow);
     debugTileCachePoolWindow.setVisible(true);
+    debugVisibleTileWindow.setVisible(true);
     createPlayer();
     createBoxModel();
+
+    debugVisibleTileWindow.bottom().right();
+    debugTileCachePoolWindow.left().bottom();
+
   }
 
 
@@ -182,8 +202,18 @@ public class TestOcculsionScreen extends AbstractScreen {
     cameraInspectorWindow.add(cameraYSlider).row();
 
     cameraXSlider.setWidth(480);
-    cameraYSlider.setWidth(480);
+    saveFrustumButton = new VisTextButton("Save");
+    cameraInspectorWindow.add(saveFrustumButton).fill().colspan(2).row();
 
+    saveFrustumButton.addCaptureListener(new ClickListener() {
+      @Override
+      public void clicked(InputEvent event, float x, float y) {
+        if (camera.haveDebugFrustrum())
+          camera.restoreFrustum();
+        else
+          camera.saveDebugFrustum();
+      }
+    });
     cameraInspectorWindow.pack();
 
     this.stage.addActor(cameraInspectorWindow);
@@ -236,6 +266,17 @@ public class TestOcculsionScreen extends AbstractScreen {
     Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     entities.update(Gdx.graphics.getDeltaTime());
+
+    frustumDebugger.render(camera);
+
+    shapeRenderer.setProjectionMatrix(camera.combined);
+    shapeRenderer.begin(ShapeRenderer.ShapeType.Line); {
+      shapeRenderer.setColor(Color.CHARTREUSE);
+      for (Tile visibleTile : visibleTileProvider.getVisible()) {
+        DebugShape.draw(shapeRenderer, visibleTile.box);
+      }
+    } shapeRenderer.end();
+
 
     stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
     stage.draw();

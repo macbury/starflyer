@@ -111,8 +111,6 @@ public class GeoPerspectiveCamera extends PerspectiveCamera {
     return normalOrDebugFrustrum().boundsInFrustum(testBounds);
   }
 
-
-
   /**
    * Update game world X and Y component to match passed point
    * @param point

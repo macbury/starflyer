@@ -32,31 +32,39 @@ public class VisibleTileProvider implements Disposable {
    */
   private final Tile originTile = new Tile();
   private final GeoPoint originPoint = new GeoPoint();
+
+  private final BoundingBox tileBox  = new BoundingBox();
+  private final Vector3 tileStartVec = new Vector3();
+  private final Vector3 tileEndVec   = new Vector3();
+  private final Vector3 cameraPos   = new Vector3();
   /**
    * Recalculate what is visible
    */
-  public void update(Vector3 cameraWorldPosition, GeoPerspectiveCamera camera) {
+  public void update(Vector3 cameraWorldCenterPosition, GeoPerspectiveCamera camera) {
     // Clear pool and visible tiles
     tilePool.freeAll(visible);
     visible.clear();
 
-    MercatorProjection.unproject(cameraWorldPosition, originPoint);
+    cameraPos.set(cameraWorldCenterPosition).add(camera.normalOrDebugPosition());
+
+    MercatorProjection.unproject(cameraPos, originPoint);
     originTile.set(originPoint);
 
-
     // Calculate how many tiles are around player
-    int tileAheadCount = MathUtils.ceil(camera.far / Tile.TILE_SIZE) + 2;
+    int tileAheadCount = MathUtils.ceil(camera.far / Tile.TILE_SIZE);
     for (int x = -tileAheadCount; x <= tileAheadCount; x++) {
       for (int y = -tileAheadCount; y <= tileAheadCount; y++) {
-        Tile cursorTile = tilePool.obtain();
-        cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
 
-        //if (camera.boundsInFrustum(cursorTile.box)) {
-        //  cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
-          visible.add(cursorTile); // Tile is visible
-        //} else {
-        //  tilePool.free(cursorTile); // Tile not visible so return it to pool
-        //}
+        tileStartVec.set(x, y, 0).scl(Tile.TILE_SIZE);
+        tileEndVec.set(Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.MAX_ELEVATION).add(tileStartVec);
+        tileBox.set(tileStartVec, tileEndVec);
+
+        if (camera.boundsInFrustum(tileBox)) {
+          Tile cursorTile = tilePool.obtain();
+          cursorTile.setTilePosition(originTile.x + x, originTile.y + y);
+          cursorTile.box.set(tileBox); //TODO remove this, only for debug testing!!!
+          visible.add(cursorTile);
+        }
       }
     }
   }

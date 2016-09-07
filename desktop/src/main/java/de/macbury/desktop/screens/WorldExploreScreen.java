@@ -115,8 +115,7 @@ public class WorldExploreScreen extends AbstractScreen implements MenuBarManager
 
     messages.camera.centerAt(new Vector2(target.x, target.y));
   }
-
-
+  
   @Override
   public boolean isDisposedAfterHide() {
     return true;
@@ -136,6 +135,7 @@ public class WorldExploreScreen extends AbstractScreen implements MenuBarManager
 
     frustumDebugger.render(camera);
 
+    
     stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
     stage.draw();
   }
